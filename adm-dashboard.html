@@ -329,19 +329,22 @@ async function loadMissoes() {
     const m = docItem.data();
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${m.missao || "-"}</td>
-      <td>${m.motorista || "-"}</td>
-      <td>${m.viatura || "-"}</td>
-      <td>${m.status || "-"}</td>
-      <td>${m.odometro_inicio || "-"}</td>
-      <td>${m.horario_inicio || "-"}</td>
-      <td>${m.odometro_fim || "-"}</td>
-      <td>${m.horario_fim || "-"}</td>
-      <td class="actions">
-        <button onclick="editarMissao('${docItem.id}')">Editar</button>
-        <button class="secundario" onclick="setStatus('${docItem.id}')">Alterar status</button>
-      </td>
-    `;
+  <td>${m.missao || "-"}</td>
+  <td>${m.motorista || "-"}</td>
+  <td>${m.viatura || "-"}</td>
+  <td>${m.status || "-"}</td>
+  <td>${m.odometro_inicio || "-"}</td>
+  <td>${m.horario_inicio || "-"}</td>
+  <td>${m.odometro_fim || "-"}</td>
+  <td>${m.horario_fim || "-"}</td>
+  <td>${
+    m.confirmado_p3
+      ? `<span class='badge-ok'>${m.assinatura_p3 || "Assinado"}</span><br><small>${m.hora_confirmacao_p3 || ""}</small>`
+      : `<span class='badge-no'>Pendente</span>`
+  }</td>
+  <td class="actions">
+`;
+
     tbody.appendChild(tr);
   });
 }
