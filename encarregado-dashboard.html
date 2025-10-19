@@ -1,113 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Encarregado - Dashboard</title>
-
-<!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 <style>
-/* ==========================================================
-   UI FUTURISTA PREMIUM 2025 — ENCARREGADO
-   Azul-naval + modo escuro automático
-========================================================== */
-:root{
-  --cor-primaria:#004aad;
-  --cor-primaria-hover:#003b8e;
-  --cor-sucesso:#16a34a;
-  --cor-erro:#dc2626;
-  --cor-aviso:#f59e0b;
-  --cor-fundo:#f5f7fa;
-  --cor-card:#ffffff;
-  --cor-borda:#d1d5db;
-  --cor-texto:#1f2937;
+:root {
+  --cor-primaria: #004aad;
+  --cor-primaria-hover: #003b8e;
+  --cor-fundo: #f5f7fa;
+  --cor-texto: #1f2937;
+  --cor-card: #ffffff;
+  --cor-borda: #d1d5db;
+  --cor-secundaria: #e2e8f0;
+  --cor-sucesso: #16a34a;
+  --cor-erro: #dc2626;
+  --cor-aviso: #f59e0b;
 }
-@media (prefers-color-scheme: dark){
-  :root{
-    --cor-fundo:#0b1120; --cor-card:#111827; --cor-texto:#e5e7eb; --cor-borda:#1f2937;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #0b1120;
+    --cor-card: #111827;
+    --cor-texto: #e5e7eb;
+    --cor-borda: #1f2937;
+    --cor-secundaria: #1e293b;
   }
 }
 *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
-body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);min-height:100vh}
-header{
-  background:var(--cor-primaria);color:#fff;display:flex;justify-content:space-between;align-items:center;
-  padding:18px 25px;box-shadow:0 2px 10px rgba(0,0,0,.2)
-}
-header h1{font-size:1.25rem;margin:0}
-header button{
-  background:#dc2626;color:#fff;border:none;border-radius:6px;padding:8px 14px;cursor:pointer;font-weight:600;transition:.25s
-}
-header button:hover{background:#b91c1c}
-.container{
-  max-width:1150px;margin:30px auto;background:var(--cor-card);padding:24px;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.1)
-}
-h2{color:var(--cor-primaria);margin:0 0 12px;border-left:4px solid var(--cor-primaria);padding-left:10px}
-form input,form select{
-  width:100%;padding:10px;margin:8px 0;border:1px solid var(--cor-borda);border-radius:6px;font-size:1rem
-}
-form button{
-  width:100%;padding:12px;background:var(--cor-primaria);color:#fff;font-weight:700;border:none;border-radius:6px;cursor:pointer;transition:.25s
-}
-form button:hover{background:var(--cor-primaria-hover)}
-.checkbox-linha{display:flex;align-items:center;gap:8px;margin:10px 0 15px}
-.checkbox-linha input{transform:scale(1.2)}
-
-table{width:100%;border-collapse:collapse;margin-top:18px}
-th,td{border-bottom:1px solid var(--cor-borda);padding:10px;text-align:left}
-th{background:var(--cor-primaria);color:#fff}
-tr:hover{background:rgba(0,74,173,.05)}
-
-button.prim{background:var(--cor-primaria);color:#fff;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;font-weight:600}
-button.prim:hover{background:var(--cor-primaria-hover)}
-button.sucesso{background:var(--cor-sucesso)}
-button.sucesso:hover{background:#15803d}
-button.perigo{background:var(--cor-erro)}
-button.perigo:hover{background:#b91c1c}
-
-.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;display:inline-block}
-.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;display:inline-block}
-.tag-fp{color:var(--cor-aviso);font-weight:700}
-
-.assins small{display:block;opacity:.85}
-@media (max-width: 820px){th,td{font-size:.95rem}}
+body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);min-height:100vh;padding:30px 10px;}
+.container{max-width:1200px;margin:auto;background:var(--cor-card);border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,0.12);padding:30px;}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;}
+header h1{color:var(--cor-primaria);font-size:1.4rem;margin:0;}
+header button{background:var(--cor-erro);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
+header button:hover{background:#b91c1c;}
+h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
+table{width:100%;border-collapse:collapse;margin-top:15px;}
+thead{background:var(--cor-primaria);color:white;}
+th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
+tbody tr:hover{background:rgba(0,74,173,0.05);}
+button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
+button.assinar{background:var(--cor-sucesso);color:white;}
+button.assinar:hover{background:#15803d;}
+form input, form select{padding:8px;margin:5px;border:1px solid var(--cor-borda);border-radius:6px;}
+.badge-ok{background:rgba(22,163,74,0.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
+.badge-no{background:rgba(220,38,38,0.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
+.tag-fp{color:#dc2626;font-weight:700;}
+@media(max-width:768px){.container{padding:20px;}th,td{font-size:0.9rem;}}
 </style>
 </head>
-
 <body>
-<header>
-  <h1>Encarregado</h1>
-  <button onclick="logout()">Sair</button>
-</header>
+
+<!-- Banner de Emulação -->
+<div id="emulacao-banner" style="
+  display:none;background:#004aad;color:#fff;padding:10px 20px;text-align:center;
+  font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+  🔧 Modo Emulação Ativo — <span id="emulando-email"></span>
+  <button onclick="window.location.href='adm-dashboard.html'" style="
+    margin-left:10px;background:#fbbf24;color:#000;border:none;
+    padding:6px 10px;border-radius:5px;cursor:pointer;font-weight:600;">Voltar ao ADM</button>
+</div>
 
 <div class="container">
+  <header>
+    <h1>Encarregado - Dashboard</h1>
+    <button onclick="logout()">Sair</button>
+  </header>
+
   <h2>Criar Nova Missão</h2>
   <form onsubmit="event.preventDefault(); criarMissao();">
-    <input type="text" id="missao" placeholder="Descrição da Missão" required>
-    <input type="text" id="motorista" placeholder="Motorista Responsável" required>
-    <input type="text" id="viatura" placeholder="Viatura (Ex: Parati E983-0987)" required>
-    <div class="checkbox-linha">
-      <label><input type="checkbox" id="foraProg"> Fora da Programação</label>
-    </div>
-    <button type="submit">Criar Missão</button>
+    <input type="text" id="missao" placeholder="Missão" required>
+    <input type="text" id="motorista" placeholder="Motorista" required>
+    <input type="text" id="viatura" placeholder="Viatura" required>
+    <button type="submit" class="assinar">Criar Missão</button>
   </form>
 
-  <h2>Missões</h2>
+  <h2>Missões Existentes</h2>
   <table>
     <thead>
       <tr>
-        <th>Missão</th>
-        <th>Motorista</th>
-        <th>Viatura</th>
-        <th>Status</th>
-        <th>Odômetro Início</th>
-        <th>Horário Início</th>
-        <th>Odômetro Fim</th>
-        <th>Horário Fim</th>
-        <th>Assinatura P3</th>
-        <th>Assinatura Encarregado</th>
-        <th>Ações</th>
+        <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
+        <th>Fora da Programação</th>
+        <th>Assinatura OSE</th><th>Assinatura Encarregado</th><th>Assinatura P3</th><th>Ação</th>
       </tr>
     </thead>
     <tbody id="missoes-body"></tbody>
@@ -116,119 +91,91 @@ button.perigo:hover{background:#b91c1c}
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {
-  collection, addDoc, onSnapshot, updateDoc, doc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { collection, addDoc, updateDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-/* ==========================
-   ⚙️ Banner de Emulação
-========================== */
+/* =============== 🔒 Segurança e Logout Automático ================== */
+const TEMPO_MAXIMO = 10 * 60 * 1000;
+let timerLogout;
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
+    iniciarTimerLogout();
+    monitorarAtividade();
+  }
+});
+function iniciarTimerLogout() {
+  clearTimeout(timerLogout);
+  timerLogout = setTimeout(async () => {
+    alert("⏰ Sessão expirada. Faça login novamente.");
+    await signOut(auth);
+    window.location.href = "index.html";
+  }, TEMPO_MAXIMO);
+}
+function monitorarAtividade() {
+  ["mousemove","keydown","click","scroll"].forEach(e => document.addEventListener(e, iniciarTimerLogout));
+}
+
+/* =============== 🔧 Banner de Emulação ================== */
 const params = new URLSearchParams(window.location.search);
 const emulando = params.get("emulando");
 if (emulando) {
-  const aviso = document.createElement("div");
-  aviso.style.position = "fixed";
-  aviso.style.top = "0"; aviso.style.left = "0"; aviso.style.right = "0";
-  aviso.style.zIndex = "9999"; aviso.style.padding = "12px 20px";
-  aviso.style.textAlign = "center"; aviso.style.fontWeight = "600";
-  aviso.style.color = "#fff";
-  aviso.style.background = "linear-gradient(90deg, #004aad, #007bff)";
-  aviso.style.boxShadow = "0 3px 8px rgba(0,0,0,0.25)";
-  aviso.innerHTML = `⚙️ EMULANDO perfil de <b>${emulando}</b>
-    <button id="sairEmulacao" style="margin-left:10px;background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:600;">Encerrar Emulação</button>`;
-  document.body.prepend(aviso);
-  document.body.style.marginTop = "60px";
-  document.getElementById("sairEmulacao").onclick = () => window.location.href = "adm-dashboard.html";
+  document.getElementById("emulacao-banner").style.display = "block";
+  document.getElementById("emulando-email").innerText = emulando;
 }
 
-/* ==========================
-   🔐 Sessão / Logout
-========================== */
-window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; };
+/* =============== 🚪 Logout ================== */
+window.logout = async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* ==========================
-   ➕ Criar missão
-========================== */
-window.criarMissao = async()=>{
-  const missao = document.getElementById("missao").value.trim();
-  const motorista = document.getElementById("motorista").value.trim();
-  const viatura = document.getElementById("viatura").value.trim();
-  const foraProg = document.getElementById("foraProg").checked;
-
-  if(!missao || !motorista || !viatura){ return alert("⚠️ Preencha todos os campos."); }
-
-  try{
-    await addDoc(collection(db,"viaturas_missao"),{
-      missao, motorista, viatura,
-      status:"Pendente",
-      criada_por: auth.currentUser?.email || "encarregado",
-      criada_em: serverTimestamp(),
-      programada: !foraProg,
-      fora_programacao: foraProg,
-      // campos operacionais:
-      odometro_inicio: "", horario_inicio: "",
-      odometro_fim: "",    horario_fim:   "",
-      // assinaturas:
-      confirmado_p3:false, assinatura_p3:"", hora_confirmacao_p3:"",
-      assinada_encarregado:false, assinatura_encarregado:"", horario_assinatura_encarregado:"",
-      assinada_ose:false, assinada_motorista:false
-    });
-    alert(foraProg ? "🚨 Missão fora da programação criada!" : "✅ Missão criada com sucesso!");
-    document.querySelector("form").reset();
-  }catch(e){ console.error(e); alert("❌ Erro ao criar missão."); }
-};
-
-/* ==========================
-   📡 Listagem em tempo real
-========================== */
+/* =============== ⚡ Missões em Tempo Real ================== */
 onSnapshot(collection(db,"viaturas_missao"),(snapshot)=>{
-  const tbody = document.getElementById("missoes-body");
-  tbody.innerHTML = "";
+  const tbody=document.getElementById("missoes-body");
+  tbody.innerHTML="";
   snapshot.forEach(docItem=>{
-    const d = docItem.data();
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${d.missao||"-"} ${d.fora_programacao?`<span class="tag-fp">⚠ Fora da Programação</span>`:""}</td>
-      <td>${d.motorista||"-"}</td>
-      <td>${d.viatura||"-"}</td>
-      <td>${d.status||"-"}</td>
-      <td>${d.odometro_inicio||"-"}</td>
-      <td>${d.horario_inicio||"-"}</td>
-      <td>${d.odometro_fim||"-"}</td>
-      <td>${d.horario_fim||"-"}</td>
-      <td class="assins">${
-        d.confirmado_p3
-          ? `<span class="badge-ok">${d.assinatura_p3 || "P3 assinado"}</span><small>${d.hora_confirmacao_p3||""}</small>`
-          : `<span class="badge-no">Pendente P3</span>`
-      }</td>
-      <td class="assins">${
-        d.assinada_encarregado
-          ? `<span class="badge-ok">Assinado</span><small>${d.assinatura_encarregado||""} ${d.horario_assinatura_encarregado?("<br>"+d.horario_assinatura_encarregado):""}</small>`
-          : `<span class="badge-no">Pendente</span>`
-      }</td>
-      <td>
-        ${d.assinada_encarregado
-          ? `<button class="prim" disabled>Assinado</button>`
-          : `<button class="prim sucesso" onclick="assinar('${docItem.id}')">Assinar</button>`}
-      </td>
-    `;
+    const m=docItem.data();
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${m.missao||""}</td>
+      <td>${m.motorista||""}</td>
+      <td>${m.viatura||""}</td>
+      <td>${m.status||"Pendente"}</td>
+      <td>${m.fora_programacao ? "<span class='tag-fp'>⚠ Fora</span>" : "-"}</td>
+      <td>${m.assinatura_ose ? `<span class='badge-ok'>${m.assinatura_ose}</span><br><small>${m.hora_assinatura_ose||""}</small>` : "<span class='badge-no'>Pendente</span>"}</td>
+      <td>${m.assinatura_encarregado ? `<span class='badge-ok'>${m.assinatura_encarregado}</span><br><small>${m.hora_assinatura_encarregado||""}</small>` : "<span class='badge-no'>Pendente</span>"}</td>
+      <td>${m.assinatura_p3 ? `<span class='badge-ok'>${m.assinatura_p3}</span><br><small>${m.hora_assinatura_p3||""}</small>` : "<span class='badge-no'>Pendente</span>"}</td>
+      <td><button class='assinar' onclick="assinar('${docItem.id}')">Assinar</button></td>`;
     tbody.appendChild(tr);
   });
 });
 
-/* ==========================
-   ✍️ Assinatura do Encarregado
-========================== */
+/* =============== 🖊️ Assinar Missão ================== */
 window.assinar = async(id)=>{
-  try{
-    await updateDoc(doc(db,"viaturas_missao",id),{
-      assinada_encarregado:true,
-      assinatura_encarregado: auth.currentUser?.email || "encarregado",
-      horario_assinatura_encarregado: new Date().toLocaleString()
-    });
-    alert("✍️ Assinatura registrada com sucesso!");
-  }catch(e){ console.error(e); alert("❌ Erro ao assinar missão."); }
+  await updateDoc(doc(db,"viaturas_missao",id),{
+    assinada_encarregado:true,
+    assinatura_encarregado:auth.currentUser?.email || "encarregado",
+    hora_assinatura_encarregado:new Date().toLocaleString(),
+    atualizado_em:serverTimestamp()
+  });
+  alert("✍ Missão assinada com sucesso!");
+};
+
+/* =============== 🆕 Criar Missão ================== */
+window.criarMissao = async()=>{
+  const missao=document.getElementById("missao").value.trim();
+  const motorista=document.getElementById("motorista").value.trim();
+  const viatura=document.getElementById("viatura").value.trim();
+  if(!missao||!motorista||!viatura){alert("Preencha todos os campos.");return;}
+  await addDoc(collection(db,"viaturas_missao"),{
+    missao,motorista,viatura,
+    status:"Pendente",
+    criada_por:auth.currentUser?.email || "encarregado",
+    criada_em:serverTimestamp()
+  });
+  document.getElementById("missao").value="";
+  document.getElementById("motorista").value="";
+  document.getElementById("viatura").value="";
+  alert("🆕 Missão criada com sucesso!");
 };
 </script>
 </body>
