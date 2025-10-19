@@ -8,8 +8,257 @@
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 
-<!-- Tema futurista premium 2025 -->
-<link rel="stylesheet" href="style.css" />
+<style>
+/* ==========================================================
+   UI FUTURISTA PREMIUM 2025 — ADM MARINHA
+   Tema claro/escuro automático, design limpo e responsivo
+========================================================== */
+:root {
+  --cor-primaria: #004aad;
+  --cor-primaria-hover: #003b8e;
+  --cor-fundo: #f5f7fa;
+  --cor-texto: #1f2937;
+  --cor-card: #ffffff;
+  --cor-borda: #d1d5db;
+  --cor-secundaria: #e2e8f0;
+  --cor-sucesso: #16a34a;
+  --cor-erro: #dc2626;
+}
+
+/* 🌙 Tema escuro automático */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #0b1120;
+    --cor-card: #111827;
+    --cor-texto: #e5e7eb;
+    --cor-borda: #1f2937;
+    --cor-secundaria: #1e293b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 30px 10px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  background: var(--cor-card);
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  padding: 30px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ---------- Cabeçalho ---------- */
+header h2 {
+  margin: 0;
+  color: var(--cor-primaria);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+header .small {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tag {
+  background: var(--cor-primaria);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  letter-spacing: 0.4px;
+}
+
+/* ---------- Botões ---------- */
+button {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  background: var(--cor-primaria-hover);
+}
+
+button.secundario {
+  background: var(--cor-secundaria);
+  color: var(--cor-texto);
+}
+
+button.secundario:hover {
+  filter: brightness(0.9);
+}
+
+/* ---------- Abas ---------- */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid var(--cor-borda);
+  margin-top: 20px;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  color: var(--cor-texto);
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.tabs button:hover {
+  background: var(--cor-secundaria);
+}
+
+.tabs button.active {
+  border-bottom-color: var(--cor-primaria);
+  color: var(--cor-primaria);
+}
+
+/* ---------- Tabelas ---------- */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+thead {
+  background: var(--cor-primaria);
+  color: white;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+tbody tr:hover {
+  background: rgba(0, 74, 173, 0.05);
+}
+
+/* ---------- Ações ---------- */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.inline-edit select {
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-card);
+  color: var(--cor-texto);
+}
+
+/* ---------- Badges ---------- */
+.badge-ok {
+  background: var(--cor-sucesso);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-no {
+  background: var(--cor-erro);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ---------- Filtros e Inputs ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+input[type="search"], select {
+  padding: 8px 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 6px;
+  background: var(--cor-card);
+  color: var(--cor-texto);
+  outline: none;
+}
+
+input[type="search"]:focus, select:focus {
+  border-color: var(--cor-primaria);
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tabs button {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  th, td {
+    font-size: 0.9rem;
+  }
+
+  .actions button {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+}
+
+/* ---------- Animação suave ---------- */
+button, select, input, .tabs button {
+  transition: all 0.25s ease;
+}
+</style>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
