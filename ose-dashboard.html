@@ -4,11 +4,173 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oficial de Serviço - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+
 
 <!-- Favicon da Marinha -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
+<style>
+/* ==========================================================
+   UI FUTURISTA PREMIUM 2025 — OFICIAL DE SERVIÇO MARINHA
+   Tema claro/escuro automático e visual responsivo unificado
+========================================================== */
+:root {
+  --cor-primaria: #004aad;
+  --cor-primaria-hover: #003b8e;
+  --cor-fundo: #f5f7fa;
+  --cor-texto: #1f2937;
+  --cor-card: #ffffff;
+  --cor-borda: #d1d5db;
+  --cor-secundaria: #e2e8f0;
+  --cor-sucesso: #16a34a;
+  --cor-erro: #dc2626;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #0b1120;
+    --cor-card: #111827;
+    --cor-texto: #e5e7eb;
+    --cor-borda: #1f2937;
+    --cor-secundaria: #1e293b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  min-height: 100vh;
+}
+
+/* ---------- Cabeçalho ---------- */
+header {
+  background: var(--cor-primaria);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.4px;
+}
+
+header button {
+  background: var(--cor-secundaria);
+  color: var(--cor-texto);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+header button:hover {
+  background: var(--cor-card);
+}
+
+/* ---------- Container ---------- */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: var(--cor-card);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+
+/* ---------- Títulos ---------- */
+h2 {
+  color: var(--cor-primaria);
+  margin-top: 0;
+  border-left: 4px solid var(--cor-primaria);
+  padding-left: 10px;
+}
+
+/* ---------- Tabela ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+thead {
+  background: var(--cor-primaria);
+  color: white;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+tbody tr:hover {
+  background: rgba(0,74,173,0.05);
+}
+
+/* ---------- Botões de Ação ---------- */
+button.aprovar {
+  background: var(--cor-sucesso);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+button.aprovar:hover {
+  background: #15803d;
+}
+
+button.negar {
+  background: var(--cor-erro);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+button.negar:hover {
+  background: #b91c1c;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  th, td {
+    font-size: 0.9rem;
+  }
+
+  button.aprovar, button.negar {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}
+
+/* ---------- Transições ---------- */
+button {
+  transition: all 0.25s ease;
+}
+</style>
     
 
 <script type="module">
