@@ -8,38 +8,48 @@
 <!-- Favicon da Marinha -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
-<!-- CSS unificado -->
 <link rel="stylesheet" href="style.css">
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { 
-  getAuth, 
-  signOut 
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  doc, 
-  updateDoc, 
-  onSnapshot 
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { collection, addDoc, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
-  authDomain: "vtr-marinha.firebaseapp.com",
-  projectId: "vtr-marinha",
-  storageBucket: "vtr-marinha.appspot.com",
-  messagingSenderId: "503079573653",
-  appId: "1:503079573653:web:beb34f57cd5447d376239c"
-};
+let usuarioAtual = null;
 
-// Inicializa Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// =============================
+// 🔒 Proteção de acesso
+// =============================
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
+    usuarioAtual = user;
+    carregarMissoes();
+    iniciarInatividade();
+  }
+});
 
+// =============================
+// ⏰ Logout automático
+// =============================
+let timerInativo;
+function iniciarInatividade() {
+  const resetar = () => {
+    clearTimeout(timerInativo);
+    timerInativo = setTimeout(() => {
+      alert("Sessão encerrada por inatividade.");
+      signOut(auth);
+      window.location.href = "index.html";
+    }, 10 * 60 * 1000);
+  };
+  ["click","mousemove","keydown"].forEach(evt => window.addEventListener(evt, resetar));
+  resetar();
+}
+
+// =============================
+// 🚪 Logout manual
+// =============================
 window.logout = async () => {
   await signOut(auth);
   window.location.href = "index.html";
@@ -50,18 +60,14 @@ window.logout = async () => {
 // =============================
 function carregarMissoes() {
   const tbody = document.getElementById("missoes-body");
-
   onSnapshot(collection(db, "viaturas_missao"), (snapshot) => {
     tbody.innerHTML = "";
     snapshot.forEach((docItem) => {
       const data = docItem.data();
-      const tr = document.createElement("tr");
-
-      // Destacar missão fora da programação
       const destaque = data.fora_programacao 
         ? "style='background:rgba(255,0,0,0.06); border-left:4px solid #dc3545;'" 
         : "";
-
+      const tr = document.createElement("tr");
       tr.innerHTML = `
         <tr ${destaque}>
           <td>${data.missao || ""} 
@@ -79,15 +85,23 @@ function carregarMissoes() {
             <button class="negar" onclick="negar('${docItem.id}')">Negar</button>
           </td>
         </tr>
+        <tr>
+          <td colspan="9" style="font-size:13px; background:#f8fafc;">
+            <b>Assinaturas:</b> 
+            OSE: ${data.assinatura_ose || "-"} | 
+            Encarregado: ${data.assinatura_encarregado || "-"} | 
+            Chefe: ${data.assinatura_chedep || "-"} | 
+            P3: ${data.assinatura_p3 || "-"}
+          </td>
+        </tr>
       `;
       tbody.appendChild(tr);
     });
   });
 }
-window.onload = carregarMissoes;
 
 // =============================
-// 🔹 Criar missão (com foraProg)
+// 🧾 Criar missão (com foraProg)
 // =============================
 window.criarMissao = async () => {
   const missao = document.getElementById("missao").value.trim();
@@ -106,8 +120,7 @@ window.criarMissao = async () => {
       motorista,
       viatura,
       status: "Pendente",
-      criado_por: auth.currentUser?.email || "ose",
-      programada: !foraProg,
+      criado_por: usuarioAtual.email,
       fora_programacao: foraProg,
       criada_em: new Date().toLocaleString()
     });
@@ -121,61 +134,71 @@ window.criarMissao = async () => {
 };
 
 // =============================
-// 🔹 Aprovar / Negar missão
+// ✍️ Assinar (Aprovar / Negar)
 // =============================
 window.aprovar = async (id) => {
-  await updateDoc(doc(db, "viaturas_missao", id), { status: "Aprovada" });
+  const agora = new Date().toLocaleString();
+  await updateDoc(doc(db, "viaturas_missao", id), {
+    status: "Aprovada",
+    assinatura_ose: usuarioAtual.email,
+    hora_assinatura_ose: agora
+  });
+  alert("✅ Missão aprovada e assinada pela OSE.");
 };
 
 window.negar = async (id) => {
-  await updateDoc(doc(db, "viaturas_missao", id), { status: "Negada" });
+  const agora = new Date().toLocaleString();
+  await updateDoc(doc(db, "viaturas_missao", id), {
+    status: "Negada",
+    assinatura_ose: usuarioAtual.email,
+    hora_assinatura_ose: agora
+  });
+  alert("🚫 Missão negada e assinada pela OSE.");
 };
 </script>
 </head>
 
 <body>
-  <div class="container">
-    <header>
-      <div class="logo-marinha">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
-        <h1>Oficial de Serviço</h1>
-      </div>
-      <button onclick="logout()">Sair</button>
-    </header>
+<div class="container">
+  <header>
+    <div class="logo-marinha">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
+      <h1>Oficial de Serviço</h1>
+    </div>
+    <button onclick="logout()">Sair</button>
+  </header>
 
-    <h2>Criar Nova Missão</h2>
-    <form onsubmit="event.preventDefault(); criarMissao();" class="form-missao">
-      <input type="text" id="missao" placeholder="Descrição da Missão" required>
-      <input type="text" id="motorista" placeholder="Motorista Responsável" required>
-      <input type="text" id="viatura" placeholder="Viatura (Ex: Parati E983-0987)" required>
+  <h2>Criar Nova Missão</h2>
+  <form onsubmit="event.preventDefault(); criarMissao();" class="form-missao">
+    <input type="text" id="missao" placeholder="Descrição da Missão" required>
+    <input type="text" id="motorista" placeholder="Motorista Responsável" required>
+    <input type="text" id="viatura" placeholder="Viatura (Ex: Parati E983-0987)" required>
 
-      <div class="checkbox-linha">
-        <label for="foraProg">
-          <input type="checkbox" id="foraProg">
-          <span>Missão fora da programação</span>
-        </label>
-      </div>
+    <label for="foraProg" style="display:flex;align-items:center;gap:6px;margin:10px 0;">
+      <input type="checkbox" id="foraProg">
+      <span>Missão fora da programação</span>
+    </label>
 
-      <button type="submit">Criar Missão</button>
-    </form>
+    <button type="submit">Criar Missão</button>
+  </form>
 
-    <h2>Missões Pendentes</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Missão</th>
-          <th>Motorista</th>
-          <th>Viatura</th>
-          <th>Status</th>
-          <th>Odômetro Início</th>
-          <th>Horário Início</th>
-          <th>Odômetro Fim</th>
-          <th>Horário Fim</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="missoes-body"></tbody>
-    </table>
-  </div>
+  <h2>Missões Pendentes</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Missão</th>
+        <th>Motorista</th>
+        <th>Viatura</th>
+        <th>Status</th>
+        <th>Odômetro Início</th>
+        <th>Horário Início</th>
+        <th>Odômetro Fim</th>
+        <th>Horário Fim</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="missoes-body"></tbody>
+  </table>
+</div>
 </body>
 </html>
