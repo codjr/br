@@ -1,303 +1,193 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Motorista - Dashboard</title>
 
-<!-- Favicon da Marinha -->
-<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
+<link rel="icon" type="image/svg+xml"
+ href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 <style>
 /* ==========================================================
-   UI FUTURISTA PREMIUM 2025 — MOTORISTA MARINHA
-   Design moderno, responsivo e modo escuro automático
+   UI FUTURISTA PREMIUM 2025 — MOTORISTA
 ========================================================== */
 :root {
   --cor-primaria: #004aad;
   --cor-primaria-hover: #003b8e;
-  --cor-fundo: #f5f7fa;
-  --cor-texto: #1f2937;
-  --cor-card: #ffffff;
-  --cor-borda: #d1d5db;
-  --cor-secundaria: #e2e8f0;
   --cor-sucesso: #16a34a;
   --cor-erro: #dc2626;
   --cor-aviso: #f59e0b;
+  --cor-fundo: #f5f7fa;
+  --cor-card: #ffffff;
+  --cor-borda: #d1d5db;
+  --cor-texto: #1f2937;
 }
-
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark){
   :root {
-    --cor-fundo: #0b1120;
-    --cor-card: #111827;
-    --cor-texto: #e5e7eb;
-    --cor-borda: #1f2937;
-    --cor-secundaria: #1e293b;
+    --cor-fundo:#0b1120; --cor-card:#111827; --cor-texto:#e5e7eb; --cor-borda:#1f2937;
   }
 }
+*{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);min-height:100vh}
+header{
+  background:var(--cor-primaria);color:#fff;display:flex;justify-content:space-between;align-items:center;
+  padding:18px 25px;box-shadow:0 2px 10px rgba(0,0,0,.2)
+}
+header h1{font-size:1.25rem;margin:0}
+header button{
+  background:#dc2626;color:#fff;border:none;border-radius:6px;padding:8px 14px;cursor:pointer;font-weight:600;transition:.25s
+}
+header button:hover{background:#b91c1c}
+.container{
+  max-width:1150px;margin:30px auto;background:var(--cor-card);padding:24px;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.1)
+}
+h2{color:var(--cor-primaria);margin:0 0 12px;border-left:4px solid var(--cor-primaria);padding-left:10px}
+table{width:100%;border-collapse:collapse;margin-top:18px}
+th,td{border-bottom:1px solid var(--cor-borda);padding:10px;text-align:left}
+th{background:var(--cor-primaria);color:#fff}
+tr:hover{background:rgba(0,74,173,.05)}
 
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+button{
+  border:none;border-radius:6px;padding:6px 10px;cursor:pointer;font-weight:600;transition:.25s
 }
+button.sucesso{background:var(--cor-sucesso);color:#fff}
+button.sucesso:hover{background:#15803d}
+button.info{background:var(--cor-primaria);color:#fff}
+button.info:hover{background:var(--cor-primaria-hover)}
+button.perigo{background:var(--cor-erro);color:#fff}
+button.perigo:hover{background:#b91c1c}
 
-body {
-  margin: 0;
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
-  min-height: 100vh;
-}
-
-/* ---------- Cabeçalho ---------- */
-header {
-  background: var(--cor-primaria);
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-}
-
-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  letter-spacing: 0.4px;
-}
-
-header button {
-  background: var(--cor-secundaria);
-  color: var(--cor-texto);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-}
-header button:hover {
-  background: var(--cor-card);
-}
-
-/* ---------- Container ---------- */
-.container {
-  max-width: 1100px;
-  margin: 30px auto;
-  background: var(--cor-card);
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-}
-
-/* ---------- Títulos ---------- */
-h2 {
-  color: var(--cor-primaria);
-  margin-top: 0;
-  border-left: 4px solid var(--cor-primaria);
-  padding-left: 10px;
-}
-
-/* ---------- Tabela ---------- */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-thead {
-  background: var(--cor-primaria);
-  color: white;
-}
-
-th, td {
-  text-align: left;
-  padding: 10px;
-  border-bottom: 1px solid var(--cor-borda);
-}
-
-tbody tr:hover {
-  background: rgba(0,74,173,0.05);
-}
-
-/* ---------- Botões de Ação ---------- */
-button.inicio, button.fim {
-  border: none;
-  border-radius: 6px;
-  color: white;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s;
-}
-
-button.inicio {
-  background: var(--cor-aviso);
-}
-button.inicio:hover {
-  background: #d97706;
-}
-
-button.fim {
-  background: var(--cor-sucesso);
-}
-button.fim:hover {
-  background: #15803d;
-}
-
-/* ---------- Status P3 ---------- */
-td span[style*="color:green"] {
-  display: inline-block;
-  background: rgba(22,163,74,0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-td span[style*="color:red"] {
-  display: inline-block;
-  background: rgba(220,38,38,0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-/* ---------- Responsividade ---------- */
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-  }
-
-  th, td {
-    font-size: 0.9rem;
-  }
-
-  button.inicio, button.fim {
-    font-size: 0.85rem;
-    padding: 6px 10px;
-  }
-}
-
-/* ---------- Transições suaves ---------- */
-button {
-  transition: all 0.25s ease;
-}
+.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;display:inline-block}
+.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;display:inline-block}
+.tag-fp{color:var(--cor-aviso);font-weight:700}
+.assins small{display:block;opacity:.85}
+@media (max-width:820px){th,td{font-size:.95rem}}
 </style>
-
-  
-  
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
-  authDomain: "vtr-marinha.firebaseapp.com",
-  projectId: "vtr-marinha",
-  storageBucket: "vtr-marinha.appspot.com",
-  messagingSenderId: "503079573653",
-  appId: "1:503079573653:web:beb34f57cd5447d376239c"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-window.logout = async()=>{await signOut(auth);window.location.href="index.html";}
-
-async function carregarMissoes(){
-  const snapshot = await getDocs(collection(db,"viaturas_missao"));
-  const tbody = document.getElementById("missoes-body");
-  tbody.innerHTML="";
-  snapshot.forEach(docItem=>{
-    const data = docItem.data();
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-  <td>${data.missao || ""}</td>
-  <td>${data.viatura || ""}</td>
-  <td>${data.status || ""}</td>
-
-  <td>
-    ${data.odometro_inicio || ""}
-    <button class="inicio" onclick="registrarInicio('${docItem.id}')">Registrar Início</button>
-  </td>
-
-  <td>
-    ${data.odometro_fim || ""}
-    <button class="fim" onclick="registrarFim('${docItem.id}')">Registrar Fim</button>
-  </td>
-
-  <td>${
-    data.confirmado_p3
-      ? `<span style="color:green;font-weight:bold;">✔ ${data.assinatura_p3 || "Assinado"}</span><br><small>${data.hora_confirmacao_p3 || ""}</small>`
-      : `<span style="color:red;font-weight:bold;">✖ Aguardando P3</span>`
-  }</td>
-`;
-
-    tbody.appendChild(tr);
-  });
-}
-window.onload = carregarMissoes;
-
-window.registrarInicio = async(id)=>{
-  const odometro = prompt("Digite o odômetro inicial:");
-  if(!odometro) return;
-  const horario = new Date().toLocaleString();
-  await updateDoc(doc(db,"viaturas_missao",id),{odometro_inicio:odometro,horario_inicio:horario});
-  carregarMissoes();
-}
-
-window.registrarFim = async(id)=>{
-  // 🔒 Verifica se o P3 já confirmou a passagem
-  const ref = doc(db, "viaturas_missao", id);
-  const docSnap = await getDoc(ref);
-  if (!docSnap.exists()) {
-    alert("Missão não encontrada.");
-    return;
-  }
-
-  const dados = docSnap.data();
-  if (!dados.confirmado_p3) {
-    alert("⚠️ Aguardando confirmação do Auxiliar P3.\nVocê só poderá encerrar a missão após o P3 validar a passagem da viatura.");
-    return;
-  }
-
-  // ✅ Se o P3 já confirmou, permite o registro normalmente
-  const odometro = prompt("Digite o odômetro final:");
-  if (!odometro) return;
-
-  const horario = new Date().toLocaleString();
-  await updateDoc(ref, {
-    odometro_fim: odometro,
-    horario_fim: horario
-  });
-
-  alert("✅ Missão encerrada com sucesso!");
-  carregarMissoes();
-};
-
-</script>
 </head>
+
 <body>
 <header>
-<h1>Motorista</h1>
-<button onclick="logout()">Sair</button>
+  <h1>Motorista</h1>
+  <button onclick="logout()">Sair</button>
 </header>
-<div class="container">
-<h2>Missões de Viaturas</h2>
-<table>
-<thead>
-<tr>
-  <th>Missão</th>
-  <th>Viatura</th>
-  <th>Status</th>
-  <th>Odômetro Início</th>
-  <th>Odômetro Fim</th>
-  <th>Assinatura P3</th>
-</tr>
 
-</thead>
-<tbody id="missoes-body"></tbody>
-</table>
+<div class="container">
+  <h2>Missões de Viaturas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Missão</th>
+        <th>Viatura</th>
+        <th>Status</th>
+        <th>Odômetro Início</th>
+        <th>Horário Início</th>
+        <th>Odômetro Fim</th>
+        <th>Horário Fim</th>
+        <th>Assinaturas</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="missoes-body"></tbody>
+  </table>
 </div>
+
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { collection, onSnapshot, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+/* ==========================
+   ⚙️ Banner de Emulação
+========================== */
+const params = new URLSearchParams(window.location.search);
+const emulando = params.get("emulando");
+if (emulando) {
+  const aviso = document.createElement("div");
+  aviso.style.position="fixed";aviso.style.top="0";aviso.style.left="0";aviso.style.right="0";
+  aviso.style.zIndex="9999";aviso.style.padding="12px 20px";aviso.style.textAlign="center";
+  aviso.style.fontWeight="600";aviso.style.color="#fff";
+  aviso.style.background="linear-gradient(90deg,#004aad,#007bff)";
+  aviso.style.boxShadow="0 3px 8px rgba(0,0,0,0.25)";
+  aviso.innerHTML=`⚙️ EMULANDO perfil de <b>${emulando}</b>
+    <button id="sairEmulacao" style="margin-left:10px;background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:600;">Encerrar Emulação</button>`;
+  document.body.prepend(aviso);
+  document.body.style.marginTop="60px";
+  document.getElementById("sairEmulacao").onclick=()=>window.location.href="adm-dashboard.html";
+}
+
+/* ==========================
+   🔐 Logout
+========================== */
+window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; };
+
+/* ==========================
+   📡 Monitorar missões
+========================== */
+onSnapshot(collection(db,"viaturas_missao"),(snapshot)=>{
+  const tbody=document.getElementById("missoes-body");
+  tbody.innerHTML="";
+  snapshot.forEach(docItem=>{
+    const d=docItem.data();
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${d.missao||"-"} ${d.fora_programacao?`<span class="tag-fp">⚠ Fora da Programação</span>`:""}</td>
+      <td>${d.viatura||"-"}</td>
+      <td>${d.status||"-"}</td>
+      <td>${d.odometro_inicio||"-"}</td>
+      <td>${d.horario_inicio||"-"}</td>
+      <td>${d.odometro_fim||"-"}</td>
+      <td>${d.horario_fim||"-"}</td>
+      <td class="assins">
+        ${d.assinada_motorista?'<span class="badge-ok">Motorista</span>':'<span class="badge-no">Motorista</span>'}
+        ${d.assinada_ose?'<span class="badge-ok">OSE</span>':'<span class="badge-no">OSE</span>'}
+        ${d.assinada_encarregado?'<span class="badge-ok">Encarregado</span>':'<span class="badge-no">Encarregado</span>'}
+        ${d.assinada_p3?'<span class="badge-ok">P3</span>':'<span class="badge-no">P3</span>'}
+      </td>
+      <td>
+        <button class="info" onclick="registrarInicio('${docItem.id}')">Início</button>
+        <button class="sucesso" onclick="registrarFim('${docItem.id}')">Fim</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+});
+
+/* ==========================
+   🚘 Registrar início
+========================== */
+window.registrarInicio = async(id)=>{
+  const odometro = prompt("📍 Digite o odômetro inicial:");
+  if(!odometro) return;
+  const horario = new Date().toLocaleString();
+  try{
+    await updateDoc(doc(db,"viaturas_missao",id),{
+      odometro_inicio:odometro,
+      horario_inicio:horario,
+      assinada_motorista:true,
+      assinatura_motorista:auth.currentUser?.email||"motorista"
+    });
+    alert("✅ Início registrado!");
+  }catch(e){console.error(e);alert("Erro ao registrar início.");}
+};
+
+/* ==========================
+   🏁 Registrar fim
+========================== */
+window.registrarFim = async(id)=>{
+  const odometro = prompt("📍 Digite o odômetro final:");
+  if(!odometro) return;
+  const horario = new Date().toLocaleString();
+  try{
+    await updateDoc(doc(db,"viaturas_missao",id),{
+      odometro_fim:odometro,
+      horario_fim:horario,
+      assinada_motorista:true,
+      assinatura_motorista:auth.currentUser?.email||"motorista"
+    });
+    alert("🏁 Fim da missão registrado!");
+  }catch(e){console.error(e);alert("Erro ao registrar fim.");}
+};
+</script>
 </body>
 </html>
