@@ -79,12 +79,34 @@ window.registrarInicio = async(id)=>{
 }
 
 window.registrarFim = async(id)=>{
+  // 🔒 Verifica se o P3 já confirmou a passagem
+  const ref = doc(db, "viaturas_missao", id);
+  const docSnap = await getDoc(ref);
+  if (!docSnap.exists()) {
+    alert("Missão não encontrada.");
+    return;
+  }
+
+  const dados = docSnap.data();
+  if (!dados.confirmado_p3) {
+    alert("⚠️ Aguardando confirmação do Auxiliar P3.\nVocê só poderá encerrar a missão após o P3 validar a passagem da viatura.");
+    return;
+  }
+
+  // ✅ Se o P3 já confirmou, permite o registro normalmente
   const odometro = prompt("Digite o odômetro final:");
-  if(!odometro) return;
+  if (!odometro) return;
+
   const horario = new Date().toLocaleString();
-  await updateDoc(doc(db,"viaturas_missao",id),{odometro_fim:odometro,horario_fim:horario});
+  await updateDoc(ref, {
+    odometro_fim: odometro,
+    horario_fim: horario
+  });
+
+  alert("✅ Missão encerrada com sucesso!");
   carregarMissoes();
-}
+};
+
 </script>
 </head>
 <body>
