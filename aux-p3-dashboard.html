@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auxiliar P3 - Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<style>
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+header button {
+  width: auto;
+  padding: 10px 18px;
+}
+.table-wrap {
+  overflow: auto;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+th, td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+th {
+  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+  color: white;
+  text-align: left;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+.badge-ok {
+  background: #22c55e;
+  color: #fff;
+}
+.badge-no {
+  background: #ef4444;
+  color: #fff;
+}
+</style>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import {
+  getAuth, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {
+  getFirestore, collection, getDocs, doc, updateDoc, addDoc, getDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
+  authDomain: "vtr-marinha.firebaseapp.com",
+  projectId: "vtr-marinha",
+  storageBucket: "vtr-marinha.appspot.com",
+  messagingSenderId: "503079573653",
+  appId: "1:503079573653:web:beb34f57cd5447d376239c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/* Utilidades */
+const $ = (sel)=>document.querySelector(sel);
+async function logAction(acao, alvo, extra={}) {
+  try {
+    const user = auth.currentUser;
+    await addDoc(collection(db, "logs"), {
+      acao,
+      alvo,
+      feito_por_email: user?.email || "desconhecido",
+      data_hora: serverTimestamp(),
+      ...extra
+    });
+  } catch (e) { console.warn("Log falhou:", e); }
+}
+
+/* Controle de sessão */
+onAuthStateChanged(auth, async(user)=>{
+  if(!user){ window.location.href="index.html"; return; }
+  const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+  if(!userDoc.exists()){ await signOut(auth); window.location.href="index.html"; return; }
+  const dados = userDoc.data();
+  if(dados.role!=="aux_p3"){
+    alert("Acesso restrito ao Auxiliar P3.");
+    window.location.href="index.html";
+    return;
+  }
+  carregarMissoes();
+});
+
+window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; }
+
+/* Carregar missões */
+async function carregarMissoes(){
+  const snapshot = await getDocs(collection(db,"viaturas_missao"));
+  const tbody = $("#tbl-body");
+  tbody.innerHTML = "";
+  snapshot.forEach(docItem=>{
+    const d = docItem.data();
+    const assinado = d.assinatura_p3 ? true : false;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${d.missao||"-"}</td>
+      <td>${d.motorista||"-"}</td>
+      <td>${d.viatura||"-"}</td>
+      <td>${d.horario_inicio||"-"}</td>
+      <td>${d.odometro_inicio||"-"}</td>
+      <td>${d.horario_fim||"-"}</td>
+      <td>${d.odometro_fim||"-"}</td>
+      <td>${assinado ? '<span class="badge badge-ok">Assinado</span>' : '<span class="badge badge-no">Pendente</span>'}</td>
+      <td class="actions">
+        ${assinado ? '' : `<button onclick="assinarP3('${docItem.id}')">Confirmar Passagem</button>`}
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* Assinatura de passagem */
+window.assinarP3 = async(id)=>{
+  const confirmar = confirm("Confirmar passagem desta viatura pelo P3?");
+  if(!confirmar) return;
+  const user = auth.currentUser;
+  await updateDoc(doc(db,"viaturas_missao",id),{
+    confirmado_p3:true,
+    assinatura_p3:user.email,
+    hora_confirmacao_p3:new Date().toLocaleString()
+  });
+  await logAction("Assinatura P3 registrada", id, {assinatura_p3:user.email});
+  carregarMissoes();
+}
+</script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h2>Auxiliar P3 — Painel de Passagens</h2>
+    <button onclick="logout()">Sair</button>
+  </header>
+
+  <h3>Missões em andamento / finalizadas</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Missão</th>
+          <th>Motorista</th>
+          <th>Viatura</th>
+          <th>Início</th>
+          <th>Odômetro Inicial</th>
+          <th>Fim</th>
+          <th>Odômetro Final</th>
+          <th>Assinatura P3</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
