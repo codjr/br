@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encarregado - Dashboard</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:0;}
+header{background:#007bff;color:white;padding:20px;text-align:center;display:flex;justify-content:space-between;align-items:center;}
+header button{padding:6px 12px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;}
+header button:hover{background:#c82333;}
+.container{max-width:1000px;margin:20px auto;padding:20px;background:white;border-radius:8px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{border:1px solid #ccc;padding:10px;text-align:left;}
+th{background:#007bff;color:white;}
+button{padding:4px 8px;border:none;border-radius:4px;cursor:pointer;}
+button.assinar{background:#17a2b8;color:white;}
+button.assinar:hover{background:#138496;}
+form input, form select{padding:8px;margin:4px;}
+</style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
+  authDomain: "vtr-marinha.firebaseapp.com",
+  projectId: "vtr-marinha",
+  storageBucket: "vtr-marinha.appspot.com",
+  messagingSenderId: "503079573653",
+  appId: "1:503079573653:web:beb34f57cd5447d376239c"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.logout = async()=>{await signOut(auth);window.location.href="index.html";}
+
+async function carregarMissoes(){
+  const snapshot = await getDocs(collection(db,"viaturas_missao"));
+  const tbody = document.getElementById("missoes-body");
+  tbody.innerHTML="";
+  snapshot.forEach(docItem=>{
+    const data=docItem.data();
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${data.missao||""}</td>
+      <td>${data.motorista||""}</td>
+      <td>${data.viatura||""}</td>
+      <td>${data.status||""}</td>
+      <td>${data.odometro_inicio||""}</td>
+      <td>${data.horario_inicio||""}</td>
+      <td>${data.odometro_fim||""}</td>
+      <td>${data.horario_fim||""}</td>
+      <td>
+        <button class="assinar" onclick="assinar('${docItem.id}')">Assinar</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+window.onload = carregarMissoes;
+
+window.assinar = async(id)=>{
+  await updateDoc(doc(db,"viaturas_missao",id),{assinado:true});
+  carregarMissoes();
+}
+
+// Criar missão
+window.criarMissao = async()=>{
+  const missao = document.getElementById("missao").value;
+  const motorista = document.getElementById("motorista").value;
+  const viatura = document.getElementById("viatura").value;
+  await addDoc(collection(db,"viaturas_missao"),{
+    missao,status:"Pendente",motorista,viatura,assinado:true
+  });
+  carregarMissoes();
+}
+</script>
+</head>
+<body>
+<header>
+<h1>Encarregado - Dashboard</h1>
+<button onclick="logout()">Sair</button>
+</header>
+<div class="container">
+<h2>Criar Nova Missão</h2>
+<form onsubmit="event.preventDefault(); criarMissao();">
+<input type="text" id="missao" placeholder="Missão" required>
+<input type="text" id="motorista" placeholder="Motorista" required>
+<input type="text" id="viatura" placeholder="Viatura" required>
+<button type="submit">Criar Missão</button>
+</form>
+
+<h2>Missões Existentes</h2>
+<table>
+<thead>
+<tr>
+<th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th><th>Odômetro Início</th><th>Horário Início</th>
+<th>Odômetro Fim</th><th>Horário Fim</th><th>Assinatura</th>
+</tr>
+</thead>
+<tbody id="missoes-body"></tbody>
+</table>
+</div>
+</body>
+</html>

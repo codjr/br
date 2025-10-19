@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chefe de Departamento - Dashboard</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:0;}
+header{background:#007bff;color:white;padding:20px;text-align:center;display:flex;justify-content:space-between;align-items:center;}
+header button{padding:6px 12px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;}
+header button:hover{background:#c82333;}
+.container{max-width:1000px;margin:20px auto;padding:20px;background:white;border-radius:8px;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{border:1px solid #ccc;padding:10px;text-align:left;}
+th{background:#007bff;color:white;}
+button{padding:4px 8px;border:none;border-radius:4px;cursor:pointer;}
+button.aprovar{background:#28a745;color:white;}
+button.aprovar:hover{background:#218838;}
+button.negar{background:#dc3545;color:white;}
+button.negar:hover{background:#c82333;}
+</style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
+  authDomain: "vtr-marinha.firebaseapp.com",
+  projectId: "vtr-marinha",
+  storageBucket: "vtr-marinha.appspot.com",
+  messagingSenderId: "503079573653",
+  appId: "1:503079573653:web:beb34f57cd5447d376239c"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.logout = async()=>{await signOut(auth);window.location.href="index.html";}
+
+async function carregarMissoes(){
+  const snapshot = await getDocs(collection(db,"viaturas_missao"));
+  const tbody = document.getElementById("missoes-body");
+  tbody.innerHTML="";
+  snapshot.forEach(docItem=>{
+    const data = docItem.data();
+    const tr = document.createElement("tr");
+    tr.innerHTML=`
+      <td>${data.missao||""}</td>
+      <td>${data.motorista||""}</td>
+      <td>${data.viatura||""}</td>
+      <td>${data.status||""}</td>
+      <td>${data.odometro_inicio||""}</td>
+      <td>${data.horario_inicio||""}</td>
+      <td>${data.odometro_fim||""}</td>
+      <td>${data.horario_fim||""}</td>
+      <td>
+        <button class="aprovar" onclick="aprovar('${docItem.id}')">Aprovar</button>
+        <button class="negar" onclick="negar('${docItem.id}')">Negar</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+window.onload = carregarMissoes;
+
+window.aprovar = async(id)=>{await updateDoc(doc(db,"viaturas_missao",id),{status:"Aprovada"});carregarMissoes();}
+window.negar = async(id)=>{await updateDoc(doc(db,"viaturas_missao",id),{status:"Negada"});carregarMissoes();}
+</script>
+</head>
+<body>
+<header>
+<h1>Chefe de Departamento</h1>
+<button onclick="logout()">Sair</button>
+</header>
+<div class="container">
+<h2>Missões de Viaturas</h2>
+<table>
+<thead>
+<tr>
+<th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
+<th>Odômetro Início</th><th>Horário Início</th>
+<th>Odômetro Fim</th><th>Horário Fim</th><th>Ações</th>
+</tr>
+</thead>
+<tbody id="missoes-body"></tbody>
+</table>
+</div>
+</body>
+</html>

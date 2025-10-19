@@ -1,0 +1,219 @@
+/* ==========================================================
+   UI FUTURISTA PREMIUM 2025 — CLARO + ESCURO AUTOMÁTICO
+========================================================== */
+:root {
+    /* 🎨 Paleta clara */
+    --cor-primaria: #2563eb;
+    --cor-primaria-hover: #1e40af;
+    --cor-secundaria: #10b981;
+    --cor-bg: #f5f7fb;
+    --cor-card: rgba(255, 255, 255, 0.9);
+    --cor-texto: #1e293b;
+    --cor-borda: rgba(0, 0, 0, 0.07);
+
+    /* 💡 Efeitos */
+    --blur: 16px;
+    --radius: 14px;
+    --sombra: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* 🖋 Tipografia */
+    --font: "Inter", "Segoe UI", Roboto, sans-serif;
+}
+
+/* 🌙 Tema escuro automático */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --cor-bg: #0f172a;
+        --cor-card: rgba(30, 41, 59, 0.8);
+        --cor-texto: #f1f5f9;
+        --cor-borda: rgba(255, 255, 255, 0.08);
+        --sombra: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* ==========================================================
+   BASE GLOBAL
+========================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font);
+    background: var(--cor-bg);
+    color: var(--cor-texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    line-height: 1.6;
+    transition: background var(--transicao), color var(--transicao);
+}
+
+/* ==========================================================
+   CONTAINER / CARD PRINCIPAL
+========================================================== */
+.container {
+    width: 100%;
+    max-width: 900px;
+    background: var(--cor-card);
+    backdrop-filter: blur(var(--blur));
+    border-radius: var(--radius);
+    box-shadow: var(--sombra);
+    padding: 50px;
+    border: 1px solid var(--cor-borda);
+    animation: fadeIn 0.7s ease forwards;
+    transform: translateY(15px);
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ==========================================================
+   TÍTULOS
+========================================================== */
+h1, h2, h3 {
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.9rem;
+    background: linear-gradient(90deg, var(--cor-primaria), var(--cor-secundaria));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================
+   FORMULÁRIOS
+========================================================== */
+input, select, textarea {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 12px 0 18px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--cor-texto);
+    transition: var(--transicao);
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* ==========================================================
+   BOTÕES
+========================================================== */
+button {
+    display: inline-block;
+    width: 100%;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    transition: var(--transicao);
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: var(--transicao);
+}
+
+button:hover::after {
+    opacity: 1;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button.secundario {
+    background: linear-gradient(135deg, var(--cor-secundaria), #059669);
+}
+
+/* ==========================================================
+   LISTAS E ELEMENTOS DINÂMICOS
+========================================================== */
+ul {
+    list-style: none;
+    margin-top: 15px;
+}
+
+li {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transicao);
+}
+
+li:hover {
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Badge / status */
+.badge {
+    background: var(--cor-secundaria);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* ==========================================================
+   RESPONSIVIDADE
+========================================================== */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 25px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    button {
+        font-size: 0.95rem;
+    }
+}
