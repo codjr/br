@@ -4,11 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - Sistema de Viaturas</title>
-<link rel="stylesheet" href="style.css">
 
 <!-- Favicon da Marinha -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ---------- Ajuste visual ---------- */
+.login-box {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-box img {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 15px;
+}
+
+.login-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.login-box h2 {
+  color: #004aad;
+  margin-bottom: 20px;
+}
+</style>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -55,8 +85,9 @@ window.loginADM = async function(){
 </head>
 <body>
 <div class="login-box">
-  <h2>Login - Viaturas</h2>
-  <input type="email" id="email" placeholder="Email" required>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Logo Marinha do Brasil">
+  <h2>Sistema de Viaturas</h2>
+  <input type="email" id="email" placeholder="Email institucional" required>
   <input type="password" id="senha" placeholder="Senha" required>
   <button onclick="loginADM()">Entrar</button>
   <p style="text-align:center;margin-top:10px;">
