@@ -1,165 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADM Dashboard - Viaturas</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard ADM — Sistema de Viaturas</title>
+
+<!-- Tema futurista premium 2025 -->
+<link rel="stylesheet" href="style.css" />
+
 <style>
-/* Reset básico */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* Ajustes finos por página */
+.header-actions {
+  display:flex; gap:10px; align-items:center;
 }
-
-body {
-    font-family: 'Arial', sans-serif;
-    background: #f4f4f4;
-    margin: 0;
-    padding: 0;
+.tag {
+  display:inline-block; padding:6px 10px; border-radius:999px; font-size:.8rem;
+  border:1px solid var(--cor-borda); opacity:.9
 }
+.tabs { display:flex; gap:8px; margin:10px 0 20px }
+.tabs button { width:auto; padding:10px 16px }
+.tabs button.active { box-shadow: inset 0 0 0 2px rgba(255,255,255,.3) }
 
-/* Cabeçalho */
-header {
-    background: #007bff;
-    color: white;
-    padding: 20px 30px;
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+.table-wrap { overflow:auto; border:1px solid var(--cor-borda); border-radius:12px }
+table { width:100%; border-collapse:collapse; min-width:820px }
+th, td { padding:12px 10px; border-bottom:1px solid var(--cor-borda) }
+th { text-align:left; font-weight:700 }
+.actions { display:flex; flex-wrap:wrap; gap:6px }
+.badge-ok { background:#22c55e; color:#fff; padding:4px 10px; border-radius:999px; font-size:.78rem }
+.badge-no { background:#ef4444; color:#fff; padding:4px 10px; border-radius:999px; font-size:.78rem }
 
-header h1 {
-    font-size: 20px;
-}
+.inline-edit { display:flex; gap:8px; align-items:center }
+.inline-edit input, .inline-edit select { margin:0; padding:8px 10px }
 
-/* Botões do cabeçalho */
-header button {
-    padding: 8px 14px;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
+.filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px }
+.filters input, .filters select { margin:0; width:auto }
 
-header button:hover {
-    transform: translateY(-2px);
-}
-
-header button.logout {
-    background: #ffc107;
-}
-
-header button.logout:hover {
-    background: #e0a800;
-}
-
-header button.logout:active {
-    transform: translateY(0);
-}
-
-/* Container principal */
-.container {
-    max-width: 1000px;
-    margin: 30px auto;
-    padding: 25px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-}
-
-/* Títulos */
-h2 {
-    margin-top: 0;
-    color: #333;
-}
-
-/* Tabela */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px 10px;
-    text-align: left;
-    font-size: 14px;
-}
-
-th {
-    background: #007bff;
-    color: white;
-    font-weight: 600;
-}
-
-/* Botões de ação */
-button.aprovar, button.rejeitar {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-
-button.aprovar {
-    background: #28a745;
-    color: white;
-}
-
-button.aprovar:hover {
-    background: #218838;
-    transform: translateY(-1px);
-}
-
-button.rejeitar {
-    background: #dc3545;
-    color: white;
-}
-
-button.rejeitar:hover {
-    background: #c82333;
-    transform: translateY(-1px);
-}
-
-/* Responsividade leve */
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    table th, table td {
-        font-size: 12px;
-        padding: 8px 6px;
-    }
-    
-    .container {
-        margin: 15px;
-        padding: 15px;
-    }
-    
-    button.aprovar, button.rejeitar {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
-}
-
+.small { font-size:.9rem; opacity:.9 }
 </style>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {
+  getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {
+  getFirestore, collection, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
@@ -174,59 +60,444 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-window.logout = async()=>{await signOut(auth);window.location.href="index.html";}
+/* ---------- Utils ---------- */
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
-// Carrega usuários pendentes
-async function carregarUsuariosPendentes(){
-  const snapshot = await getDocs(collection(db,"usuarios"));
-  const tbody = document.getElementById("usuarios-body");
-  tbody.innerHTML="";
-  snapshot.forEach(docItem=>{
-    const data = docItem.data();
-    if(!data.aprovado){ // mostra apenas pendentes
-      const tr = document.createElement("tr");
-      tr.innerHTML=`
-        <td>${data.nome}</td>
-        <td>${data.email}</td>
-        <td>${data.role}</td>
-        <td>
-          <button class="aprovar" onclick="aprovar('${docItem.id}')">Aprovar</button>
-          <button class="rejeitar" onclick="rejeitar('${docItem.id}')">Rejeitar</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    }
+async function logAction(acao, alvo, extra = {}) {
+  try {
+    const user = auth.currentUser;
+    await addDoc(collection(db, "logs"), {
+      acao,
+      alvo,
+      feito_por_uid: user?.uid || null,
+      feito_por_email: user?.email || null,
+      data_hora: serverTimestamp(),
+      ...extra
+    });
+  } catch (e) {
+    console.warn("Falha ao gravar log:", e);
+  }
+}
+
+function downloadCSV(filename, rows) {
+  const csv = [
+    Object.keys(rows[0] || {}).join(";"),
+    ...rows.map(r => Object.values(r).map(v => `"${(v ?? "").toString().replace(/"/g,'""')}"`).join(";"))
+  ].join("\n");
+  const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- Auth gate (somente ADM) ---------- */
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+  const docUser = await getDoc(doc(db, "usuarios", user.uid));
+  if (!docUser.exists()) {
+    alert("Usuário sem cadastro no Firestore."); 
+    await signOut(auth);
+    window.location.href = "index.html"; 
+    return;
+  }
+  const data = docUser.data();
+  if (data.role !== "adm") {
+    alert("Acesso restrito ao ADM.");
+    window.location.href = "index.html";
+    return;
+  }
+  // Carregar tudo
+  loadUsers();
+  loadArchivedUsers();
+  loadLogs();
+  loadMissoes();
+});
+
+/* ---------- Tabs ---------- */
+window.setTab = (id) => {
+  $$(".tab-pane").forEach(p => p.style.display = "none");
+  $$(".tabs button").forEach(b => b.classList.remove("active"));
+  $(`#${id}`).style.display = "block";
+  $(`[data-tab='${id}']`).classList.add("active");
+}
+window.logout = async () => { await signOut(auth); window.location.href = "index.html"; }
+
+/* ==========================================================
+   USUÁRIOS ATIVOS
+========================================================== */
+async function loadUsers() {
+  const q = query(collection(db, "usuarios"), orderBy("nome"));
+  const snap = await getDocs(q);
+  const tbody = $("#tbl-users-body");
+  tbody.innerHTML = "";
+  snap.forEach(docItem => {
+    const u = docItem.data();
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${u.nome || "-"}</td>
+      <td>${u.email || "-"}</td>
+      <td>
+        <div class="inline-edit">
+          <select id="role-${docItem.id}">
+            ${roleOptions(u.role)}
+          </select>
+        </div>
+      </td>
+      <td>${u.aprovado ? '<span class="badge-ok">Aprovado</span>' : '<span class="badge-no">Pendente</span>'}</td>
+      <td class="actions">
+        <button class="secundario" onclick="toggleAprov('${docItem.id}', ${!!u.aprovado})">${u.aprovado ? 'Desaprovar' : 'Aprovar'}</button>
+        <button onclick="editarNome('${docItem.id}', '${(u.nome||'').replace(/"/g,'&quot;')}')">Editar nome</button>
+        <button onclick="salvarRole('${docItem.id}')">Salvar cargo</button>
+        <button onclick="resetSenha('${(u.email||'')}')">Reiniciar senha</button>
+        <button onclick="arquivarUsuario('${docItem.id}')">Arquivar</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-// Aprovar usuário
-window.aprovar = async(uid)=>{
-  await updateDoc(doc(db,"usuarios",uid),{aprovado:true});
-  carregarUsuariosPendentes();
+function roleOptions(current) {
+  const roles = [
+    ["adm","ADM"],
+    ["chefe","Chefe de Departamento"],
+    ["ose","Oficial de Serviço"],
+    ["encarregado","Encarregado"],
+    ["motorista","Motorista"],
+    ["aux_p3","Auxiliar P3"]
+  ];
+  return roles.map(([val,label]) =>
+    `<option value="${val}" ${current===val?'selected':''}>${label}</option>`
+  ).join("");
 }
 
-// Rejeitar usuário
-window.rejeitar = async(uid)=>{
-  await updateDoc(doc(db,"usuarios",uid),{aprovado:false});
-  carregarUsuariosPendentes();
+window.toggleAprov = async (uid, aprov) => {
+  await updateDoc(doc(db, "usuarios", uid), { aprovado: !aprov });
+  await logAction(!aprov ? "Aprovar usuário" : "Desaprovar usuário", uid);
+  loadUsers();
 }
 
-window.onload = carregarUsuariosPendentes;
+window.editarNome = async (uid, atual) => {
+  const nome = prompt("Novo nome do usuário:", atual || "");
+  if (!nome) return;
+  await updateDoc(doc(db, "usuarios", uid), { nome });
+  await logAction("Editar nome do usuário", uid, { nome });
+  loadUsers();
+}
+
+window.salvarRole = async (uid) => {
+  const sel = $(`#role-${uid}`);
+  const role = sel.value;
+  await updateDoc(doc(db, "usuarios", uid), { role });
+  await logAction("Alterar cargo do usuário", uid, { role });
+  loadUsers();
+}
+
+window.resetSenha = async (email) => {
+  if (!email) return alert("Usuário sem e-mail cadastrado.");
+  if (!confirm(`Enviar e-mail de redefinição de senha para:\n${email}?`)) return;
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("E-mail de redefinição enviado.");
+    await logAction("Reset de senha solicitado", email);
+  } catch (e) {
+    alert("Falha ao enviar e-mail de redefinição: " + e.message);
+  }
+}
+
+window.arquivarUsuario = async (uid) => {
+  if (!confirm("Arquivar este usuário? Ele será movido para 'usuarios_excluidos'.")) return;
+  const ref = doc(db, "usuarios", uid);
+  const d = await getDoc(ref);
+  if (!d.exists()) return;
+  const data = d.data();
+  await setDoc(doc(db, "usuarios_excluidos", uid), { ...data, arquivado_em: serverTimestamp() });
+  await deleteDoc(ref);
+  await logAction("Arquivar usuário", uid);
+  loadUsers();
+  loadArchivedUsers();
+}
+
+/* ==========================================================
+   USUÁRIOS ARQUIVADOS
+========================================================== */
+async function loadArchivedUsers() {
+  const q = query(collection(db, "usuarios_excluidos"), orderBy("nome"));
+  const snap = await getDocs(q);
+  const tbody = $("#tbl-arch-body");
+  tbody.innerHTML = "";
+  snap.forEach(docItem => {
+    const u = docItem.data();
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${u.nome || "-"}</td>
+      <td>${u.email || "-"}</td>
+      <td>${u.role || "-"}</td>
+      <td class="actions">
+        <button onclick="restaurarUsuario('${docItem.id}')">Restaurar</button>
+        <button class="secundario" onclick="apagarDefinitivo('${docItem.id}')">Apagar definitivamente</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+window.restaurarUsuario = async (uid) => {
+  const ref = doc(db, "usuarios_excluidos", uid);
+  const d = await getDoc(ref);
+  if (!d.exists()) return;
+  const data = d.data();
+  await setDoc(doc(db, "usuarios", uid), { ...data });
+  await deleteDoc(ref);
+  await logAction("Restaurar usuário", uid);
+  loadUsers();
+  loadArchivedUsers();
+}
+
+window.apagarDefinitivo = async (uid) => {
+  if (!confirm("Tem certeza? Essa ação é irreversível.")) return;
+  await deleteDoc(doc(db, "usuarios_excluidos", uid));
+  await logAction("Apagar usuário definitivamente", uid);
+  loadArchivedUsers();
+}
+
+/* ==========================================================
+   LOGS
+========================================================== */
+let LOGS_CACHE = [];
+
+async function loadLogs() {
+  const q = query(collection(db, "logs"), orderBy("data_hora", "desc"));
+  const snap = await getDocs(q);
+  LOGS_CACHE = [];
+  const tbody = $("#tbl-logs-body");
+  tbody.innerHTML = "";
+  snap.forEach(docItem => {
+    const l = docItem.data();
+    LOGS_CACHE.push({
+      acao: l.acao || "",
+      alvo: l.alvo || "",
+      feito_por_email: l.feito_por_email || "",
+      data_hora: (l.data_hora?.toDate?.() || l.data_hora || "").toString()
+    });
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${l.acao || "-"}</td>
+      <td>${l.alvo || "-"}</td>
+      <td>${l.feito_por_email || "-"}</td>
+      <td>${l.data_hora?.toDate ? l.data_hora.toDate().toLocaleString() : "-"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+window.filtrarLogs = () => {
+  const termo = ($("#busca-logs").value || "").toLowerCase().trim();
+  const linhas = $$("#tbl-logs-body tr");
+  linhas.forEach(tr => {
+    const txt = tr.innerText.toLowerCase();
+    tr.style.display = txt.includes(termo) ? "" : "none";
+  });
+}
+
+window.exportarLogs = () => {
+  if (!LOGS_CACHE.length) return alert("Sem logs para exportar.");
+  downloadCSV(`logs_${new Date().toISOString().slice(0,10)}.csv`, LOGS_CACHE);
+}
+
+/* ==========================================================
+   MISSÕES GLOBAIS
+========================================================== */
+async function loadMissoes() {
+  const qs = [];
+  const statusFilter = $("#status-missao-filter").value;
+  let c = collection(db,"viaturas_missao");
+  let qFinal;
+  if (statusFilter) {
+    qFinal = query(c, where("status","==",statusFilter));
+  } else {
+    qFinal = query(c, orderBy("missao"));
+  }
+  const snap = await getDocs(qFinal);
+  const tbody = $("#tbl-missoes-body");
+  tbody.innerHTML = "";
+  snap.forEach(docItem => {
+    const m = docItem.data();
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${m.missao || "-"}</td>
+      <td>${m.motorista || "-"}</td>
+      <td>${m.viatura || "-"}</td>
+      <td>${m.status || "-"}</td>
+      <td>${m.odometro_inicio || "-"}</td>
+      <td>${m.horario_inicio || "-"}</td>
+      <td>${m.odometro_fim || "-"}</td>
+      <td>${m.horario_fim || "-"}</td>
+      <td class="actions">
+        <button onclick="editarMissao('${docItem.id}')">Editar</button>
+        <button class="secundario" onclick="setStatus('${docItem.id}')">Alterar status</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+window.refreshMissoes = () => loadMissoes();
+
+window.setStatus = async (id) => {
+  const status = prompt("Novo status (ex: Pendente, Aprovada, Negada, Em viagem, Concluída):","");
+  if (!status) return;
+  await updateDoc(doc(db,"viaturas_missao",id),{ status });
+  await logAction("Alterar status missão", id, { status });
+  loadMissoes();
+}
+
+window.editarMissao = async (id) => {
+  const ref = doc(db,"viaturas_missao",id);
+  const d = await getDoc(ref);
+  if (!d.exists()) return;
+  const m = d.data();
+  const missao = prompt("Missão:", m.missao || "");
+  if (missao===null) return;
+  const motorista = prompt("Motorista:", m.motorista || "");
+  if (motorista===null) return;
+  const viatura = prompt("Viatura:", m.viatura || "");
+  if (viatura===null) return;
+  const odIni = prompt("Odômetro início:", m.odometro_inicio || "");
+  if (odIni===null) return;
+  const hrIni = prompt("Horário início:", m.horario_inicio || "");
+  if (hrIni===null) return;
+  const odFim = prompt("Odômetro fim:", m.odometro_fim || "");
+  if (odFim===null) return;
+  const hrFim = prompt("Horário fim:", m.horario_fim || "");
+  if (hrFim===null) return;
+
+  await updateDoc(ref, {
+    missao, motorista, viatura, odometro_inicio: odIni, horario_inicio: hrIni,
+    odometro_fim: odFim, horario_fim: hrFim
+  });
+  await logAction("Editar missão", id);
+  loadMissoes();
+}
 </script>
 </head>
 <body>
-<header>
-<h1>Dashboard ADM</h1>
-<button class="logout" onclick="logout()">Sair</button>
-</header>
-<div class="container">
-<h2>Usuários Pendentes de Aprovação</h2>
-<table>
-<thead>
-<tr><th>Nome</th><th>Email</th><th>Cargo</th><th>Ações</th></tr>
-</thead>
-<tbody id="usuarios-body"></tbody>
-</table>
-</div>
+  <div class="container">
+    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+      <div>
+        <h2>Dashboard ADM</h2>
+        <div class="small">Acesso total • Monitoramento e Auditoria</div>
+      </div>
+      <div class="header-actions">
+        <span class="tag">Desenvolvedor / Root</span>
+        <button class="secundario" onclick="setTab('tab-usuarios')">Usuários</button>
+        <button class="secundario" onclick="setTab('tab-missoes')">Missões</button>
+        <button class="secundario" onclick="setTab('tab-logs')">Logs</button>
+        <button onclick="logout()">Sair</button>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button data-tab="tab-usuarios" class="active" onclick="setTab('tab-usuarios')">Usuários</button>
+      <button data-tab="tab-missoes" onclick="setTab('tab-missoes')">Missões</button>
+      <button data-tab="tab-logs" onclick="setTab('tab-logs')">Logs</button>
+    </div>
+
+    <!-- ========== TAB: USUÁRIOS ========== -->
+    <section id="tab-usuarios" class="tab-pane" style="display:block;">
+      <h3>Usuários ativos</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Cargo</th>
+              <th>Status</th>
+              <th style="min-width:360px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbl-users-body"></tbody>
+        </table>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <h3>Usuários arquivados</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Cargo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbl-arch-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== TAB: MISSÕES ========== -->
+    <section id="tab-missoes" class="tab-pane" style="display:none;">
+      <h3>Missões (visão global)</h3>
+      <div class="filters">
+        <select id="status-missao-filter" onchange="refreshMissoes()">
+          <option value="">Todas</option>
+          <option value="Pendente">Pendente</option>
+          <option value="Aprovada">Aprovada</option>
+          <option value="Negada">Negada</option>
+          <option value="Em viagem">Em viagem</option>
+          <option value="Concluída">Concluída</option>
+        </select>
+        <button class="secundario" onclick="refreshMissoes()">Atualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Missão</th>
+              <th>Motorista</th>
+              <th>Viatura</th>
+              <th>Status</th>
+              <th>Odômetro Início</th>
+              <th>Horário Início</th>
+              <th>Odômetro Fim</th>
+              <th>Horário Fim</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbl-missoes-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== TAB: LOGS ========== -->
+    <section id="tab-logs" class="tab-pane" style="display:none;">
+      <h3>Monitoramento / Logs</h3>
+      <div class="filters">
+        <input id="busca-logs" type="search" placeholder="Buscar por ação, alvo, e-mail..." oninput="filtrarLogs()"/>
+        <button class="secundario" onclick="exportarLogs()">Exportar CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ação</th>
+              <th>Alvo</th>
+              <th>Feito por</th>
+              <th>Data/Hora</th>
+            </tr>
+          </thead>
+          <tbody id="tbl-logs-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
 </body>
 </html>
