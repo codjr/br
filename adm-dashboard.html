@@ -8,8 +8,230 @@
 <!-- Favicon da Marinha -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
-<!-- CSS principal -->
-<link rel="stylesheet" href="style.css">
+  <style>
+/* ==========================================================
+   UI FUTURISTA PREMIUM 2025 — ADMINISTRADOR MARINHA
+   Tema institucional azul-naval + modo escuro automático
+========================================================== */
+:root {
+  --cor-primaria: #004aad;
+  --cor-primaria-hover: #003b8e;
+  --cor-fundo: #f5f7fa;
+  --cor-texto: #1f2937;
+  --cor-card: #ffffff;
+  --cor-borda: #d1d5db;
+  --cor-secundaria: #e2e8f0;
+  --cor-sucesso: #16a34a;
+  --cor-erro: #dc2626;
+  --cor-aviso: #f59e0b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #0b1120;
+    --cor-card: #111827;
+    --cor-texto: #e5e7eb;
+    --cor-borda: #1f2937;
+    --cor-secundaria: #1e293b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 30px 10px;
+}
+
+/* ---------- Container ---------- */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  background: var(--cor-card);
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  padding: 30px;
+}
+
+/* ---------- Cabeçalho ---------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+header .logo-marinha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+header .logo-marinha img {
+  width: 50px;
+  height: 50px;
+}
+
+header h1 {
+  color: var(--cor-primaria);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+header button {
+  background: var(--cor-secundaria);
+  color: var(--cor-texto);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+header button:hover {
+  background: var(--cor-card);
+}
+
+/* ---------- Título ---------- */
+h2 {
+  color: var(--cor-primaria);
+  margin-top: 0;
+  border-left: 4px solid var(--cor-primaria);
+  padding-left: 10px;
+}
+
+/* ---------- Tabela ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+thead {
+  background: var(--cor-primaria);
+  color: white;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+tbody tr:hover {
+  background: rgba(0,74,173,0.05);
+}
+
+/* ---------- Botões de Ação ---------- */
+button.aprovar {
+  background: var(--cor-sucesso);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 4px;
+}
+button.aprovar:hover {
+  background: #15803d;
+}
+
+button.editar {
+  background: var(--cor-aviso);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 4px;
+}
+button.editar:hover {
+  background: #b45309;
+}
+
+button.reset {
+  background: var(--cor-secundaria);
+  color: var(--cor-texto);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 4px;
+}
+button.reset:hover {
+  filter: brightness(0.9);
+}
+
+button.excluir {
+  background: var(--cor-erro);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button.excluir:hover {
+  background: #b91c1c;
+}
+
+/* ---------- Status ---------- */
+td span[style*="color:green"] {
+  display: inline-block;
+  background: rgba(22,163,74,0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+td span[style*="color:red"] {
+  display: inline-block;
+  background: rgba(220,38,38,0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  header .logo-marinha {
+    flex-wrap: wrap;
+  }
+
+  th, td {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+}
+
+/* ---------- Transições ---------- */
+button, input {
+  transition: all 0.25s ease;
+}
+</style>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
