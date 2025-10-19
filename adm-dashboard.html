@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Administrador - Dashboard</title>
 
 <!-- Favicon da Marinha -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
-  <style>
+<!-- ================== ESTILO INSTITUCIONAL AZUL-NAVAL ================== -->
+<style>
 /* ==========================================================
    UI FUTURISTA PREMIUM 2025 — ADMINISTRADOR MARINHA
    Tema institucional azul-naval + modo escuro automático
@@ -36,340 +37,477 @@
   }
 }
 
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-}
-
+* { box-sizing: border-box; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
 body {
-  margin: 0;
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 30px 10px;
+  margin: 0; background: var(--cor-fundo); color: var(--cor-texto);
+  min-height: 100vh; display: flex; justify-content: center; padding: 30px 10px;
 }
 
-/* ---------- Container ---------- */
+/* Container */
 .container {
-  width: 100%;
-  max-width: 1200px;
-  background: var(--cor-card);
-  border-radius: 10px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-  padding: 30px;
+  width: 100%; max-width: 1250px; background: var(--cor-card);
+  border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,0.12); padding: 24px;
 }
 
-/* ---------- Cabeçalho ---------- */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-header .logo-marinha {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-header .logo-marinha img {
-  width: 50px;
-  height: 50px;
-}
-
-header h1 {
-  color: var(--cor-primaria);
-  font-size: 1.4rem;
-  margin: 0;
-}
-
+/* Header */
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.logo-marinha { display: flex; align-items: center; gap: 12px; }
+.logo-marinha img { width: 50px; height: 50px; }
+header h1 { color: var(--cor-primaria); font-size: 1.35rem; margin: 0; }
 header button {
-  background: var(--cor-secundaria);
-  color: var(--cor-texto);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.25s ease;
+  background: var(--cor-secundaria); color: var(--cor-texto); border: none;
+  padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.25s ease;
 }
-header button:hover {
-  background: var(--cor-card);
-}
+header button:hover { background: var(--cor-card); }
 
-/* ---------- Título ---------- */
+/* Tabs */
+.nav-tabs { display: flex; gap: 8px; margin: 12px 0 18px; flex-wrap: wrap; }
+.nav-tabs button {
+  background: var(--cor-secundaria); border: 1px solid var(--cor-borda); color: var(--cor-texto);
+  padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600;
+}
+.nav-tabs button.active { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
+
+/* Títulos */
 h2 {
-  color: var(--cor-primaria);
-  margin-top: 0;
-  border-left: 4px solid var(--cor-primaria);
-  padding-left: 10px;
+  color: var(--cor-primaria); margin: 0 0 8px 0; border-left: 4px solid var(--cor-primaria); padding-left: 10px;
 }
 
-/* ---------- Tabela ---------- */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
+/* Tabelas */
+.table-wrap { overflow: auto; border: 1px solid var(--cor-borda); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; min-width: 980px; }
+thead { background: var(--cor-primaria); color: white; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--cor-borda); }
+tbody tr:hover { background: rgba(0,74,173,0.05); }
 
-thead {
-  background: var(--cor-primaria);
-  color: white;
-}
+/* Botões de ação */
+button.aprovar { background: var(--cor-sucesso); color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; margin-right:4px; }
+button.aprovar:hover { background:#15803d; }
+button.editar { background: var(--cor-aviso); color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; margin-right:4px; }
+button.editar:hover{ background:#b45309; }
+button.reset { background: var(--cor-secundaria); color:var(--cor-texto); border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; margin-right:4px; }
+button.reset:hover{ filter: brightness(0.9); }
+button.excluir { background: var(--cor-erro); color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; }
+button.excluir:hover{ background:#b91c1c; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; }
 
-th, td {
-  text-align: left;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--cor-borda);
-}
+/* Badges */
+.badge-ok { display:inline-block; background:rgba(22,163,74,.12); color:#166534; padding:4px 8px; border-radius:6px; font-weight:700; }
+.badge-no { display:inline-block; background:rgba(220,38,38,.12); color:#991b1b; padding:4px 8px; border-radius:6px; font-weight:700; }
+.badge-warn { display:inline-block; background:rgba(245,158,11,.12); color:#92400e; padding:4px 8px; border-radius:6px; font-weight:700; }
+.tag-fp { color:#dc2626; font-weight:700; }
 
-tbody tr:hover {
-  background: rgba(0,74,173,0.05);
-}
+/* Filtros / inputs */
+.filters { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 8px 0 12px; }
+.filters input, .filters select { padding: 8px 10px; border:1px solid var(--cor-borda); border-radius:8px; background:#fff; }
 
-/* ---------- Botões de Ação ---------- */
-button.aprovar {
-  background: var(--cor-sucesso);
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-right: 4px;
-}
-button.aprovar:hover {
-  background: #15803d;
-}
-
-button.editar {
-  background: var(--cor-aviso);
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-right: 4px;
-}
-button.editar:hover {
-  background: #b45309;
-}
-
-button.reset {
-  background: var(--cor-secundaria);
-  color: var(--cor-texto);
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-right: 4px;
-}
-button.reset:hover {
-  filter: brightness(0.9);
-}
-
-button.excluir {
-  background: var(--cor-erro);
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-}
-button.excluir:hover {
-  background: #b91c1c;
-}
-
-/* ---------- Status ---------- */
-td span[style*="color:green"] {
-  display: inline-block;
-  background: rgba(22,163,74,0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-td span[style*="color:red"] {
-  display: inline-block;
-  background: rgba(220,38,38,0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-/* ---------- Responsividade ---------- */
+/* Responsivo */
 @media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-  }
-
-  header .logo-marinha {
-    flex-wrap: wrap;
-  }
-
-  th, td {
-    font-size: 0.9rem;
-  }
-
-  button {
-    font-size: 0.85rem;
-    padding: 5px 8px;
-  }
-
-  .container {
-    padding: 20px;
-  }
-}
-
-/* ---------- Transições ---------- */
-button, input {
-  transition: all 0.25s ease;
+  header { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .container { padding: 18px; }
+  th, td { font-size: 0.92rem; }
+  .nav-tabs { gap: 6px; }
+  .nav-tabs button { padding: 7px 10px; }
 }
 </style>
-
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { 
-  getAuth, 
-  signOut, 
-  sendPasswordResetEmail 
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { 
-  getFirestore, 
-  collection, 
-  onSnapshot, 
-  doc, 
-  updateDoc, 
-  deleteDoc 
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
-  authDomain: "vtr-marinha.firebaseapp.com",
-  projectId: "vtr-marinha",
-  storageBucket: "vtr-marinha.appspot.com",
-  messagingSenderId: "503079573653",
-  appId: "1:503079573653:web:beb34f57cd5447d376239c"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-window.logout = async () => {
-  await signOut(auth);
-  window.location.href = "index.html";
-};
-
-// ==============================================
-// 🔹 Atualização em tempo real dos usuários
-// ==============================================
-function carregarUsuarios() {
-  const tbody = document.getElementById("usuarios-body");
-
-  onSnapshot(collection(db, "usuarios"), (snapshot) => {
-    tbody.innerHTML = "";
-    snapshot.forEach((docItem) => {
-      const data = docItem.data();
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${data.nome || "-"}</td>
-        <td>${data.email || "-"}</td>
-        <td>${data.role || "-"}</td>
-        <td>
-          ${data.aprovado 
-            ? "<span style='color:green;font-weight:bold;'>Aprovado</span>"
-            : "<span style='color:red;font-weight:bold;'>Pendente</span>"
-          }
-        </td>
-        <td>
-          <button class="aprovar" onclick="aprovar('${docItem.id}')">✔ Aprovar</button>
-          <button class="editar" onclick="editarUsuario('${docItem.id}', '${data.nome}', '${data.role}')">✏ Editar</button>
-          <button class="reset" onclick="resetSenha('${data.email}')">🔁 Resetar Senha</button>
-          <button class="excluir" onclick="excluir('${docItem.id}')">🗑 Excluir</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  });
-}
-window.onload = carregarUsuarios;
-
-// ==============================================
-// 🔹 Funções ADM
-// ==============================================
-window.aprovar = async (id) => {
-  await updateDoc(doc(db, "usuarios", id), { aprovado: true });
-  alert("✅ Usuário aprovado com sucesso!");
-};
-
-window.editarUsuario = async (id, nomeAtual, cargoAtual) => {
-  const novoNome = prompt("Novo nome:", nomeAtual);
-  const novoCargo = prompt("Novo cargo (adm, chefe, ose, encarregado, motorista, aux_p3):", cargoAtual);
-
-  if (!novoNome || !novoCargo) {
-    alert("⚠️ Campos inválidos. Edição cancelada.");
-    return;
-  }
-
-  await updateDoc(doc(db, "usuarios", id), {
-    nome: novoNome,
-    role: novoCargo
-  });
-
-  alert("✏ Dados do usuário atualizados!");
-};
-
-window.resetSenha = async (email) => {
-  try {
-    await sendPasswordResetEmail(auth, email);
-    alert(`🔁 Um e-mail de redefinição foi enviado para ${email}`);
-  } catch (err) {
-    console.error(err);
-    alert("❌ Erro ao enviar e-mail de redefinição.");
-  }
-};
-
-window.excluir = async (id) => {
-  if (confirm("Tem certeza que deseja excluir este usuário? Essa ação é irreversível.")) {
-    await deleteDoc(doc(db, "usuarios", id));
-    alert("🗑 Usuário removido com sucesso!");
-  }
-};
-</script>
 </head>
-
 <body>
   <div class="container">
     <header>
       <div class="logo-marinha">
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
-        <h1>Administrador - Sistema de Viaturas</h1>
+        <h1>Administrador — Sistema de Viaturas</h1>
       </div>
       <button onclick="logout()">Sair</button>
     </header>
 
-    <h2>Gerenciamento de Usuários</h2>
+    <!-- Navegação -->
+    <div class="nav-tabs">
+      <button class="active" data-tab="tab-usuarios" onclick="setTab('tab-usuarios', this)">Usuários</button>
+      <button data-tab="tab-missoes" onclick="setTab('tab-missoes', this)">Missões</button>
+      <button data-tab="tab-logs" onclick="setTab('tab-logs', this)">Logs do Sistema</button>
+      <button data-tab="tab-emulacao" onclick="setTab('tab-emulacao', this)">Emulação</button>
+    </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Cargo</th>
-          <th>Status</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="usuarios-body"></tbody>
-    </table>
+    <!-- ======= USUÁRIOS ======= -->
+    <section id="tab-usuarios" class="tab-pane" style="display:block;">
+      <h2>Gerenciamento de Usuários</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Cargo</th>
+              <th>Status</th>
+              <th style="min-width:380px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="usuarios-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= MISSÕES ======= -->
+    <section id="tab-missoes" class="tab-pane" style="display:none;">
+      <h2>Missões (todas)</h2>
+
+      <div class="filters">
+        <select id="filtro-status" onchange="filtrarMissoes()">
+          <option value="">Status: Todos</option>
+          <option value="Pendente">Pendente</option>
+          <option value="Aprovada">Aprovada</option>
+          <option value="Negada">Negada</option>
+          <option value="Em viagem">Em viagem</option>
+          <option value="Concluída">Concluída</option>
+        </select>
+        <input id="busca-missao" type="search" placeholder="Buscar por missão/viatura/motorista..." oninput="filtrarMissoes()"/>
+        <span class="badge-warn">⚠ Missões fora da programação aparecerão com destaque</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Missão</th>
+              <th>Motorista</th>
+              <th>Viatura</th>
+              <th>Status</th>
+              <th>Odômetro Início</th>
+              <th>Horário Início</th>
+              <th>Odômetro Fim</th>
+              <th>Horário Fim</th>
+              <th>Assinatura P3</th>
+              <th style="min-width:220px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="missoes-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= LOGS ======= -->
+    <section id="tab-logs" class="tab-pane" style="display:none;">
+      <h2>Logs do Sistema</h2>
+      <div class="filters">
+        <input id="busca-logs" type="search" placeholder="Buscar por ação, alvo, e-mail..." oninput="filtrarLogs()"/>
+        <button class="reset" onclick="exportarLogs()">Exportar CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ação</th>
+              <th>Alvo</th>
+              <th>Feito por</th>
+              <th>Data/Hora</th>
+            </tr>
+          </thead>
+          <tbody id="logs-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= EMULAÇÃO ======= -->
+    <section id="tab-emulacao" class="tab-pane" style="display:none;">
+      <h2>Emulação de Perfil</h2>
+      <div class="filters">
+        <input id="busca-emulacao" type="search" placeholder="Buscar usuário por nome/email..." oninput="filtrarEmulacao()"/>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Cargo</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="emulacao-body"></tbody>
+        </table>
+      </div>
+      <p class="badge-warn" style="margin-top:8px;">⚙ Ao emular, você será redirecionado para o dashboard do cargo com <b>?emulando=email</b>. (Os dashboards devem exibir aviso quando detectarem esse parâmetro.)</p>
+    </section>
   </div>
+
+  <script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+  import {
+    collection, onSnapshot, doc, updateDoc, deleteDoc, getDoc, addDoc, serverTimestamp, query, where, orderBy
+  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+  /* ===== Tabs ===== */
+  window.setTab = (id, btn) => {
+    document.querySelectorAll(".tab-pane").forEach(p => p.style.display = "none");
+    document.getElementById(id).style.display = "block";
+    document.querySelectorAll(".nav-tabs button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  };
+
+  /* ===== Logout ===== */
+  window.logout = async () => { await signOut(auth); window.location.href = "index.html"; };
+
+  /* ===== Utils ===== */
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+  function roleLabel(r){ return ({
+    adm:"ADM", chefe:"Chefe", ose:"OSE", encarregado:"Encarregado", motorista:"Motorista", aux_p3:"Auxiliar P3"
+  }[r] || r); }
+  function destinosPorRole(role){
+    return ({
+      adm: "adm-dashboard.html",
+      chefe: "chefe-dashboard.html",
+      ose: "ose-dashboard.html",
+      encarregado: "encarregado-dashboard.html",
+      motorista: "motorista-dashboard.html",
+      aux_p3: "aux-p3-dashboard.html"
+    }[role] || "index.html");
+  }
+  function downloadCSV(filename, rows){
+    if(!rows.length) return alert("Sem dados para exportar.");
+    const csv = [
+      Object.keys(rows[0]).join(";"),
+      ...rows.map(r => Object.values(r).map(v => `"${(v??"").toString().replace(/"/g,'""')}"`).join(";"))
+    ].join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"}); const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url);
+  }
+
+  /* ===== LOG helper ===== */
+  async function logAction(acao, alvo, extra={}){
+    try{
+      await addDoc(collection(db,"logs"), {
+        acao, alvo,
+        feito_por_uid: auth.currentUser?.uid || null,
+        feito_por_email: auth.currentUser?.email || null,
+        data_hora: serverTimestamp(),
+        ...extra
+      });
+    }catch(e){ console.warn("Falha ao gravar log:", e); }
+  }
+
+  /* ===================== USUÁRIOS (Realtime) ===================== */
+  function carregarUsuarios(){
+    const tbody = $("#usuarios-body");
+    const emuBody = $("#emulacao-body");
+
+    onSnapshot(collection(db,"usuarios"), (snap)=>{
+      tbody.innerHTML = "";
+      emuBody.innerHTML = "";
+
+      snap.forEach(docItem=>{
+        const u = docItem.data();
+        // Tabela de gerenciamento
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${u.nome || "-"}</td>
+          <td>${u.email || "-"}</td>
+          <td>${roleLabel(u.role)}</td>
+          <td>${u.aprovado ? '<span class="badge-ok">Aprovado</span>' : '<span class="badge-no">Pendente</span>'}</td>
+          <td class="actions">
+            <button class="aprovar" onclick="aprovar('${docItem.id}')">✔ Aprovar</button>
+            <button class="editar" onclick="editarUsuario('${docItem.id}','${(u.nome||'').replace(/"/g,'&quot;')}','${u.role||''}')">✏ Editar</button>
+            <button class="reset" onclick="resetSenha('${u.email||''}')">🔁 Resetar Senha</button>
+            <button class="excluir" onclick="excluirUsuario('${docItem.id}')">🗑 Excluir</button>
+          </td>`;
+        tbody.appendChild(tr);
+
+        // Tabela de emulação
+        const tr2 = document.createElement("tr");
+        tr2.innerHTML = `
+          <td>${u.nome || "-"}</td>
+          <td>${u.email || "-"}</td>
+          <td>${roleLabel(u.role)}</td>
+          <td><button class="editar" onclick="emularPerfil('${u.email||''}','${u.role||''}')">Emular</button></td>`;
+        emuBody.appendChild(tr2);
+      });
+    });
+  }
+  window.onload = carregarUsuarios;
+
+  window.aprovar = async (uid) => {
+    await updateDoc(doc(db,"usuarios",uid), { aprovado: true });
+    await logAction("Aprovar usuário", uid);
+    alert("✅ Usuário aprovado!");
+  };
+  window.editarUsuario = async (uid, nomeAtual, cargoAtual) => {
+    const novoNome = prompt("Novo nome:", nomeAtual || "")?.trim();
+    const novoCargo = prompt("Novo cargo (adm, chefe, ose, encarregado, motorista, aux_p3):", cargoAtual || "")?.trim();
+    if(!novoNome || !novoCargo) return alert("⚠️ Edição cancelada.");
+    await updateDoc(doc(db,"usuarios",uid), { nome: novoNome, role: novoCargo });
+    await logAction("Editar usuário", uid, { nome: novoNome, role: novoCargo });
+    alert("✏ Usuário atualizado!");
+  };
+  window.resetSenha = async (email) => {
+    if(!email) return alert("Usuário sem e-mail.");
+    try{ await sendPasswordResetEmail(auth, email); alert(`🔁 E-mail de redefinição enviado para ${email}.`); await logAction("Reset de senha", email); }
+    catch(e){ console.error(e); alert("❌ Erro ao enviar e-mail de redefinição."); }
+  };
+  window.excluirUsuario = async (uid) => {
+    if(!confirm("Excluir usuário? Esta ação é irreversível.")) return;
+    await deleteDoc(doc(db,"usuarios",uid));
+    await logAction("Excluir usuário", uid);
+    alert("🗑 Usuário excluído.");
+  };
+
+  /* ===================== MISSÕES (Realtime + Filtro) ===================== */
+  let MISSOES_CACHE = [];
+  onSnapshot(collection(db,"viaturas_missao"), (snap)=>{
+    MISSOES_CACHE = [];
+    const tbody = $("#missoes-body");
+    tbody.innerHTML = "";
+    snap.forEach(docItem=>{
+      const m = { id: docItem.id, ...docItem.data() };
+      MISSOES_CACHE.push(m);
+    });
+    renderMissoes(MISSOES_CACHE);
+  });
+
+  function renderMissoes(list){
+    const tbody = $("#missoes-body");
+    tbody.innerHTML = "";
+    list.forEach(m=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${m.missao || "-"} ${m.fora_programacao ? "<span class='tag-fp'>⚠ Fora da Programação</span>" : ""}</td>
+        <td>${m.motorista || "-"}</td>
+        <td>${m.viatura || "-"}</td>
+        <td>${m.status || "-"}</td>
+        <td>${m.odometro_inicio || "-"}</td>
+        <td>${m.horario_inicio || "-"}</td>
+        <td>${m.odometro_fim || "-"}</td>
+        <td>${m.horario_fim || "-"}</td>
+        <td>${
+          m.confirmado_p3
+            ? `<span class="badge-ok">${m.assinatura_p3 || "P3 assinado"}</span><br><small>${m.hora_confirmacao_p3 || ""}</small>`
+            : `<span class="badge-no">Pendente P3</span>`
+        }</td>
+        <td class="actions">
+          <button class="editar" onclick="editarMissao('${m.id}')">✏ Editar</button>
+          <button class="reset" onclick="alterarStatus('${m.id}')">↺ Status</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+    filtrarMissoes(); // aplica filtro atual
+  }
+
+  window.filtrarMissoes = () => {
+    const st = $("#filtro-status").value;
+    const q = ($("#busca-missao").value || "").toLowerCase();
+    const filtradas = MISSOES_CACHE.filter(m=>{
+      const okStatus = st ? (m.status === st) : true;
+      const txt = `${m.missao||""} ${m.motorista||""} ${m.viatura||""}`.toLowerCase();
+      const okQuery = q ? txt.includes(q) : true;
+      return okStatus && okQuery;
+    });
+    renderMissoesSemRefazer(filtradas);
+  };
+
+  function renderMissoesSemRefazer(list){
+    const tbody = $("#missoes-body");
+    tbody.innerHTML = "";
+    list.forEach(m=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${m.missao || "-"} ${m.fora_programacao ? "<span class='tag-fp'>⚠ Fora da Programação</span>" : ""}</td>
+        <td>${m.motorista || "-"}</td>
+        <td>${m.viatura || "-"}</td>
+        <td>${m.status || "-"}</td>
+        <td>${m.odometro_inicio || "-"}</td>
+        <td>${m.horario_inicio || "-"}</td>
+        <td>${m.odometro_fim || "-"}</td>
+        <td>${m.horario_fim || "-"}</td>
+        <td>${
+          m.confirmado_p3
+            ? `<span class="badge-ok">${m.assinatura_p3 || "P3 assinado"}</span><br><small>${m.hora_confirmacao_p3 || ""}</small>`
+            : `<span class="badge-no">Pendente P3</span>`
+        }</td>
+        <td class="actions">
+          <button class="editar" onclick="editarMissao('${m.id}')">✏ Editar</button>
+          <button class="reset" onclick="alterarStatus('${m.id}')">↺ Status</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.editarMissao = async (id) => {
+    const ref = doc(db,"viaturas_missao",id);
+    const d = await getDoc(ref); if(!d.exists()) return;
+    const m = d.data();
+
+    const missao = prompt("Missão:", m.missao || ""); if(missao===null) return;
+    const motorista = prompt("Motorista:", m.motorista || ""); if(motorista===null) return;
+    const viatura = prompt("Viatura:", m.viatura || ""); if(viatura===null) return;
+    const odIni = prompt("Odômetro início:", m.odometro_inicio || ""); if(odIni===null) return;
+    const hrIni = prompt("Horário início:", m.horario_inicio || ""); if(hrIni===null) return;
+    const odFim = prompt("Odômetro fim:", m.odometro_fim || ""); if(odFim===null) return;
+    const hrFim = prompt("Horário fim:", m.horario_fim || ""); if(hrFim===null) return;
+
+    await updateDoc(ref, {
+      missao, motorista, viatura, odometro_inicio: odIni, horario_inicio: hrIni,
+      odometro_fim: odFim, horario_fim: hrFim
+    });
+    await logAction("Editar missão", id);
+    alert("✏ Missão atualizada.");
+  };
+
+  window.alterarStatus = async (id) => {
+    const status = prompt("Novo status (Pendente, Aprovada, Negada, Em viagem, Concluída):",""); if(!status) return;
+    await updateDoc(doc(db,"viaturas_missao",id), { status });
+    await logAction("Alterar status missão", id, {status});
+    alert("↺ Status atualizado.");
+  };
+
+  /* ===================== LOGS (Realtime + Export) ===================== */
+  let LOGS_CACHE = [];
+  onSnapshot(query(collection(db,"logs"), orderBy("data_hora","desc")), (snap)=>{
+    LOGS_CACHE = [];
+    const tbody = $("#logs-body");
+    tbody.innerHTML = "";
+    snap.forEach(docItem=>{
+      const l = docItem.data();
+      const row = {
+        acao: l.acao || "",
+        alvo: l.alvo || "",
+        feito_por: l.feito_por_email || "",
+        data_hora: l.data_hora?.toDate ? l.data_hora.toDate().toLocaleString() : ""
+      };
+      LOGS_CACHE.push(row);
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.acao}</td>
+        <td>${row.alvo}</td>
+        <td>${row.feito_por}</td>
+        <td>${row.data_hora}</td>`;
+      tbody.appendChild(tr);
+    });
+    filtrarLogs();
+  });
+
+  window.filtrarLogs = () => {
+    const termo = ($("#busca-logs").value || "").toLowerCase();
+    $$("#logs-body tr").forEach(tr=>{
+      tr.style.display = tr.innerText.toLowerCase().includes(termo) ? "" : "none";
+    });
+  };
+  window.exportarLogs = () => {
+    downloadCSV(`logs_${new Date().toISOString().slice(0,10)}.csv`, LOGS_CACHE);
+  };
+
+  /* ===================== EMULAÇÃO ===================== */
+  window.emularPerfil = (email, role) => {
+    if(!email || !role) return alert("Usuário inválido para emulação.");
+    const destino = destinosPorRole(role);
+    window.location.href = `${destino}?emulando=${encodeURIComponent(email)}`;
+  };
+  window.filtrarEmulacao = () => {
+    const termo = ($("#busca-emulacao").value || "").toLowerCase();
+    $$("#emulacao-body tr").forEach(tr=>{
+      tr.style.display = tr.innerText.toLowerCase().includes(termo) ? "" : "none";
+    });
+  };
+  </script>
 </body>
 </html>
