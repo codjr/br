@@ -45,20 +45,26 @@ async function carregarMissoes(){
   snapshot.forEach(docItem=>{
     const data = docItem.data();
     const tr = document.createElement("tr");
-    tr.innerHTML=`
-      <td>${data.missao||""}</td>
-      <td>${data.motorista||""}</td>
-      <td>${data.viatura||""}</td>
-      <td>${data.status||""}</td>
-      <td>${data.odometro_inicio||""}</td>
-      <td>${data.horario_inicio||""}</td>
-      <td>${data.odometro_fim||""}</td>
-      <td>${data.horario_fim||""}</td>
-      <td>
-        <button class="aprovar" onclick="aprovar('${docItem.id}')">Aprovar</button>
-        <button class="negar" onclick="negar('${docItem.id}')">Negar</button>
-      </td>
-    `;
+   tr.innerHTML = `
+  <td>${data.missao||""}</td>
+  <td>${data.motorista||""}</td>
+  <td>${data.viatura||""}</td>
+  <td>${data.status||""}</td>
+  <td>${data.odometro_inicio||""}</td>
+  <td>${data.horario_inicio||""}</td>
+  <td>${data.odometro_fim||""}</td>
+  <td>${data.horario_fim||""}</td>
+  <td>${
+    data.confirmado_p3
+      ? `<span style="color:green;font-weight:bold;">✔ ${data.assinatura_p3||"Assinado"}</span><br><small>${data.hora_confirmacao_p3||""}</small>`
+      : `<span style="color:red;font-weight:bold;">✖ Pendente</span>`
+  }</td>
+  <td>
+    <button class="aprovar" onclick="aprovar('${docItem.id}')">Aprovar</button>
+    <button class="negar" onclick="negar('${docItem.id}')">Negar</button>
+  </td>
+`;
+
     tbody.appendChild(tr);
   });
 }
