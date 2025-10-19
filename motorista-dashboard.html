@@ -43,13 +43,28 @@ async function carregarMissoes(){
   snapshot.forEach(docItem=>{
     const data = docItem.data();
     const tr = document.createElement("tr");
-    tr.innerHTML=`
-      <td>${data.missao||""}</td>
-      <td>${data.viatura||""}</td>
-      <td>${data.status||""}</td>
-      <td>${data.odometro_inicio||""} <button class="inicio" onclick="registrarInicio('${docItem.id}')">Registrar Início</button></td>
-      <td>${data.odometro_fim||""} <button class="fim" onclick="registrarFim('${docItem.id}')">Registrar Fim</button></td>
-    `;
+    tr.innerHTML = `
+  <td>${data.missao || ""}</td>
+  <td>${data.viatura || ""}</td>
+  <td>${data.status || ""}</td>
+
+  <td>
+    ${data.odometro_inicio || ""}
+    <button class="inicio" onclick="registrarInicio('${docItem.id}')">Registrar Início</button>
+  </td>
+
+  <td>
+    ${data.odometro_fim || ""}
+    <button class="fim" onclick="registrarFim('${docItem.id}')">Registrar Fim</button>
+  </td>
+
+  <td>${
+    data.confirmado_p3
+      ? `<span style="color:green;font-weight:bold;">✔ ${data.assinatura_p3 || "Assinado"}</span><br><small>${data.hora_confirmacao_p3 || ""}</small>`
+      : `<span style="color:red;font-weight:bold;">✖ Aguardando P3</span>`
+  }</td>
+`;
+
     tbody.appendChild(tr);
   });
 }
