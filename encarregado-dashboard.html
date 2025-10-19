@@ -76,6 +76,14 @@ window.onload = carregarMissoes;
 window.assinar = async(id)=>{
   await updateDoc(doc(db,"viaturas_missao",id),{assinado:true});
   carregarMissoes();
+
+  await addDoc(collection(db,"logs"), {
+  acao: "Assinatura do Encarregado",
+  alvo: id,
+  feito_por_email: auth.currentUser?.email || "encarregado",
+  data_hora: new Date().toLocaleString()
+});
+
 }
 
 // Criar missão
