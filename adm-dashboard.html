@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Administrador - Dashboard</title>
 
-<!-- Favicon da Marinha -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
-<!-- ================== ESTILO INSTITUCIONAL AZUL-NAVAL ================== -->
 <style>
 /* ==========================================================
    UI FUTURISTA PREMIUM 2025 — ADMINISTRADOR MARINHA
@@ -26,7 +24,6 @@
   --cor-erro: #dc2626;
   --cor-aviso: #f59e0b;
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --cor-fundo: #0b1120;
@@ -36,78 +33,66 @@
     --cor-secundaria: #1e293b;
   }
 }
-
-* { box-sizing: border-box; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
-body {
-  margin: 0; background: var(--cor-fundo); color: var(--cor-texto);
-  min-height: 100vh; display: flex; justify-content: center; padding: 30px 10px;
+*{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+body{
+  margin:0;background:var(--cor-fundo);color:var(--cor-texto);
+  min-height:100vh;display:flex;justify-content:center;padding:30px 10px;
 }
-
 /* Container */
-.container {
-  width: 100%; max-width: 1250px; background: var(--cor-card);
-  border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,0.12); padding: 24px;
+.container{
+  width:100%;max-width:1250px;background:var(--cor-card);
+  border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:24px;
 }
-
 /* Header */
-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.logo-marinha { display: flex; align-items: center; gap: 12px; }
-.logo-marinha img { width: 50px; height: 50px; }
-header h1 { color: var(--cor-primaria); font-size: 1.35rem; margin: 0; }
-header button {
-  background: var(--cor-secundaria); color: var(--cor-texto); border: none;
-  padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.25s ease;
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.logo-marinha{display:flex;align-items:center;gap:12px}
+.logo-marinha img{width:50px;height:50px}
+header h1{color:var(--cor-primaria);font-size:1.35rem;margin:0}
+header button{
+  background:var(--cor-secundaria);color:var(--cor-texto);border:none;
+  padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;transition:.25s;
 }
-header button:hover { background: var(--cor-card); }
-
+header button:hover{background:var(--cor-card)}
 /* Tabs */
-.nav-tabs { display: flex; gap: 8px; margin: 12px 0 18px; flex-wrap: wrap; }
-.nav-tabs button {
-  background: var(--cor-secundaria); border: 1px solid var(--cor-borda); color: var(--cor-texto);
-  padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600;
+.nav-tabs{display:flex;gap:8px;margin:12px 0 18px;flex-wrap:wrap}
+.nav-tabs button{
+  background:var(--cor-secundaria);border:1px solid var(--cor-borda);color:var(--cor-texto);
+  padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;
 }
-.nav-tabs button.active { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
-
+.nav-tabs button.active{background:var(--cor-primaria);color:#fff;border-color:var(--cor-primaria)}
 /* Títulos */
-h2 {
-  color: var(--cor-primaria); margin: 0 0 8px 0; border-left: 4px solid var(--cor-primaria); padding-left: 10px;
-}
-
+h2{color:var(--cor-primaria);margin:0 0 8px;border-left:4px solid var(--cor-primaria);padding-left:10px}
 /* Tabelas */
-.table-wrap { overflow: auto; border: 1px solid var(--cor-borda); border-radius: 10px; }
-table { width: 100%; border-collapse: collapse; min-width: 980px; }
-thead { background: var(--cor-primaria); color: white; }
-th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--cor-borda); }
-tbody tr:hover { background: rgba(0,74,173,0.05); }
-
-/* Botões de ação */
-button.aprovar { background: var(--cor-sucesso); color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; margin-right:4px; }
-button.aprovar:hover { background:#15803d; }
-button.editar { background: var(--cor-aviso); color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; margin-right:4px; }
-button.editar:hover{ background:#b45309; }
-button.reset { background: var(--cor-secundaria); color:var(--cor-texto); border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; margin-right:4px; }
-button.reset:hover{ filter: brightness(0.9); }
-button.excluir { background: var(--cor-erro); color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:600; }
-button.excluir:hover{ background:#b91c1c; }
-.actions { display: flex; flex-wrap: wrap; gap: 6px; }
-
+.table-wrap{overflow:auto;border:1px solid var(--cor-borda);border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:980px}
+thead{background:var(--cor-primaria);color:#fff}
+th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left}
+tbody tr:hover{background:rgba(0,74,173,.05)}
+/* Ações */
+.actions{display:flex;flex-wrap:wrap;gap:6px}
+button.aprovar{background:var(--cor-sucesso);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-weight:600}
+button.aprovar:hover{background:#15803d}
+button.editar{background:var(--cor-aviso);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-weight:600}
+button.editar:hover{background:#b45309}
+button.reset{background:var(--cor-secundaria);color:var(--cor-texto);border:none;padding:6px 10px;border-radius:6px;font-weight:600}
+button.reset:hover{filter:brightness(.9)}
+button.excluir{background:var(--cor-erro);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-weight:600}
+button.excluir:hover{background:#b91c1c}
 /* Badges */
-.badge-ok { display:inline-block; background:rgba(22,163,74,.12); color:#166534; padding:4px 8px; border-radius:6px; font-weight:700; }
-.badge-no { display:inline-block; background:rgba(220,38,38,.12); color:#991b1b; padding:4px 8px; border-radius:6px; font-weight:700; }
-.badge-warn { display:inline-block; background:rgba(245,158,11,.12); color:#92400e; padding:4px 8px; border-radius:6px; font-weight:700; }
-.tag-fp { color:#dc2626; font-weight:700; }
-
-/* Filtros / inputs */
-.filters { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 8px 0 12px; }
-.filters input, .filters select { padding: 8px 10px; border:1px solid var(--cor-borda); border-radius:8px; background:#fff; }
-
+.badge-ok{display:inline-block;background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700}
+.badge-no{display:inline-block;background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700}
+.badge-warn{display:inline-block;background:rgba(245,158,11,.12);color:#92400e;padding:4px 8px;border-radius:6px;font-weight:700}
+.tag-fp{color:#dc2626;font-weight:700}
+/* Filtros */
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
+.filters input,.filters select{padding:8px 10px;border:1px solid var(--cor-borda);border-radius:8px;background:#fff}
 /* Responsivo */
-@media (max-width: 768px) {
-  header { flex-direction: column; gap: 10px; align-items: flex-start; }
-  .container { padding: 18px; }
-  th, td { font-size: 0.92rem; }
-  .nav-tabs { gap: 6px; }
-  .nav-tabs button { padding: 7px 10px; }
+@media (max-width:768px){
+  header{flex-direction:column;gap:10px;align-items:flex-start}
+  .container{padding:18px}
+  th,td{font-size:.92rem}
+  .nav-tabs{gap:6px}
+  .nav-tabs button{padding:7px 10px}
 }
 </style>
 </head>
@@ -121,7 +106,6 @@ button.excluir:hover{ background:#b91c1c; }
       <button onclick="logout()">Sair</button>
     </header>
 
-    <!-- Navegação -->
     <div class="nav-tabs">
       <button class="active" data-tab="tab-usuarios" onclick="setTab('tab-usuarios', this)">Usuários</button>
       <button data-tab="tab-missoes" onclick="setTab('tab-missoes', this)">Missões</button>
@@ -129,18 +113,14 @@ button.excluir:hover{ background:#b91c1c; }
       <button data-tab="tab-emulacao" onclick="setTab('tab-emulacao', this)">Emulação</button>
     </div>
 
-    <!-- ======= USUÁRIOS ======= -->
+    <!-- ===== Usuários ===== -->
     <section id="tab-usuarios" class="tab-pane" style="display:block;">
       <h2>Gerenciamento de Usuários</h2>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Cargo</th>
-              <th>Status</th>
-              <th style="min-width:380px">Ações</th>
+              <th>Nome</th><th>Email</th><th>Cargo</th><th>Status</th><th style="min-width:380px">Ações</th>
             </tr>
           </thead>
           <tbody id="usuarios-body"></tbody>
@@ -148,10 +128,9 @@ button.excluir:hover{ background:#b91c1c; }
       </div>
     </section>
 
-    <!-- ======= MISSÕES ======= -->
+    <!-- ===== Missões ===== -->
     <section id="tab-missoes" class="tab-pane" style="display:none;">
       <h2>Missões (todas)</h2>
-
       <div class="filters">
         <select id="filtro-status" onchange="filtrarMissoes()">
           <option value="">Status: Todos</option>
@@ -162,21 +141,15 @@ button.excluir:hover{ background:#b91c1c; }
           <option value="Concluída">Concluída</option>
         </select>
         <input id="busca-missao" type="search" placeholder="Buscar por missão/viatura/motorista..." oninput="filtrarMissoes()"/>
-        <span class="badge-warn">⚠ Missões fora da programação aparecerão com destaque</span>
+        <span class="badge-warn">⚠ Fora da Programação aparece destacado</span>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Missão</th>
-              <th>Motorista</th>
-              <th>Viatura</th>
-              <th>Status</th>
-              <th>Odômetro Início</th>
-              <th>Horário Início</th>
-              <th>Odômetro Fim</th>
-              <th>Horário Fim</th>
+              <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
+              <th>Odômetro Início</th><th>Horário Início</th>
+              <th>Odômetro Fim</th><th>Horário Fim</th>
               <th>Assinatura P3</th>
               <th style="min-width:220px">Ações</th>
             </tr>
@@ -186,7 +159,7 @@ button.excluir:hover{ background:#b91c1c; }
       </div>
     </section>
 
-    <!-- ======= LOGS ======= -->
+    <!-- ===== Logs ===== -->
     <section id="tab-logs" class="tab-pane" style="display:none;">
       <h2>Logs do Sistema</h2>
       <div class="filters">
@@ -196,19 +169,14 @@ button.excluir:hover{ background:#b91c1c; }
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>Ação</th>
-              <th>Alvo</th>
-              <th>Feito por</th>
-              <th>Data/Hora</th>
-            </tr>
+            <tr><th>Ação</th><th>Alvo</th><th>Feito por</th><th>Data/Hora</th></tr>
           </thead>
           <tbody id="logs-body"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- ======= EMULAÇÃO ======= -->
+    <!-- ===== Emulação ===== -->
     <section id="tab-emulacao" class="tab-pane" style="display:none;">
       <h2>Emulação de Perfil</h2>
       <div class="filters">
@@ -217,17 +185,12 @@ button.excluir:hover{ background:#b91c1c; }
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Cargo</th>
-              <th>Ação</th>
-            </tr>
+            <tr><th>Nome</th><th>Email</th><th>Cargo</th><th>Ação</th></tr>
           </thead>
           <tbody id="emulacao-body"></tbody>
         </table>
       </div>
-      <p class="badge-warn" style="margin-top:8px;">⚙ Ao emular, você será redirecionado para o dashboard do cargo com <b>?emulando=email</b>. (Os dashboards devem exibir aviso quando detectarem esse parâmetro.)</p>
+      <p class="badge-warn" style="margin-top:8px;">⚙ Ao emular, você será redirecionado para o dashboard do cargo com <b>?emulando=email</b>.</p>
     </section>
   </div>
 
@@ -235,7 +198,7 @@ button.excluir:hover{ background:#b91c1c; }
   import { auth, db } from "./firebase-config.js";
   import { signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
   import {
-    collection, onSnapshot, doc, updateDoc, deleteDoc, getDoc, addDoc, serverTimestamp, query, where, orderBy
+    collection, onSnapshot, doc, updateDoc, deleteDoc, getDoc, addDoc, serverTimestamp, query, orderBy
   } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
   /* ===== Tabs ===== */
@@ -252,18 +215,9 @@ button.excluir:hover{ background:#b91c1c; }
   /* ===== Utils ===== */
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
-  function roleLabel(r){ return ({
-    adm:"ADM", chefe:"Chefe", ose:"OSE", encarregado:"Encarregado", motorista:"Motorista", aux_p3:"Auxiliar P3"
-  }[r] || r); }
+  function roleLabel(r){ return ({adm:"ADM",chefe:"Chefe",ose:"OSE",encarregado:"Encarregado",motorista:"Motorista",aux_p3:"Auxiliar P3"}[r] || r); }
   function destinosPorRole(role){
-    return ({
-      adm: "adm-dashboard.html",
-      chefe: "chefe-dashboard.html",
-      ose: "ose-dashboard.html",
-      encarregado: "encarregado-dashboard.html",
-      motorista: "motorista-dashboard.html",
-      aux_p3: "aux-p3-dashboard.html"
-    }[role] || "index.html");
+    return ({adm:"adm-dashboard.html",chefe:"chefe-dashboard.html",ose:"ose-dashboard.html",encarregado:"encarregado-dashboard.html",motorista:"motorista-dashboard.html",aux_p3:"p3-dashboard.html"}[role] || "index.html");
   }
   function downloadCSV(filename, rows){
     if(!rows.length) return alert("Sem dados para exportar.");
@@ -299,7 +253,7 @@ button.excluir:hover{ background:#b91c1c; }
 
       snap.forEach(docItem=>{
         const u = docItem.data();
-        // Tabela de gerenciamento
+        // Gerenciamento
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${u.nome || "-"}</td>
@@ -314,7 +268,7 @@ button.excluir:hover{ background:#b91c1c; }
           </td>`;
         tbody.appendChild(tr);
 
-        // Tabela de emulação
+        // Emulação
         const tr2 = document.createElement("tr");
         tr2.innerHTML = `
           <td>${u.nome || "-"}</td>
@@ -356,12 +310,7 @@ button.excluir:hover{ background:#b91c1c; }
   let MISSOES_CACHE = [];
   onSnapshot(collection(db,"viaturas_missao"), (snap)=>{
     MISSOES_CACHE = [];
-    const tbody = $("#missoes-body");
-    tbody.innerHTML = "";
-    snap.forEach(docItem=>{
-      const m = { id: docItem.id, ...docItem.data() };
-      MISSOES_CACHE.push(m);
-    });
+    snap.forEach(docItem=> MISSOES_CACHE.push({ id: docItem.id, ...docItem.data() }));
     renderMissoes(MISSOES_CACHE);
   });
 
@@ -390,7 +339,7 @@ button.excluir:hover{ background:#b91c1c; }
         </td>`;
       tbody.appendChild(tr);
     });
-    filtrarMissoes(); // aplica filtro atual
+    filtrarMissoes();
   }
 
   window.filtrarMissoes = () => {
@@ -402,13 +351,9 @@ button.excluir:hover{ background:#b91c1c; }
       const okQuery = q ? txt.includes(q) : true;
       return okStatus && okQuery;
     });
-    renderMissoesSemRefazer(filtradas);
-  };
-
-  function renderMissoesSemRefazer(list){
     const tbody = $("#missoes-body");
     tbody.innerHTML = "";
-    list.forEach(m=>{
+    filtradas.forEach(m=>{
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${m.missao || "-"} ${m.fora_programacao ? "<span class='tag-fp'>⚠ Fora da Programação</span>" : ""}</td>
@@ -430,7 +375,7 @@ button.excluir:hover{ background:#b91c1c; }
         </td>`;
       tbody.appendChild(tr);
     });
-  }
+  };
 
   window.editarMissao = async (id) => {
     const ref = doc(db,"viaturas_missao",id);
@@ -476,11 +421,7 @@ button.excluir:hover{ background:#b91c1c; }
       };
       LOGS_CACHE.push(row);
       const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.acao}</td>
-        <td>${row.alvo}</td>
-        <td>${row.feito_por}</td>
-        <td>${row.data_hora}</td>`;
+      tr.innerHTML = `<td>${row.acao}</td><td>${row.alvo}</td><td>${row.feito_por}</td><td>${row.data_hora}</td>`;
       tbody.appendChild(tr);
     });
     filtrarLogs();
@@ -496,7 +437,7 @@ button.excluir:hover{ background:#b91c1c; }
     downloadCSV(`logs_${new Date().toISOString().slice(0,10)}.csv`, LOGS_CACHE);
   };
 
-  /* ===================== EMULAÇÃO ===================== */
+  /* ===================== Emulação ===================== */
   window.emularPerfil = (email, role) => {
     if(!email || !role) return alert("Usuário inválido para emulação.");
     const destino = destinosPorRole(role);
