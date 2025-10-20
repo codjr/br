@@ -123,9 +123,9 @@ function carregarMinhasMissoes(){
     snap.forEach(d=>{
       const m = {id:d.id, ...d.data()};
 
-      // Botões sempre disponíveis conforme o progresso do odômetro
-      const podeIniciar = !m.odometro_inicio;
-      const podeFinalizar = !!m.odometro_inicio && !m.odometro_fim;
+      // Agora permite Início mesmo com odômetro já preenchido
+      const podeIniciar = !m.horario_inicio;
+      const podeFinalizar = !!m.horario_inicio && !m.odometro_fim;
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
@@ -152,11 +152,17 @@ window.registrarInicio = async (missaoId)=>{
   const dSnap = await getDoc(ref);
   if(!dSnap.exists()) return alert("Missão não encontrada.");
   const m = dSnap.data();
-  if(m.odometro_inicio){ return alert("Início já registrado."); }
-  const valor = prompt("Digite o odômetro inicial:");
-  if(valor===null) return;
-  const odo = Number(String(valor).replace(",","."));
-  if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
+
+  // Agora só bloqueia se já tiver horário_inicio (não pelo odômetro)
+  if(m.horario_inicio){ return alert("Início já registrado."); }
+
+  let odo = m.odometro_inicio;
+  if(!odo){
+    const valor = prompt("Digite o odômetro inicial:");
+    if(valor===null) return;
+    odo = Number(String(valor).replace(",","."));
+    if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
+  }
 
   await updateDoc(ref, {
     odometro_inicio: odo,
