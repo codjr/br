@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Relatórios - Encarregado</title>
-<link rel="icon" type="image/svg+xml"
+<title>Relatórios - Sistema de Viaturas</title>
+<link rel="icon" type="image/svg+xml" 
       href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 <style>
@@ -13,12 +13,11 @@
   --cor-fundo:#f5f7fa;--cor-texto:#1f2937;
   --cor-card:#fff;--cor-borda:#d1d5db;
   --cor-secundaria:#e2e8f0;
-  --cor-sucesso:#16a34a;--cor-erro:#dc2626;
+  --cor-sucesso:#16a34a;--cor-erro:#dc2626;--cor-aviso:#f59e0b;
 }
 @media(prefers-color-scheme:dark){
-  :root{--cor-fundo:#0b1120;--cor-card:#111827;
-        --cor-texto:#e5e7eb;--cor-borda:#1f2937;
-        --cor-secundaria:#1e293b;}
+  :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;
+        --cor-borda:#1f2937;--cor-secundaria:#1e293b;}
 }
 *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
 body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
@@ -31,151 +30,161 @@ header button{background:var(--cor-erro);color:#fff;border:none;
               padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
 header button:hover{background:#b91c1c;}
 h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
-.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
-.filters input,.filters select,button{padding:10px;border:1px solid var(--cor-borda);
-  border-radius:6px;font-size:1rem;}
-.filters button{background:var(--cor-primaria);color:#fff;border:none;cursor:pointer;font-weight:600;}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px;}
+.filters input,.filters select, .filters button{
+  padding:8px 12px;border:1px solid var(--cor-borda);
+  border-radius:6px;background:#fff;font-size:.95rem;
+}
+.filters button{background:var(--cor-primaria);color:#fff;cursor:pointer;font-weight:600;}
 .filters button:hover{background:var(--cor-primaria-hover);}
-table{width:100%;border-collapse:collapse;margin-top:15px;}
+.table-wrap{overflow:auto;border:1px solid var(--cor-borda);border-radius:10px;}
+table{width:100%;border-collapse:collapse;min-width:900px;}
 thead{background:var(--cor-primaria);color:#fff;}
 th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
 tbody tr:hover{background:rgba(0,74,173,.05);}
+.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
+.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
 @media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
 </style>
 </head>
 <body>
-
 <div class="container">
   <header>
     <h1>Relatórios de Missões</h1>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Filtros</h2>
+  <h2>Filtrar e Gerar Relatório</h2>
   <div class="filters">
-    <select id="tipo-relatorio">
-      <option value="diario">📅 Diário</option>
-      <option value="semanal">🗓️ Semanal</option>
-      <option value="mensal">📆 Mensal</option>
-      <option value="anual">📈 Anual</option>
-      <option value="individual">👤 Individual (Motorista)</option>
+    <select id="filtro-periodo">
+      <option value="">Período: Todos</option>
+      <option value="dia">Hoje</option>
+      <option value="semana">Últimos 7 dias</option>
+      <option value="mes">Últimos 30 dias</option>
+      <option value="ano">Últimos 365 dias</option>
     </select>
-    <input type="date" id="data-inicio" placeholder="Data inicial">
-    <input type="date" id="data-fim" placeholder="Data final">
-    <input type="text" id="motorista" placeholder="Motorista (opcional)">
-    <button onclick="gerarRelatorio()">Gerar</button>
+
+    <select id="filtro-status">
+      <option value="">Status: Todos</option>
+      <option value="pendente">Pendente</option>
+      <option value="aprovada">Aprovada</option>
+      <option value="em viagem">Em viagem</option>
+      <option value="concluída">Concluída</option>
+    </select>
+
+    <input id="busca" type="search" placeholder="Buscar por motorista, viatura ou missão">
+    <button onclick="gerarRelatorio()">Gerar Relatório</button>
     <button onclick="exportarCSV()">Exportar CSV</button>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
-        <th>Início</th><th>Fim</th><th>Odômetro Inicial</th><th>Odômetro Final</th>
-      </tr>
-    </thead>
-    <tbody id="relatorio-body"></tbody>
-  </table>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
+          <th>Odômetro Início</th><th>Odômetro Fim</th>
+          <th>Criação</th><th>Encerramento</th><th>Assinaturas</th>
+        </tr>
+      </thead>
+      <tbody id="relatorio-body"></tbody>
+    </table>
+  </div>
 </div>
 
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {collection,getDocs,query,where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {collection,onSnapshot,query,orderBy} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
+/* 🔒 Proteção e logout automático */
 const LIMITE=10*60*1000;let timer;
 onAuthStateChanged(auth,u=>{
   if(!u){window.location.href="index.html";}
-  else{resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));}
+  else{reiniciar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,reiniciar));}
 });
-function resetar(){clearTimeout(timer);
+function reiniciar(){clearTimeout(timer);
   timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
 window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* 📊 Gerar Relatório */
-window.gerarRelatorio=async()=>{
-  const tipo=document.getElementById("tipo-relatorio").value;
-  const inicio=document.getElementById("data-inicio").value;
-  const fim=document.getElementById("data-fim").value;
-  const motorista=document.getElementById("motorista").value.toLowerCase();
-  const tbody=document.getElementById("relatorio-body");
-  tbody.innerHTML="<tr><td colspan='8'>Carregando...</td></tr>";
+/* 🔄 Missões em tempo real */
+let MISSOES_CACHE=[];
+onSnapshot(query(collection(db,"viaturas_missao"),orderBy("criada_em","desc")),snap=>{
+  MISSOES_CACHE=[];snap.forEach(d=>MISSOES_CACHE.push({id:d.id,...d.data()}));
+});
 
-  const snap=await getDocs(collection(db,"viaturas_missao"));
-  const todas=[];
-  snap.forEach(d=>todas.push({id:d.id,...d.data()}));
+/* 🧮 Gerar relatório */
+window.gerarRelatorio=()=>{
+  try{
+    const filtroStatus=(document.getElementById("filtro-status").value||"").toLowerCase();
+    const filtroTexto=(document.getElementById("busca").value||"").toLowerCase();
+    const periodo=document.getElementById("filtro-periodo").value;
 
-  /* Filtragem temporal */
-  const hoje=new Date();
-  let filtradas=todas;
-  if(tipo==="diario"){
-    const hojeStr=hoje.toLocaleDateString();
-    filtradas=todas.filter(m=>(m.criada_em||"").includes(hojeStr));
-  }
-  else if(tipo==="semanal"){
-    const inicioSemana=new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate()-7);
-    filtradas=todas.filter(m=>{
-      const data=new Date(m.criada_em);
-      return data>=inicioSemana;
+    const hoje=new Date();
+    const filtradas=MISSOES_CACHE.filter(m=>{
+      const status=(m.status||"").toString().toLowerCase();
+      const motorista=(m.motorista||"").toString().toLowerCase();
+      const viatura=(m.viatura||"").toString().toLowerCase();
+      const missao=(m.missao||"").toString().toLowerCase();
+      const criadaEm=new Date(m.criada_em||Date.now());
+
+      // filtro por data
+      let dentro=true;
+      if(periodo==="dia") dentro=criadaEm>new Date(hoje.getTime()-24*60*60*1000);
+      if(periodo==="semana") dentro=criadaEm>new Date(hoje.getTime()-7*24*60*60*1000);
+      if(periodo==="mes") dentro=criadaEm>new Date(hoje.getTime()-30*24*60*60*1000);
+      if(periodo==="ano") dentro=criadaEm>new Date(hoje.getTime()-365*24*60*60*1000);
+
+      const condStatus=!filtroStatus||status.includes(filtroStatus);
+      const condBusca=!filtroTexto||
+        motorista.includes(filtroTexto)||viatura.includes(filtroTexto)||missao.includes(filtroTexto);
+
+      return condStatus&&condBusca&&dentro;
     });
-  }
-  else if(tipo==="mensal"){
-    const mes=hoje.getMonth(),ano=hoje.getFullYear();
-    filtradas=todas.filter(m=>{
-      const d=new Date(m.criada_em);
-      return d.getMonth()===mes && d.getFullYear()===ano;
+
+    const tb=document.getElementById("relatorio-body");
+    tb.innerHTML="";
+    filtradas.forEach(m=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td>${m.missao||"-"}</td>
+        <td>${m.motorista||"-"}</td>
+        <td>${m.viatura||"-"}</td>
+        <td>${m.status||"-"}</td>
+        <td>${m.odometro_inicio||"-"}</td>
+        <td>${m.odometro_fim||"-"}</td>
+        <td>${m.criada_em||"-"}</td>
+        <td>${m.horario_fim||"-"}</td>
+        <td>
+          <span class="badge-ok">OSE: ${m.assinatura_ose||"-"}</span><br>
+          <span class="badge-ok">Enc: ${m.assinatura_encarregado||"-"}</span><br>
+          <span class="badge-ok">Chefe: ${m.assinatura_chedep||"-"}</span>
+        </td>`;
+      tb.appendChild(tr);
     });
+  }catch(e){
+    console.error("Erro ao gerar relatório:",e);
+    alert("Erro ao gerar relatório. Veja o console.");
   }
-  else if(tipo==="anual"){
-    const ano=hoje.getFullYear();
-    filtradas=todas.filter(m=>new Date(m.criada_em).getFullYear()===ano);
-  }
-  else if(tipo==="individual" && motorista){
-    filtradas=todas.filter(m=>(m.motorista||"").toLowerCase().includes(motorista));
-  }
-
-  if(inicio && fim){
-    const di=new Date(inicio), df=new Date(fim);
-    filtradas=filtradas.filter(m=>{
-      const d=new Date(m.criada_em);
-      return d>=di && d<=df;
-    });
-  }
-
-  tbody.innerHTML="";
-  if(!filtradas.length){
-    tbody.innerHTML="<tr><td colspan='8'>Nenhum registro encontrado.</td></tr>";
-    return;
-  }
-
-  filtradas.forEach(m=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${m.missao||"-"}</td>
-      <td>${m.motorista||"-"}</td>
-      <td>${m.viatura||"-"}</td>
-      <td>${m.status||"-"}</td>
-      <td>${m.horario_inicio||"-"}</td>
-      <td>${m.horario_fim||"-"}</td>
-      <td>${m.odometro_inicio||"-"}</td>
-      <td>${m.odometro_fim||"-"}</td>`;
-    tbody.appendChild(tr);
-  });
 };
 
 /* 💾 Exportar CSV */
 window.exportarCSV=()=>{
-  const linhas=[["Missão","Motorista","Viatura","Status","Início","Fim","Odômetro Inicial","Odômetro Final"]];
-  document.querySelectorAll("#relatorio-body tr").forEach(tr=>{
-    const cols=[...tr.children].map(td=>td.innerText);
-    linhas.push(cols);
+  if(!MISSOES_CACHE.length)return alert("Sem dados para exportar.");
+  const linhas=[
+    ["Missão","Motorista","Viatura","Status","Odômetro Início","Odômetro Fim","Criação","Encerramento","OSE","Enc","Chefe"].join(";")
+  ];
+  MISSOES_CACHE.forEach(m=>{
+    linhas.push([
+      m.missao||"",m.motorista||"",m.viatura||"",m.status||"",
+      m.odometro_inicio||"",m.odometro_fim||"",m.criada_em||"",
+      m.horario_fim||"",m.assinatura_ose||"",m.assinatura_encarregado||"",m.assinatura_chedep||""
+    ].map(x=>`"${(x||"").toString().replace(/"/g,'""')}"`).join(";"));
   });
-  const csv=linhas.map(l=>l.join(";")).join("\n");
-  const blob=new Blob([csv],{type:"text/csv"});
+  const blob=new Blob([linhas.join("\n")],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download=`relatorio_missoes_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
+  a.href=url;a.download=`relatorio_viaturas_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+  URL.revokeObjectURL(url);
 };
 </script>
 </body>
