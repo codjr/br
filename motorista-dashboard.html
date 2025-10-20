@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Motorista - Dashboard</title>
 <link rel="icon" type="image/svg+xml"
       href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
@@ -16,131 +16,191 @@
   --cor-sucesso:#16a34a;--cor-erro:#dc2626;--cor-aviso:#f59e0b;
 }
 @media(prefers-color-scheme:dark){
-  :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;--cor-borda:#1f2937;--cor-secundaria:#1e293b;}
+  :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;
+        --cor-borda:#1f2937;--cor-secundaria:#1e293b;}
 }
 *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
 body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
      min-height:100vh;padding:30px 10px;}
-.container{max-width:1200px;margin:auto;background:var(--cor-card);
-           border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:30px;}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;}
-header h1{color:var(--cor-primaria);font-size:1.4rem;margin:0;}
+.container{max-width:1250px;margin:auto;background:var(--cor-card);
+           border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:28px;}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+header h1{color:var(--cor-primaria);font-size:1.5rem;margin:0;}
 header button{background:var(--cor-erro);color:#fff;border:none;
               padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
 header button:hover{background:#b91c1c;}
-h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
-table{width:100%;border-collapse:collapse;margin-top:15px;}
-thead{background:var(--cor-primaria);color:#fff;}
-th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
-tbody tr:hover{background:rgba(0,74,173,.05);}
-button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
-button.inicio,button.fim{background:var(--cor-primaria);color:white;}
-button.inicio:hover,button.fim:hover{background:var(--cor-primaria-hover);}
-.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
-.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
-@media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
+h2{color:var(--cor-primaria);margin:10px 0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
+.table-wrap{overflow:auto;border:1px solid var(--cor-borda);border-radius:10px;margin-top:10px}
+table{width:100%;border-collapse:collapse;min-width:1000px}
+thead{background:var(--cor-primaria);color:#fff}
+th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;vertical-align:top}
+tbody tr:hover{background:rgba(0,74,173,.05)}
+button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+button.inicio,button.fim{background:var(--cor-primaria);color:#fff}
+button.inicio:hover,button.fim:hover{background:var(--cor-primaria-hover)}
+.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700}
+.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700}
+.small{font-size:.9rem;color:#475569}
 </style>
 </head>
 <body>
 
-<!-- 🔧 Banner de Emulação -->
-<div id="emulacao-banner"
-     style="display:none;background:#004aad;color:#fff;padding:10px 20px;text-align:center;
-            font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.2);">
-  🔧 Modo Emulação Ativo — <span id="emulando-email"></span>
-  <button onclick="window.location.href='adm-dashboard.html'"
-          style="margin-left:10px;background:#fbbf24;color:#000;border:none;
-                 padding:6px 10px;border-radius:5px;cursor:pointer;font-weight:600;">
-    Voltar ao ADM
-  </button>
-</div>
-
 <div class="container">
   <header>
-    <h1>Motorista - Dashboard</h1>
+    <h1>Motorista — Dashboard</h1>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Missões Atribuídas</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Missão</th><th>Viatura</th><th>Status</th>
-        <th>Odômetro Início</th><th>Odômetro Fim</th><th>Ações</th>
-      </tr>
-    </thead>
-    <tbody id="missoes-body"></tbody>
-  </table>
+  <h2>Minhas Missões</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Missão</th>
+          <th>Viatura</th>
+          <th>Status</th>
+          <th>Odômetro Início</th>
+          <th>Horário Início</th>
+          <th>Odômetro Fim</th>
+          <th>Horário Fim</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="missoes-body"></tbody>
+    </table>
+  </div>
+
+  <p class="small" style="margin-top:10px">
+    • Use <b>Início</b> ao sair com a viatura. • Use <b>Fim</b> ao retornar. <br/>
+    • O sistema valida a sequência do odômetro e atualiza o odômetro da viatura ao concluir.
+  </p>
 </div>
 
 <script type="module">
-import {auth,db} from "./firebase-config.js";
-import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {collection,onSnapshot,updateDoc,doc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {auth, db} from "./firebase-config.js";
+import {signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {
+  collection, doc, getDoc, updateDoc, onSnapshot, query, where, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-/* 🔒 Proteção e logout automático */
-const LIMITE=10*60*1000;let timer;
-onAuthStateChanged(auth,u=>{
-  if(!u){window.location.href="index.html";}
-  else{reiniciar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,reiniciar));}
+/* ================= Proteção (role) + Sessão (10 min) ================= */
+const TIMEOUT = 10*60*1000; let t;
+onAuthStateChanged(auth, async (u)=>{
+  if(!u){ return window.location.href="index.html"; }
+  // checa role
+  const uDoc = await getDoc(doc(db,"usuarios",u.uid));
+  if(!uDoc.exists() || (uDoc.data().role!=="motorista")){
+    alert("Acesso restrito ao perfil: Motorista.");
+    await signOut(auth);
+    return window.location.href="index.html";
+  }
+  init(u);
+  resetTimer();
+  ["mousemove","keydown","click","scroll"].forEach(evt=>document.addEventListener(evt, resetTimer));
 });
-function reiniciar(){clearTimeout(timer);
-  timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
+function resetTimer(){
+  clearTimeout(t);
+  t = setTimeout(async ()=>{
+    alert("⏰ Sessão expirada por inatividade.");
+    await signOut(auth);
+    window.location.href="index.html";
+  }, TIMEOUT);
+}
+window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; };
 
-/* Banner de emulação */
-const p=new URLSearchParams(window.location.search);const em=p.get("emulando");
-if(em){document.getElementById("emulacao-banner").style.display="block";
-       document.getElementById("emulando-email").textContent=em;}
+/* ================= Estado / Init ================= */
+let EU = null;
+function init(user){
+  EU = user;
+  carregarMinhasMissoes();
+}
 
-/* Logout manual */
-window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
+/* =============== Minhas Missões (somente as do motorista logado) =============== */
+function carregarMinhasMissoes(){
+  const qMinhas = query(collection(db, "viaturas_missao"), where("motorista","==", EU.email));
+  onSnapshot(qMinhas, (snap)=>{
+    const tb = document.getElementById("missoes-body");
+    tb.innerHTML = "";
+    snap.forEach(d=>{
+      const m = {id:d.id, ...d.data()};
+      const podeIniciar = (!m.odometro_inicio) && ["Pendente","Aprovada","Aprovada pela OSE","Autorizada"].includes(m.status || "Pendente");
+      const podeFinalizar = (!!m.odometro_inicio && !m.odometro_fim) && (m.status==="Em viagem");
 
-/* 🔄 Missões em tempo real */
-onSnapshot(collection(db,"viaturas_missao"),snap=>{
-  const tb=document.getElementById("missoes-body");tb.innerHTML="";
-  snap.forEach(d=>{
-    const m=d.data();
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${m.missao||""}</td>
-      <td>${m.viatura||""}</td>
-      <td>${m.status||"Pendente"}</td>
-      <td>${m.odometro_inicio||"-"}<br><small>${m.horario_inicio||""}</small></td>
-      <td>${m.odometro_fim||"-"}<br><small>${m.horario_fim||""}</small></td>
-      <td>
-        <button class="inicio" onclick="registrarInicio('${d.id}')">Início</button>
-        <button class="fim" onclick="registrarFim('${d.id}')">Fim</button>
-      </td>`;
-    tb.appendChild(tr);
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${m.missao||"-"}</td>
+        <td>${m.viatura_label || m.viatura || "-"}</td>
+        <td>${m.status || "Pendente"}</td>
+        <td>${m.odometro_inicio ?? "-"}</td>
+        <td>${m.horario_inicio ?? "-"}</td>
+        <td>${m.odometro_fim ?? "-"}</td>
+        <td>${m.horario_fim ?? "-"}</td>
+        <td>
+          ${podeIniciar ? `<button class="inicio" onclick="registrarInicio('${m.id}')">Início</button>` : ""}
+          ${podeFinalizar ? `<button class="fim" onclick="registrarFim('${m.id}')">Fim</button>` : ""}
+        </td>
+      `;
+      tb.appendChild(tr);
+    });
   });
-});
+}
 
-/* 🚗 Registrar início */
-window.registrarInicio=async id=>{
-  const odo=prompt("Digite o odômetro inicial:");
-  if(!odo)return;
-  await updateDoc(doc(db,"viaturas_missao",id),{
-    odometro_inicio:odo,
-    horario_inicio:new Date().toLocaleString(),
-    motorista_inicio:auth.currentUser?.email||"motorista",
-    status:"Em viagem",
-    atualizado_em:serverTimestamp()
+/* ================= Registrar Início ================= */
+window.registrarInicio = async (missaoId)=>{
+  const ref = doc(db,"viaturas_missao",missaoId);
+  const dSnap = await getDoc(ref);
+  if(!dSnap.exists()) return alert("Missão não encontrada.");
+  const m = dSnap.data();
+  if(m.odometro_inicio){ return alert("Início já registrado."); }
+  const valor = prompt("Digite o odômetro inicial:");
+  if(valor===null) return;
+  const odo = Number(String(valor).replace(",","."));
+  if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
+  // Se houver um odometro_inicio sugerido/esperado, pode validar se odo >= sugerido
+  // (opcional: aqui não bloqueamos, mas você pode exigir >= m.odometro_inicio se já existir).
+  await updateDoc(ref, {
+    odometro_inicio: odo,
+    horario_inicio: new Date().toLocaleString(),
+    motorista_inicio: auth.currentUser?.email || "",
+    status: "Em viagem",
+    atualizado_em: serverTimestamp()
   });
-  alert("📍 Início de viagem registrado.");
+  alert("📍 Início registrado. Boa viagem!");
 };
 
-/* 🏁 Registrar fim */
-window.registrarFim=async id=>{
-  const odo=prompt("Digite o odômetro final:");
-  if(!odo)return;
-  await updateDoc(doc(db,"viaturas_missao",id),{
-    odometro_fim:odo,
-    horario_fim:new Date().toLocaleString(),
-    motorista_fim:auth.currentUser?.email||"motorista",
-    status:"Concluída",
-    atualizado_em:serverTimestamp()
+/* ================= Registrar Fim ================= */
+window.registrarFim = async (missaoId)=>{
+  const ref = doc(db,"viaturas_missao",missaoId);
+  const dSnap = await getDoc(ref);
+  if(!dSnap.exists()) return alert("Missão não encontrada.");
+  const m = dSnap.data();
+  if(!m.odometro_inicio) return alert("Registre o início antes de finalizar.");
+  if(m.odometro_fim) return alert("Fim já registrado.");
+
+  const valor = prompt("Digite o odômetro final:");
+  if(valor===null) return;
+  const odo = Number(String(valor).replace(",","."));
+  if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
+  if(odo < Number(m.odometro_inicio)) return alert("Odômetro final não pode ser menor que o inicial.");
+
+  await updateDoc(ref, {
+    odometro_fim: odo,
+    horario_fim: new Date().toLocaleString(),
+    motorista_fim: auth.currentUser?.email || "",
+    status: "Concluída",
+    atualizado_em: serverTimestamp()
   });
-  alert("✅ Fim da viagem registrado.");
+
+  // Atualiza odômetro da viatura para manter continuidade
+  if(m.viatura){
+    try{
+      await updateDoc(doc(db,"viaturas", m.viatura), { odometro: odo, atualizado_em: serverTimestamp() });
+    }catch(e){
+      console.warn("Não foi possível atualizar odômetro da viatura:", e);
+    }
+  }
+
+  alert("✅ Fim registrado. Missão concluída.");
 };
 </script>
 </body>
