@@ -1,94 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cadastro de Usuário - Sistema de Viaturas</title>
-
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml"
-      href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
-
-<style>
-:root {
-  --cor-primaria:#004aad;--cor-primaria-hover:#003b8e;
-  --grad-a:#e0eafc;--grad-b:#cfdef3;
-}
-body {
-  font-family:"Segoe UI",Roboto,Arial,sans-serif;
-  background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
-  display:flex;justify-content:center;align-items:center;
-  min-height:100vh;margin:0;padding:20px;
-}
-.box {
-  background:#fff;border-radius:12px;padding:40px 30px;width:100%;max-width:400px;
-  box-shadow:0 10px 25px rgba(0,0,0,.1);text-align:center;
-  transition:transform .3s ease, box-shadow .3s ease;
-}
-.box:hover {transform:translateY(-4px);box-shadow:0 15px 30px rgba(0,0,0,.15);}
-.box img {width:90px;height:90px;margin-bottom:12px;}
-h2 {color:var(--cor-primaria);margin-bottom:18px;}
-input, select {
-  width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:6px;
-  font-size:15px;transition:.2s;
-}
-input:focus, select:focus {
-  border-color:var(--cor-primaria);outline:none;box-shadow:0 0 0 3px rgba(0,74,173,.15);
-}
-button {
-  width:100%;padding:12px;margin-top:10px;border:none;border-radius:6px;
-  background:var(--cor-primaria);color:#fff;font-size:16px;font-weight:600;cursor:pointer;
-  transition:.25s;
-}
-button:hover {background:var(--cor-primaria-hover);transform:translateY(-2px);}
-a {color:var(--cor-primaria);text-decoration:none;}
-a:hover{text-decoration:underline;}
-</style>
-
-<script type="module">
-import { auth, db } from "./firebase-config.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { setDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-
-window.cadastrar = async () => {
-  const nome = document.getElementById("nome").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const senha = document.getElementById("senha").value;
-  const role = document.getElementById("role").value;
-
-  if (!nome || !email || !senha || !role) {
-    alert("⚠️ Preencha todos os campos obrigatórios!");
-    return;
-  }
-
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, senha);
-    const uid = cred.user.uid;
-
-    await setDoc(doc(db, "usuarios", uid), {
-      nome,
-      email,
-      role,
-      aprovado: false,
-      criado_em: serverTimestamp()
-    });
-
-    alert("✅ Cadastro enviado com sucesso! Aguarde aprovação do administrador.");
-    window.location.href = "index.html";
-  } catch (erro) {
-    console.error(erro);
-    alert("❌ Erro ao cadastrar: " + erro.message);
-  }
-};
-</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cadastro de Usuário - Viaturas</title>
+<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="box">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
+<body class="centered">
+  <div class="card narrow">
+    <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
     <h2>Cadastro de Usuário</h2>
 
     <input type="text" id="nome" placeholder="Nome completo" required>
-    <input type="email" id="email" placeholder="E-mail institucional" required>
+    <input type="email" id="email" placeholder="Email institucional" required>
     <input type="password" id="senha" placeholder="Senha" required>
 
     <select id="role" required>
@@ -98,12 +23,37 @@ window.cadastrar = async () => {
       <option value="encarregado">Encarregado</option>
       <option value="ose">Oficial de Serviço</option>
       <option value="chefe">Chefe de Departamento</option>
+      <option value="adm">Administrador</option>
     </select>
 
-    <button onclick="cadastrar()">Cadastrar</button>
-    <p style="margin-top:10px;">
-      <a href="index.html">Já possui conta? Faça login</a>
-    </p>
+    <button class="primary" onclick="cadastrar()">Cadastrar</button>
+    <p class="hint"><a href="index.html">Já tem conta? Faça login</a></p>
   </div>
+
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+window.cadastrar = async ()=>{
+  const nome = document.getElementById("nome").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value;
+  const role = document.getElementById("role").value;
+
+  if(!nome || !email || !senha || !role){ alert("Preencha todos os campos."); return; }
+
+  try{
+    const cred = await createUserWithEmailAndPassword(auth, email, senha);
+    await setDoc(doc(db,"usuarios", cred.user.uid), {
+      nome, email, role, aprovado: false, criado_em: serverTimestamp()
+    });
+    alert("Cadastro enviado! Aguarde aprovação do ADM.");
+    window.location.href = "index.html";
+  }catch(e){
+    alert("Erro no cadastro: " + (e.message || e));
+  }
+};
+</script>
 </body>
 </html>
