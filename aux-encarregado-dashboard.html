@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auxiliar P3 - Dashboard</title>
+<title>Auxiliar do Encarregado - Dashboard</title>
 <link rel="icon" type="image/svg+xml"
       href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
@@ -35,10 +35,9 @@ thead{background:var(--cor-primaria);color:#fff;}
 th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
 tbody tr:hover{background:rgba(0,74,173,.05);}
 button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
-button.assinar{background:var(--cor-primaria);color:white;}
-button.assinar:hover{background:var(--cor-primaria-hover);}
-.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
-.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
+button.criar{background:var(--cor-primaria);color:#fff;}
+button.criar:hover{background:var(--cor-primaria-hover);}
+input,select{padding:8px;margin:5px;border:1px solid var(--cor-borda);border-radius:6px;}
 @media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
 </style>
 </head>
@@ -58,17 +57,25 @@ button.assinar:hover{background:var(--cor-primaria-hover);}
 
 <div class="container">
   <header>
-    <h1>Auxiliar P3 - Dashboard</h1>
+    <h1>Auxiliar do Encarregado - Dashboard</h1>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Missões para Assinatura</h2>
+  <!-- 🚗 Criação de Missão -->
+  <h2>Criar Nova Missão</h2>
+  <form onsubmit="event.preventDefault(); criarMissao();">
+    <input type="text" id="missao" placeholder="Descrição da Missão" required>
+    <input type="text" id="motorista" placeholder="Motorista Responsável" required>
+    <select id="viaturaSelect" required></select>
+    <button type="submit" class="criar">Criar Missão</button>
+  </form>
+
+  <h2>Missões Programadas</h2>
   <table>
     <thead>
       <tr>
         <th>Missão</th><th>Motorista</th><th>Viatura</th>
-        <th>Status</th><th>Fora da Prog.</th>
-        <th>OSE</th><th>Encarregado</th><th>Chefe</th><th>P3</th><th>Ação</th>
+        <th>Status</th><th>Odômetro Inicial</th><th>Odômetro Final</th><th>Criação</th>
       </tr>
     </thead>
     <tbody id="missoes-body"></tbody>
@@ -78,13 +85,13 @@ button.assinar:hover{background:var(--cor-primaria-hover);}
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {collection,onSnapshot,updateDoc,doc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {collection,addDoc,onSnapshot,getDocs,query,where,orderBy,limit,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-/* 🔒 Proteção e logout automático */
+/* 🔒 Proteção + Logout automático (10 min) */
 const LIMITE=10*60*1000;let timer;
 onAuthStateChanged(auth,u=>{
   if(!u){window.location.href="index.html";}
-  else{resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));}
+  else{resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));carregarDados();}
 });
 function resetar(){clearTimeout(timer);
   timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
@@ -94,42 +101,74 @@ const p=new URLSearchParams(window.location.search);const em=p.get("emulando");
 if(em){document.getElementById("emulacao-banner").style.display="block";
        document.getElementById("emulando-email").textContent=em;}
 
-/* Logout manual */
+/* Logout */
 window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* 🔄 Missões em tempo real */
-onSnapshot(collection(db,"viaturas_missao"),snap=>{
-  const tb=document.getElementById("missoes-body");tb.innerHTML="";
-  snap.forEach(d=>{
-    const m=d.data();
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${m.missao||""}</td>
-      <td>${m.motorista||""}</td>
-      <td>${m.viatura||""}</td>
-      <td>${m.status||"Pendente"}</td>
-      <td>${m.fora_programacao?"⚠️ Sim":"Não"}</td>
-      <td>${m.assinatura_ose?`<span class='badge-ok'>${m.assinatura_ose}</span><br><small>${m.hora_assinatura_ose||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
-      <td>${m.assinatura_encarregado?`<span class='badge-ok'>${m.assinatura_encarregado}</span><br><small>${m.hora_assinatura_encarregado||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
-      <td>${m.assinatura_chedep?`<span class='badge-ok'>${m.assinatura_chedep}</span><br><small>${m.hora_assinatura_chedep||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
-      <td>${m.assinatura_p3?`<span class='badge-ok'>${m.assinatura_p3}</span><br><small>${m.hora_assinatura_p3||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
-      <td>
-        <button class="assinar" onclick="assinar('${d.id}')">Assinar P3</button>
-      </td>`;
-    tb.appendChild(tr);
+/* 🔄 Carregar Viaturas Cadastradas */
+function carregarViaturas(){
+  const select=document.getElementById("viaturaSelect");
+  onSnapshot(collection(db,"viaturas"),snap=>{
+    select.innerHTML="<option value=''>Selecione a Viatura</option>";
+    snap.forEach(d=>{
+      const v=d.data();
+      select.innerHTML+=`<option value="${d.id}" data-odo="${v.odometro_atual||0}">
+        ${v.modelo} - ${v.placa} (Atual: ${v.odometro_atual||"-"} km)
+      </option>`;
+    });
   });
-});
+}
 
-/* ✍️ Assinatura do P3 */
-window.assinar=async id=>{
-  await updateDoc(doc(db,"viaturas_missao",id),{
-    assinatura_p3:auth.currentUser?.email||"P3",
-    hora_assinatura_p3:new Date().toLocaleString(),
-    status:"Confirmada pelo P3",
-    atualizado_em:serverTimestamp()
+/* 🚗 Criar Missão */
+window.criarMissao=async()=>{
+  const missao=document.getElementById("missao").value.trim();
+  const motorista=document.getElementById("motorista").value.trim();
+  const viaturaID=document.getElementById("viaturaSelect").value;
+  if(!missao||!motorista||!viaturaID)return alert("Preencha todos os campos!");
+
+  const ultimas=await getDocs(query(collection(db,"viaturas_missao"),
+    where("viatura_id","==",viaturaID),orderBy("criada_em","desc"),limit(1)));
+  let odometro_inicio=0;
+  if(!ultimas.empty){
+    const ultima=ultimas.docs[0].data();
+    odometro_inicio=ultima.odometro_fim||ultima.odometro_inicio||0;
+  }
+
+  await addDoc(collection(db,"viaturas_missao"),{
+    missao,motorista,viatura_id:viaturaID,
+    status:"Programada",
+    odometro_inicio,
+    criada_por:auth.currentUser?.email,
+    criada_em:serverTimestamp()
   });
-  alert("✅ Missão assinada e confirmada pelo P3.");
+  alert("🆕 Missão programada com sucesso!");
 };
+
+/* 🔄 Carregar Missões */
+function carregarMissoes(){
+  const tbody=document.getElementById("missoes-body");
+  onSnapshot(collection(db,"viaturas_missao"),snap=>{
+    tbody.innerHTML="";
+    snap.forEach(d=>{
+      const m=d.data();
+      tbody.innerHTML+=`
+        <tr>
+          <td>${m.missao||""}</td>
+          <td>${m.motorista||""}</td>
+          <td>${m.viatura_id||""}</td>
+          <td>${m.status||"Pendente"}</td>
+          <td>${m.odometro_inicio||"-"}</td>
+          <td>${m.odometro_fim||"-"}</td>
+          <td>${m.criada_em?new Date(m.criada_em.seconds*1000).toLocaleString():"-"}</td>
+        </tr>`;
+    });
+  });
+}
+
+/* Inicialização */
+function carregarDados(){
+  carregarViaturas();
+  carregarMissoes();
+}
 </script>
 </body>
 </html>
