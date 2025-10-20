@@ -8,10 +8,10 @@
 <!-- Favicon da Marinha -->
 <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
- <style>
+<style>
 /* ==========================================================
-   UI FUTURISTA PREMIUM 2025 — OFICIAL DE SERVIÇO MARINHA
-   Responsivo aprimorado + tema escuro automático
+   UI FUTURISTA PREMIUM 2025 — OFICIAL DE SERVIÇO (MARINHA)
+   Design aprimorado e responsivo real em todos os tamanhos
 ========================================================== */
 :root {
   --cor-primaria: #004aad;
@@ -41,25 +41,27 @@
 * {
   box-sizing: border-box;
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
   background: var(--cor-fundo);
   color: var(--cor-texto);
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 20px 10px;
 }
 
+/* ---------- Container principal ---------- */
 .container {
   width: 100%;
   max-width: 1200px;
   background: var(--cor-card);
   border-radius: 10px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-  padding: 25px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  padding: 24px;
   overflow: hidden;
 }
 
@@ -69,8 +71,8 @@ header {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 25px;
   gap: 10px;
+  margin-bottom: 25px;
 }
 
 .logo-marinha {
@@ -81,14 +83,14 @@ header {
 }
 
 .logo-marinha img {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
 }
 
 header h1 {
   color: var(--cor-primaria);
-  font-size: 1.4rem;
-  margin: 0;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 700;
 }
 
 header button {
@@ -109,9 +111,9 @@ header button:hover {
 /* ---------- Títulos ---------- */
 h2 {
   color: var(--cor-primaria);
-  margin-top: 0;
   border-left: 4px solid var(--cor-primaria);
   padding-left: 10px;
+  margin: 20px 0 10px;
   font-size: 1.2rem;
 }
 
@@ -124,14 +126,13 @@ h2 {
 }
 
 .form-missao input[type="text"] {
-  flex: 1 1 30%;
-  min-width: 220px;
+  flex: 1 1 260px;
   padding: 10px;
   border: 1px solid var(--cor-borda);
   border-radius: 6px;
   background: var(--cor-card);
   color: var(--cor-texto);
-  transition: border 0.25s ease;
+  transition: 0.25s;
 }
 
 .form-missao input[type="text"]:focus {
@@ -146,6 +147,7 @@ h2 {
   display: flex;
   align-items: center;
   gap: 6px;
+  color: var(--cor-texto);
 }
 
 .form-missao button[type="submit"] {
@@ -162,19 +164,29 @@ h2 {
   background: var(--cor-primaria-hover);
 }
 
-/* ---------- Tabela responsiva ---------- */
+/* ---------- Tabela Responsiva ---------- */
 .table-wrap {
   width: 100%;
   overflow-x: auto;
-  overflow-y: hidden;
   border-radius: 8px;
-  margin-top: 15px;
+  margin-top: 10px;
+}
+
+.table-wrap::-webkit-scrollbar {
+  height: 8px;
+}
+.table-wrap::-webkit-scrollbar-thumb {
+  background: var(--cor-borda);
+  border-radius: 6px;
+}
+.table-wrap::-webkit-scrollbar-thumb:hover {
+  background: var(--cor-primaria);
 }
 
 table {
   width: 100%;
-  min-width: 850px;
   border-collapse: collapse;
+  min-width: 850px;
 }
 
 thead {
@@ -190,7 +202,7 @@ th, td {
 }
 
 tbody tr:hover {
-  background: rgba(0, 74, 173, 0.05);
+  background: rgba(0,74,173,0.05);
 }
 
 tbody tr[style*="background:rgba(255,0,0,0.06)"] {
@@ -198,7 +210,7 @@ tbody tr[style*="background:rgba(255,0,0,0.06)"] {
   border-left: 4px solid #dc2626;
 }
 
-/* ---------- Botões ---------- */
+/* ---------- Botões de ação ---------- */
 button.aprovar,
 button.negar {
   border: none;
@@ -206,9 +218,9 @@ button.negar {
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.25s;
   font-size: 0.9rem;
-  margin-right: 4px;
+  transition: 0.25s;
+  margin: 2px 0;
 }
 
 button.aprovar {
@@ -227,31 +239,21 @@ button.negar:hover {
   background: #b91c1c;
 }
 
-/* ---------- Alerta "fora da programação" ---------- */
+/* ---------- Destaques ---------- */
 td span[style*="color:#dc3545"] {
   display: inline-block;
   background: rgba(220, 53, 69, 0.1);
   padding: 3px 6px;
   border-radius: 6px;
   margin-left: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
-/* ---------- Rolagem responsiva ---------- */
-.table-wrap::-webkit-scrollbar {
-  height: 8px;
-}
-.table-wrap::-webkit-scrollbar-thumb {
-  background: var(--cor-borda);
-  border-radius: 6px;
-}
-.table-wrap::-webkit-scrollbar-thumb:hover {
-  background: var(--cor-primaria);
-}
-
-/* ---------- Responsividade real ---------- */
-@media (max-width: 980px) {
+/* ---------- Responsividade aprimorada ---------- */
+@media (max-width: 1024px) {
   th, td {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   h2 {
     font-size: 1.1rem;
@@ -264,8 +266,7 @@ td span[style*="color:#dc3545"] {
   }
 
   .form-missao input[type="text"] {
-    flex: 1 1 100%;
-    min-width: 100%;
+    width: 100%;
   }
 
   header {
@@ -276,6 +277,10 @@ td span[style*="color:#dc3545"] {
   header h1 {
     font-size: 1.2rem;
   }
+
+  table {
+    min-width: 700px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -284,26 +289,31 @@ td span[style*="color:#dc3545"] {
   }
 
   .container {
-    padding: 15px;
+    padding: 16px;
   }
 
   table {
-    min-width: 700px;
+    min-width: 600px;
   }
 
   th, td {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     padding: 8px;
   }
 
-  button.aprovar, button.negar {
-    padding: 5px 8px;
+  button.aprovar,
+  button.negar {
     font-size: 0.8rem;
+    padding: 5px 8px;
+  }
+
+  header button {
+    padding: 6px 10px;
   }
 
   .logo-marinha img {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -312,7 +322,6 @@ button, input {
   transition: all 0.25s ease;
 }
 </style>
- 
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
