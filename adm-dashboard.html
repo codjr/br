@@ -1,64 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Administrador - Dashboard</title>
-
-<link rel="icon" type="image/svg+xml"
-      href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
-
+<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 <style>
-/* ==========================================================
-   UI FUTURISTA PREMIUM 2025 — ADMINISTRADOR MARINHA
-   Tema institucional azul-naval + modo escuro automático
-========================================================== */
-:root {
-  --cor-primaria:#004aad;
-  --cor-primaria-hover:#003b8e;
-  --cor-fundo:#f5f7fa;
-  --cor-texto:#1f2937;
-  --cor-card:#ffffff;
-  --cor-borda:#d1d5db;
-  --cor-secundaria:#e2e8f0;
-  --cor-sucesso:#16a34a;
-  --cor-erro:#dc2626;
-  --cor-aviso:#f59e0b;
-}
-@media(prefers-color-scheme:dark){
-  :root{
-    --cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;
-    --cor-borda:#1f2937;--cor-secundaria:#1e293b;
-  }
-}
+:root{--cor-primaria:#004aad;--cor-primaria-hover:#003b8e;--cor-fundo:#f5f7fa;--cor-texto:#1f2937;--cor-card:#fff;--cor-borda:#d1d5db;--cor-secundaria:#e2e8f0;--cor-sucesso:#16a34a;--cor-erro:#dc2626;--cor-aviso:#f59e0b;}
+@media(prefers-color-scheme:dark){:root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;--cor-borda:#1f2937;--cor-secundaria:#1e293b}}
 *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
-body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
-  min-height:100vh;display:flex;justify-content:center;padding:30px 10px;}
-.container{
-  width:100%;max-width:1250px;background:var(--cor-card);
-  border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:24px;
-}
+body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);min-height:100vh;padding:30px 10px;}
+.container{max-width:1250px;margin:auto;background:var(--cor-card);border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:24px;}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .logo-marinha{display:flex;align-items:center;gap:12px}
 .logo-marinha img{width:50px;height:50px}
 header h1{color:var(--cor-primaria);font-size:1.35rem;margin:0}
-header button{
-  background:var(--cor-erro);color:#fff;border:none;
-  padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;transition:.25s;
-}
+header button{background:var(--cor-erro);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;transition:.25s}
 header button:hover{background:#b91c1c}
 .nav-tabs{display:flex;gap:8px;margin:12px 0 18px;flex-wrap:wrap}
-.nav-tabs button{
-  background:var(--cor-secundaria);border:1px solid var(--cor-borda);color:var(--cor-texto);
-  padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;
-}
+.nav-tabs button{background:var(--cor-secundaria);border:1px solid var(--cor-borda);color:var(--cor-texto);padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600}
 .nav-tabs button.active{background:var(--cor-primaria);color:#fff;border-color:var(--cor-primaria)}
+h2{color:var(--cor-primaria);margin:0 0 8px;border-left:4px solid var(--cor-primaria);padding-left:10px}
 .table-wrap{overflow:auto;border:1px solid var(--cor-borda);border-radius:10px}
 table{width:100%;border-collapse:collapse;min-width:980px}
 thead{background:var(--cor-primaria);color:#fff}
 th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left}
 tbody tr:hover{background:rgba(0,74,173,.05)}
-button{transition:0.2s}
+.actions{display:flex;flex-wrap:wrap;gap:6px}
 button.aprovar{background:var(--cor-sucesso);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-weight:600}
 button.aprovar:hover{background:#15803d}
 button.editar{background:var(--cor-aviso);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-weight:600}
@@ -69,198 +37,324 @@ button.excluir{background:var(--cor-erro);color:#fff;border:none;padding:6px 10p
 button.excluir:hover{background:#b91c1c}
 .badge-ok{display:inline-block;background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700}
 .badge-no{display:inline-block;background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700}
+.badge-warn{display:inline-block;background:rgba(245,158,11,.12);color:#92400e;padding:4px 8px;border-radius:6px;font-weight:700}
 .tag-fp{color:#dc2626;font-weight:700}
-@media(max-width:768px){header{flex-direction:column;gap:10px;align-items:flex-start}
-.container{padding:18px}th,td{font-size:.92rem}}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
+.filters input,.filters select{padding:8px 10px;border:1px solid var(--cor-borda);border-radius:8px;background:#fff}
 </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <div class="logo-marinha">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
-      <h1>Administrador — Sistema de Viaturas</h1>
-    </div>
-    <button onclick="logout()">Sair</button>
-  </header>
+  <div class="container">
+    <header>
+      <div class="logo-marinha">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
+        <h1>Administrador — Sistema de Viaturas</h1>
+      </div>
+      <button onclick="logout()">Sair</button>
+    </header>
 
-  <div class="nav-tabs">
-    <button class="active" data-tab="tab-usuarios" onclick="setTab('tab-usuarios', this)">Usuários</button>
-    <button data-tab="tab-missoes" onclick="setTab('tab-missoes', this)">Missões</button>
-    <button data-tab="tab-logs" onclick="setTab('tab-logs', this)">Logs</button>
-    <button data-tab="tab-emulacao" onclick="setTab('tab-emulacao', this)">Emulação</button>
+    <div class="nav-tabs">
+      <button class="active" data-tab="tab-usuarios" onclick="setTab('tab-usuarios', this)">Usuários</button>
+      <button data-tab="tab-missoes" onclick="setTab('tab-missoes', this)">Missões</button>
+      <button data-tab="tab-logs" onclick="setTab('tab-logs', this)">Logs do Sistema</button>
+      <button data-tab="tab-emulacao" onclick="setTab('tab-emulacao', this)">Emulação</button>
+    </div>
+
+    <!-- Usuários -->
+    <section id="tab-usuarios" class="tab-pane" style="display:block;">
+      <h2>Gerenciamento de Usuários</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Nome</th><th>Email</th><th>Cargo</th><th>Status</th><th style="min-width:380px">Ações</th></tr>
+          </thead>
+          <tbody id="usuarios-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Missões -->
+    <section id="tab-missoes" class="tab-pane" style="display:none;">
+      <h2>Missões (todas)</h2>
+      <div class="filters">
+        <select id="filtro-status" onchange="filtrarMissoes()">
+          <option value="">Status: Todos</option>
+          <option value="Pendente">Pendente</option>
+          <option value="Aprovada pela OSE">Aprovada pela OSE</option>
+          <option value="Negada pela OSE">Negada pela OSE</option>
+          <option value="Em viagem">Em viagem</option>
+          <option value="Concluída">Concluída</option>
+        </select>
+        <input id="busca-missao" type="search" placeholder="Buscar missão/viatura/motorista..." oninput="filtrarMissoes()"/>
+        <span class="badge-warn">⚠ Fora da Programação aparece destacado</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
+              <th>Odômetro Início</th><th>Horário Início</th>
+              <th>Odômetro Fim</th><th>Horário Fim</th>
+              <th>Assinaturas</th>
+              <th style="min-width:220px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="missoes-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Logs -->
+    <section id="tab-logs" class="tab-pane" style="display:none;">
+      <h2>Logs do Sistema</h2>
+      <div class="filters">
+        <input id="busca-logs" type="search" placeholder="Buscar por ação, alvo, e-mail..." oninput="filtrarLogs()"/>
+        <button class="reset" onclick="exportarLogs()">Exportar CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ação</th><th>Alvo</th><th>Feito por</th><th>Data/Hora</th></tr></thead>
+          <tbody id="logs-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Emulação -->
+    <section id="tab-emulacao" class="tab-pane" style="display:none;">
+      <h2>Emulação de Perfil</h2>
+      <div class="filters">
+        <input id="busca-emulacao" type="search" placeholder="Buscar usuário por nome/email..." oninput="filtrarEmulacao()"/>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nome</th><th>Email</th><th>Cargo</th><th>Ação</th></tr></thead>
+          <tbody id="emulacao-body"></tbody>
+        </table>
+      </div>
+      <p class="badge-warn" style="margin-top:8px;">⚙ Você será redirecionado ao dashboard do cargo com <b>?emulando=email</b>.</p>
+    </section>
   </div>
-
-  <!-- Usuários -->
-  <section id="tab-usuarios" style="display:block;">
-    <h2>Gerenciamento de Usuários</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Nome</th><th>Email</th><th>Cargo</th><th>Status</th><th>Ações</th></tr></thead>
-        <tbody id="usuarios-body"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Missões -->
-  <section id="tab-missoes" style="display:none;">
-    <h2>Missões (todas)</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th><th>Fora Prog.</th><th>Ações</th></tr>
-        </thead>
-        <tbody id="missoes-body"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Logs -->
-  <section id="tab-logs" style="display:none;">
-    <h2>Logs do Sistema</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Ação</th><th>Alvo</th><th>Feito por</th><th>Data/Hora</th></tr></thead>
-        <tbody id="logs-body"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Emulação -->
-  <section id="tab-emulacao" style="display:none;">
-    <h2>Emular Perfis</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Nome</th><th>Email</th><th>Cargo</th><th>Ação</th></tr></thead>
-        <tbody id="emulacao-body"></tbody>
-      </table>
-    </div>
-  </section>
-</div>
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
-import { signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {
+  collection, onSnapshot, doc, updateDoc, deleteDoc, getDoc, addDoc, serverTimestamp, query, orderBy
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-/* Proteção e logout automático */
-const TEMPO_MAX_MS = 10*60*1000;let timer;
-onAuthStateChanged(auth,u=>{
-  if(!u){window.location.href="index.html";}
-  else{reiniciar();["mousemove","keydown","click"].forEach(e=>document.addEventListener(e,reiniciar));}
+/* Proteção role ADM + sessão 10min */
+const LIMITE = 10*60*1000; let t;
+onAuthStateChanged(auth, async (u)=>{
+  if(!u){ return window.location.href="index.html"; }
+  const uDoc = await getDoc(doc(db,"usuarios", u.uid));
+  if(!uDoc.exists() || uDoc.data().role!=="adm"){
+    alert("Acesso permitido apenas ao Administrador.");
+    await signOut(auth); return window.location.href="index.html";
+  }
+  init();
+  reset();
+  ["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e, reset));
 });
-function reiniciar(){clearTimeout(timer);
-  timer=setTimeout(async()=>{alert("⏰ Sessão encerrada.");await signOut(auth);window.location.href="index.html";},TEMPO_MAX_MS);
-}
+function reset(){ clearTimeout(t); t=setTimeout(async()=>{ alert("⏰ Sessão expirada."); await signOut(auth); window.location.href="index.html"; }, LIMITE); }
+window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; };
 
 /* Tabs */
-window.setTab=(id,btn)=>{
-  document.querySelectorAll("section").forEach(s=>s.style.display="none");
+window.setTab = (id, btn)=>{
+  document.querySelectorAll(".tab-pane").forEach(p=>p.style.display="none");
   document.getElementById(id).style.display="block";
   document.querySelectorAll(".nav-tabs button").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
 };
 
-/* Logout */
-window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
-
-/* Funções utilitárias */
-function roleLabel(r){
-  return ({adm:"Administrador",chefe:"Chefe",ose:"OSE",encarregado:"Encarregado",aux_encarregado:"Aux. Encarregado",motorista:"Motorista"}[r]||r);
-}
+/* Utils */
+function roleLabel(r){ return ({adm:"ADM",chefe:"Chefe",ose:"OSE",encarregado:"Encarregado",motorista:"Motorista",aux_encarregado:"Aux. Encarregado"}[r]||r); }
 function destinosPorRole(role){
-  return ({adm:"adm-dashboard.html",chefe:"chefe-dashboard.html",ose:"ose-dashboard.html",
-           encarregado:"encarregado-dashboard.html",aux_encarregado:"aux-encarregado-dashboard.html",
-           motorista:"motorista-dashboard.html"}[role]||"index.html");
+  return ({adm:"adm-dashboard.html",chefe:"chefe-dashboard.html",ose:"ose-dashboard.html",encarregado:"encarregado-dashboard.html",motorista:"motorista-dashboard.html",aux_encarregado:"aux-encarregado-dashboard.html"}[role]||"index.html");
+}
+function downloadCSV(filename, rows){
+  if(!rows.length) return alert("Sem dados.");
+  const head = Object.keys(rows[0]).join(";");
+  const body = rows.map(r => Object.values(r).map(v=>`"${(v??"").toString().replace(/"/g,'""')}"`).join(";")).join("\n");
+  const blob = new Blob([head+"\n"+body], {type:"text/csv;charset=utf-8;"}); const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url);
 }
 
-/* Usuários em tempo real */
-onSnapshot(collection(db,"usuarios"),snap=>{
-  const tbody=document.getElementById("usuarios-body");
-  const emuBody=document.getElementById("emulacao-body");
-  tbody.innerHTML="";emuBody.innerHTML="";
-  snap.forEach(d=>{
-    const u=d.data();
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${u.nome||"-"}</td>
-      <td>${u.email||"-"}</td>
-      <td>${roleLabel(u.role)}</td>
-      <td>${u.aprovado?'<span class="badge-ok">Aprovado</span>':'<span class="badge-no">Pendente</span>'}</td>
+/* Logs helper */
+async function logAction(acao, alvo, extra={}){
+  try{
+    await addDoc(collection(db,"logs"), {
+      acao, alvo, feito_por_uid: auth.currentUser?.uid || null,
+      feito_por_email: auth.currentUser?.email || null,
+      data_hora: serverTimestamp(), ...extra
+    });
+  }catch(e){ console.warn("Falha ao gravar log:", e); }
+}
+
+/* Init geral */
+function init(){ carregarUsuarios(); carregarMissoesRealtime(); carregarLogsRealtime(); carregarEmulacaoRealtime(); }
+
+/* Usuários */
+function carregarUsuarios(){
+  const tbody = document.getElementById("usuarios-body");
+  onSnapshot(collection(db,"usuarios"), (snap)=>{
+    tbody.innerHTML = "";
+    snap.forEach(d=>{
+      const u = d.data();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${u.nome||"-"}</td>
+        <td>${u.email||"-"}</td>
+        <td>${roleLabel(u.role)}</td>
+        <td>${u.aprovado?'<span class="badge-ok">Aprovado</span>':'<span class="badge-no">Pendente</span>'}</td>
+        <td class="actions">
+          <button class="aprovar" onclick="aprovar('${d.id}')">✔ Aprovar</button>
+          <button class="editar" onclick="editarUsuario('${d.id}','${(u.nome||'').replace(/"/g,'&quot;')}','${u.role||''}')">✏ Editar</button>
+          <button class="reset" onclick="resetSenha('${u.email||''}')">🔁 Resetar Senha</button>
+          <button class="excluir" onclick="excluirUsuario('${d.id}')">🗑 Excluir</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  });
+}
+window.aprovar = async(uid)=>{ await updateDoc(doc(db,"usuarios",uid), {aprovado:true}); await logAction("Aprovar usuário", uid); alert("Usuário aprovado!"); };
+window.editarUsuario = async (uid, nomeAtual, cargoAtual)=>{
+  const novoNome = prompt("Novo nome:", nomeAtual||"")?.trim();
+  const novoCargo = prompt("Novo cargo (adm, chefe, ose, encarregado, aux_encarregado, motorista):", cargoAtual||"")?.trim();
+  if(!novoNome || !novoCargo) return alert("Edição cancelada.");
+  await updateDoc(doc(db,"usuarios",uid), { nome: novoNome, role: novoCargo });
+  await logAction("Editar usuário", uid, { nome: novoNome, role: novoCargo });
+  alert("Usuário atualizado.");
+};
+window.resetSenha = async (email)=>{
+  if(!email) return alert("Usuário sem e-mail.");
+  try{ await sendPasswordResetEmail(auth, email); alert(`Email de redefinição enviado para ${email}.`); await logAction("Reset senha", email); }
+  catch(e){ alert("Erro ao enviar e-mail de redefinição."); }
+};
+window.excluirUsuario = async (uid)=>{
+  if(!confirm("Excluir usuário?")) return;
+  await deleteDoc(doc(db,"usuarios",uid));
+  await logAction("Excluir usuário", uid);
+  alert("Usuário excluído.");
+};
+
+/* Missões */
+let MISSOES_CACHE = [];
+function assinaturaPill(label, email, hora){
+  return email ? `<span class="badge-ok">${email}</span>${hora?`<br><small>${hora}</small>`:""}` : `<span class="badge-no">${label} pendente</span>`;
+}
+function renderMissoes(list){
+  const tbody = document.getElementById("missoes-body");
+  tbody.innerHTML = "";
+  list.forEach(m=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${m.missao||"-"} ${m.fora_programacao?'<span class="tag-fp">⚠ Fora</span>':""}</td>
+      <td>${m.motorista||"-"}</td>
+      <td>${m.viatura_label||m.viatura||"-"}</td>
+      <td>${m.status||"Pendente"}</td>
+      <td>${m.odometro_inicio||"-"}</td>
+      <td>${m.horario_inicio||"-"}</td>
+      <td>${m.odometro_fim||"-"}</td>
+      <td>${m.horario_fim||"-"}</td>
       <td>
-        <button class="aprovar" onclick="aprovar('${d.id}')">✔</button>
-        <button class="editar" onclick="editarUsuario('${d.id}','${u.nome}','${u.role}')">✏</button>
-        <button class="reset" onclick="resetSenha('${u.email}')">🔁</button>
-        <button class="excluir" onclick="excluirUsuario('${d.id}')">🗑</button>
+        ${assinaturaPill("OSE", m.assinatura_ose, m.hora_assinatura_ose)}<br>
+        ${assinaturaPill("Encarregado", m.assinatura_encarregado, m.hora_assinatura_encarregado)}<br>
+        ${assinaturaPill("Chefe", m.assinatura_chedep, m.hora_assinatura_chedep)}
+      </td>
+      <td class="actions">
+        <button class="editar" onclick="editarMissao('${m.id}')">✏ Editar</button>
+        <button class="reset" onclick="alterarStatus('${m.id}')">↺ Status</button>
       </td>`;
     tbody.appendChild(tr);
-
-    const tr2=document.createElement("tr");
-    tr2.innerHTML=`
-      <td>${u.nome||"-"}</td><td>${u.email||"-"}</td><td>${roleLabel(u.role)}</td>
-      <td><button class="editar" onclick="emular('${u.email}','${u.role}')">Emular</button></td>`;
-    emuBody.appendChild(tr2);
   });
-});
+  filtrarMissoes();
+}
+function carregarMissoesRealtime(){
+  onSnapshot(collection(db,"viaturas_missao"), (snap)=>{
+    MISSOES_CACHE = [];
+    snap.forEach(d=> MISSOES_CACHE.push({id:d.id, ...d.data()}));
+    renderMissoes(MISSOES_CACHE);
+  });
+}
+window.filtrarMissoes = ()=>{
+  const st = document.getElementById("filtro-status").value;
+  const q = (document.getElementById("busca-missao").value||"").toLowerCase();
+  renderMissoes(MISSOES_CACHE.filter(m=>{
+    const okSt = st ? m.status===st : true;
+    const okQ = q ? (`${m.missao||""} ${m.motorista||""} ${m.viatura_label||m.viatura||""}`.toLowerCase().includes(q)) : true;
+    return okSt && okQ;
+  }));
+};
+window.editarMissao = async(id)=>{
+  const ref = doc(db,"viaturas_missao",id);
+  const d = await getDoc(ref); if(!d.exists()) return;
+  const m = d.data();
+  const missao = prompt("Missão:", m.missao||""); if(missao===null) return;
+  const motorista = prompt("Motorista:", m.motorista||""); if(motorista===null) return;
+  const viatura_label = prompt("Viatura (label):", m.viatura_label||""); if(viatura_label===null) return;
+  await updateDoc(ref, { missao, motorista, viatura_label });
+  await logAction("Editar missão", id);
+  alert("Missão atualizada.");
+};
+window.alterarStatus = async(id)=>{
+  const status = prompt("Novo status (Pendente, Aprovada pela OSE, Negada pela OSE, Em viagem, Concluída):",""); if(!status) return;
+  await updateDoc(doc(db,"viaturas_missao",id), { status });
+  await logAction("Alterar status missão", id, {status});
+  alert("Status atualizado.");
+};
 
-/* Ações básicas */
-window.aprovar=async uid=>{await updateDoc(doc(db,"usuarios",uid),{aprovado:true});alert("✅ Usuário aprovado.");};
-window.editarUsuario=async(uid,nome,cargo)=>{
-  const novoNome=prompt("Novo nome:",nome);
-  const novoCargo=prompt("Novo cargo (adm, chefe, ose, encarregado, aux_encarregado, motorista):",cargo);
-  if(!novoNome||!novoCargo)return;
-  await updateDoc(doc(db,"usuarios",uid),{nome:novoNome,role:novoCargo});
-  alert("✏ Usuário atualizado.");
+/* Logs */
+let LOGS_CACHE = [];
+function carregarLogsRealtime(){
+  onSnapshot(query(collection(db,"logs"), orderBy("data_hora","desc")), (snap)=>{
+    LOGS_CACHE = [];
+    const tbody = document.getElementById("logs-body");
+    tbody.innerHTML = "";
+    snap.forEach(d=>{
+      const l = d.data();
+      const row = {
+        acao: l.acao || "", alvo: l.alvo || "",
+        feito_por: l.feito_por_email || "",
+        data_hora: l.data_hora?.toDate ? l.data_hora.toDate().toLocaleString() : ""
+      };
+      LOGS_CACHE.push(row);
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${row.acao}</td><td>${row.alvo}</td><td>${row.feito_por}</td><td>${row.data_hora}</td>`;
+      tbody.appendChild(tr);
+    });
+    filtrarLogs();
+  });
+}
+window.filtrarLogs = ()=>{
+  const termo = (document.getElementById("busca-logs").value||"").toLowerCase();
+  Array.from(document.querySelectorAll("#logs-body tr")).forEach(tr=>{
+    tr.style.display = tr.innerText.toLowerCase().includes(termo) ? "" : "none";
+  });
 };
-window.resetSenha=async email=>{
-  await sendPasswordResetEmail(auth,email);
-  alert("🔁 E-mail de redefinição enviado para "+email);
-};
-window.excluirUsuario=async uid=>{
-  if(confirm("Excluir este usuário?")){
-    await deleteDoc(doc(db,"usuarios",uid));
-    alert("🗑 Usuário excluído.");
-  }
-};
+window.exportarLogs = ()=> downloadCSV(`logs_${new Date().toISOString().slice(0,10)}.csv`, LOGS_CACHE);
 
 /* Emulação */
-window.emular=(email,role)=>{
-  const destino=destinosPorRole(role);
-  window.location.href=`${destino}?emulando=${encodeURIComponent(email)}`;
-};
-
-/* Missões (leitura simples) */
-onSnapshot(collection(db,"viaturas_missao"),snap=>{
-  const tb=document.getElementById("missoes-body");
-  tb.innerHTML="";
-  snap.forEach(d=>{
-    const m=d.data();
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${m.missao||"-"}</td><td>${m.motorista||"-"}</td>
-      <td>${m.viatura||"-"}</td><td>${m.status||"-"}</td>
-      <td>${m.fora_programacao?"⚠ Sim":"Não"}</td>
-      <td><button class="editar" onclick="editarMissao('${d.id}')">✏</button></td>`;
-    tb.appendChild(tr);
+function carregarEmulacaoRealtime(){
+  const tbody = document.getElementById("emulacao-body");
+  onSnapshot(collection(db,"usuarios"), (snap)=>{
+    tbody.innerHTML = "";
+    snap.forEach(d=>{
+      const u = d.data();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${u.nome||"-"}</td>
+        <td>${u.email||"-"}</td>
+        <td>${roleLabel(u.role)}</td>
+        <td><button class="editar" onclick="emularPerfil('${u.email||''}','${u.role||''}')">Emular</button></td>`;
+      tbody.appendChild(tr);
+    });
   });
-});
-window.editarMissao=async id=>{
-  const ref=doc(db,"viaturas_missao",id);
-  const missao=prompt("Nova descrição da missão:");
-  if(missao){await updateDoc(ref,{missao});alert("Missão atualizada.");}
+}
+window.emularPerfil = (email, role)=>{
+  if(!email || !role) return alert("Usuário inválido para emulação.");
+  const destino = destinosPorRole(role);
+  window.location.href = `${destino}?emulando=${encodeURIComponent(email)}`;
 };
-
-/* Logs (simplificado) */
-onSnapshot(collection(db,"logs"),snap=>{
-  const tb=document.getElementById("logs-body");
-  tb.innerHTML="";
-  snap.forEach(d=>{
-    const l=d.data();
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${l.acao||""}</td><td>${l.alvo||""}</td><td>${l.feito_por_email||""}</td><td>${l.data_hora||""}</td>`;
-    tb.appendChild(tr);
-  });
-});
 </script>
 </body>
 </html>
