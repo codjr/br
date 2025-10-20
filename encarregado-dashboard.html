@@ -30,6 +30,10 @@ header button{background:var(--cor-erro);color:#fff;border:none;
               padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
 header button:hover{background:#b91c1c;}
 h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
+nav.menu{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:25px;}
+nav.menu a{background:var(--cor-primaria);color:#fff;text-decoration:none;
+           padding:10px 18px;border-radius:6px;font-weight:600;transition:.3s;}
+nav.menu a:hover{background:var(--cor-primaria-hover);}
 form{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:25px;}
 form input, form select{padding:10px;border:1px solid var(--cor-borda);
            border-radius:6px;font-size:1rem;flex:1 1 200px;}
@@ -55,6 +59,12 @@ tbody tr:hover{background:rgba(0,74,173,.05);}
     <h1>Encarregado - Dashboard</h1>
     <button onclick="logout()">Sair</button>
   </header>
+
+  <!-- 🔗 MENU DE ACESSO RÁPIDO -->
+  <nav class="menu">
+    <a href="gerenciar-viaturas.html">🚗 Cadastrar/Editar Viaturas</a>
+    <a href="relatorios.html">📊 Relatórios</a>
+  </nav>
 
   <h2>Criar Nova Missão</h2>
   <form onsubmit="event.preventDefault(); criarMissao();">
@@ -151,9 +161,7 @@ function carregarMissoes(){
           <small>Enc: ${m.assinatura_encarregado||"-"}</small><br>
           <small>Chefe: ${m.assinatura_chedep||"-"}</small>
         </td>
-        <td>
-          <button class='assinar' onclick="assinar('${d.id}')">Assinar</button>
-        </td>`;
+        <td><button class='assinar' onclick="assinar('${d.id}')">Assinar</button></td>`;
       tb.appendChild(tr);
     });
   });
@@ -163,7 +171,7 @@ function carregarMissoes(){
 window.carregarOdometro=async()=>{
   const id=document.getElementById("viatura").value;
   if(!id)return;
-  const snap=await getDocs(query(collection(db,"viaturas")));
+  const snap=await getDocs(collection(db,"viaturas"));
   snap.forEach(v=>{
     if(v.id===id){
       const d=v.data();
