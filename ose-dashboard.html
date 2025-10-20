@@ -4,318 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oficial de Serviço - Dashboard</title>
-
-<!-- Favicon da Marinha -->
-<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
-
-<style>
-/* ==========================================================
-   VISUAL PREMIUM 2025 — OFICIAL DE SERVIÇO (AMPLIADO + ASSINATURAS)
-========================================================== */
-:root {
-  --cor-primaria: #004aad;
-  --cor-primaria-hover: #003b8e;
-  --cor-fundo: #f5f7fa;
-  --cor-texto: #1f2937;
-  --cor-card: #ffffff;
-  --cor-borda: #d1d5db;
-  --cor-secundaria: #e2e8f0;
-  --cor-sucesso: #16a34a;
-  --cor-erro: #dc2626;
-  --cor-aviso: #f59e0b;
-  --cor-fora: rgba(255, 0, 0, 0.06);
-  --cor-assinaturas: #f8fafc;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --cor-fundo: #0b1120;
-    --cor-card: #111827;
-    --cor-texto: #e5e7eb;
-    --cor-borda: #1f2937;
-    --cor-secundaria: #1e293b;
-    --cor-fora: rgba(255, 0, 0, 0.15);
-    --cor-assinaturas: #1a2438;
-  }
-}
-
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 30px 15px;
-  font-size: 1.05rem;
-}
-
-/* ---------- Container ---------- */
-.container {
-  width: 100%;
-  max-width: 1350px;
-  background: var(--cor-card);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  padding: 35px;
-  overflow: hidden;
-}
-
-/* ---------- Cabeçalho ---------- */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.logo-marinha {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.logo-marinha img {
-  width: 64px;
-  height: 64px;
-}
-
-header h1 {
-  color: var(--cor-primaria);
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-header button {
-  background: var(--cor-secundaria);
-  color: var(--cor-texto);
-  border: none;
-  padding: 12px 22px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s;
-  font-size: 1rem;
-}
-header button:hover {
-  background: var(--cor-card);
-}
-
-/* ---------- Títulos ---------- */
-h2 {
-  color: var(--cor-primaria);
-  border-left: 5px solid var(--cor-primaria);
-  padding-left: 12px;
-  margin: 30px 0 12px;
-  font-size: 1.4rem;
-}
-
-/* ---------- Formulário ---------- */
-.form-missao {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 30px;
-}
-
-.form-missao input[type="text"] {
-  flex: 1 1 30%;
-  min-width: 260px;
-  padding: 14px;
-  font-size: 1rem;
-  border: 1px solid var(--cor-borda);
-  border-radius: 8px;
-  background: var(--cor-card);
-  color: var(--cor-texto);
-  transition: border 0.25s ease;
-}
-
-.form-missao input[type="text"]:focus {
-  border-color: var(--cor-primaria);
-  outline: none;
-}
-
-.form-missao label {
-  width: 100%;
-  font-size: 1rem;
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.form-missao button[type="submit"] {
-  background: var(--cor-primaria);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s;
-  font-size: 1.05rem;
-}
-.form-missao button[type="submit"]:hover {
-  background: var(--cor-primaria-hover);
-}
-
-/* ---------- Tabela Responsiva ---------- */
-.table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  border-radius: 10px;
-  margin-top: 15px;
-}
-
-.table-wrap::-webkit-scrollbar {
-  height: 10px;
-}
-.table-wrap::-webkit-scrollbar-thumb {
-  background: var(--cor-borda);
-  border-radius: 6px;
-}
-.table-wrap::-webkit-scrollbar-thumb:hover {
-  background: var(--cor-primaria);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 900px;
-  font-size: 1rem;
-}
-
-thead {
-  background: var(--cor-primaria);
-  color: white;
-}
-
-th, td {
-  text-align: left;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--cor-borda);
-  vertical-align: middle;
-}
-
-tbody tr:hover {
-  background: rgba(0,74,173,0.05);
-}
-
-tbody tr[style*="background:rgba(255,0,0,0.06)"] {
-  background: var(--cor-fora) !important;
-  border-left: 4px solid #dc2626;
-}
-
-/* ---------- Linha de Assinaturas ---------- */
-tr.assinaturas-row td {
-  background: var(--cor-assinaturas);
-  font-size: 0.95rem;
-  color: var(--cor-texto);
-  border-bottom: 2px solid var(--cor-borda);
-  padding: 10px 16px;
-}
-
-tr.assinaturas-row b {
-  color: var(--cor-primaria);
-}
-
-/* ---------- Botões de Ação ---------- */
-button.aprovar,
-button.negar {
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: 0.25s;
-  margin: 3px 0;
-}
-
-button.aprovar {
-  background: var(--cor-sucesso);
-  color: white;
-}
-button.aprovar:hover {
-  background: #15803d;
-}
-
-button.negar {
-  background: var(--cor-erro);
-  color: white;
-}
-button.negar:hover {
-  background: #b91c1c;
-}
-
-/* ---------- Responsividade ---------- */
-@media (max-width: 992px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  header h1 {
-    font-size: 1.5rem;
-  }
-
-  .form-missao {
-    flex-direction: column;
-  }
-
-  .form-missao input[type="text"] {
-    width: 100%;
-  }
-
-  table {
-    min-width: 750px;
-  }
-}
-
-@media (max-width: 600px) {
-  .container {
-    padding: 20px;
-  }
-
-  body {
-    font-size: 0.95rem;
-  }
-
-  table {
-    min-width: 650px;
-  }
-
-  th, td {
-    font-size: 0.9rem;
-    padding: 10px 12px;
-  }
-
-  tr.assinaturas-row td {
-    font-size: 0.85rem;
-    line-height: 1.4;
-  }
-
-  header button {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-  }
-
-  .logo-marinha img {
-    width: 48px;
-    height: 48px;
-  }
-}
-</style>
-
-
+<link rel="icon" type="image/svg+xml"
+  href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
+<link rel="stylesheet" href="styleose.css"> <!-- seu CSS premium 2025 -->
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
@@ -371,44 +62,60 @@ function carregarMissoes() {
     tbody.innerHTML = "";
     snapshot.forEach((docItem) => {
       const data = docItem.data();
-      const destaque = data.fora_programacao 
-        ? "style='background:rgba(255,0,0,0.06); border-left:4px solid #dc3545;'" 
-        : "";
+      const foraProg = data.fora_programacao ? "style='background:rgba(255,0,0,0.06); border-left:4px solid #dc3545;'" : "";
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <tr ${destaque}>
-          <td>${data.missao || ""} 
-            ${data.fora_programacao ? "<span style='color:#dc3545;font-weight:bold;'> ⚠ Fora da Programação</span>" : ""}
-          </td>
-          <td>${data.motorista || ""}</td>
-          <td>${data.viatura || ""}</td>
-          <td>${data.status || ""}</td>
-          <td>${data.odometro_inicio || ""}</td>
-          <td>${data.horario_inicio || ""}</td>
-          <td>${data.odometro_fim || ""}</td>
-          <td>${data.horario_fim || ""}</td>
-          <td>
-            <button class="aprovar" onclick="aprovar('${docItem.id}')">Aprovar</button>
-            <button class="negar" onclick="negar('${docItem.id}')">Negar</button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="9" style="font-size:13px; background:#f8fafc;">
-            <b>Assinaturas:</b> 
-            OSE: ${data.assinatura_ose || "-"} | 
-            Encarregado: ${data.assinatura_encarregado || "-"} | 
-            Chefe: ${data.assinatura_chedep || "-"} | 
-            P3: ${data.assinatura_p3 || "-"}
-          </td>
-        </tr>
+        <td>${data.missao || ""}
+          ${data.fora_programacao ? "<span style='color:#dc3545;font-weight:bold;'> ⚠ Fora da Programação</span>" : ""}
+          <br>
+          <button class="toggle-assinaturas" onclick="toggleAssinaturas('${docItem.id}')">Ver Assinaturas</button>
+        </td>
+        <td>${data.motorista || ""}</td>
+        <td>${data.viatura || ""}</td>
+        <td>${data.status || ""}</td>
+        <td>${data.odometro_inicio || ""}</td>
+        <td>${data.horario_inicio || ""}</td>
+        <td>${data.odometro_fim || ""}</td>
+        <td>${data.horario_fim || ""}</td>
+        <td>
+          <button class="aprovar" onclick="aprovar('${docItem.id}')">Aprovar</button>
+          <button class="negar" onclick="negar('${docItem.id}')">Negar</button>
+        </td>
       `;
-      tbody.appendChild(tr);
+
+      const trAss = document.createElement("tr");
+      trAss.classList.add("assinaturas-row");
+      trAss.innerHTML = `
+        <td colspan="9">
+          <div id="assinaturas-${docItem.id}" class="assinaturas-conteudo">
+            <p><b>Assinaturas:</b></p>
+            <p>OSE: ${data.assinatura_ose || "-"}<br>
+            Encarregado: ${data.assinatura_encarregado || "-"}<br>
+            Chefe: ${data.assinatura_chedep || "-"}<br>
+            P3: ${data.assinatura_p3 || "-"}</p>
+          </div>
+        </td>
+      `;
+
+      const linha = document.createElement("tbody");
+      linha.innerHTML = `<tr ${foraProg}>${tr.innerHTML}</tr>`;
+      linha.appendChild(trAss);
+      tbody.appendChild(linha);
     });
   });
 }
 
 // =============================
-// 🧾 Criar missão (com foraProg)
+// 🔽 Abrir/fechar assinaturas
+// =============================
+window.toggleAssinaturas = (id) => {
+  const div = document.getElementById(`assinaturas-${id}`);
+  div.classList.toggle("open");
+};
+
+// =============================
+// 🧾 Criar missão
 // =============================
 window.criarMissao = async () => {
   const missao = document.getElementById("missao").value.trim();
@@ -481,7 +188,7 @@ window.negar = async (id) => {
     <input type="text" id="motorista" placeholder="Motorista Responsável" required>
     <input type="text" id="viatura" placeholder="Viatura (Ex: Parati E983-0987)" required>
 
-    <label for="foraProg" style="display:flex;align-items:center;gap:6px;margin:10px 0;">
+    <label for="foraProg">
       <input type="checkbox" id="foraProg">
       <span>Missão fora da programação</span>
     </label>
@@ -490,22 +197,24 @@ window.negar = async (id) => {
   </form>
 
   <h2>Missões Pendentes</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Missão</th>
-        <th>Motorista</th>
-        <th>Viatura</th>
-        <th>Status</th>
-        <th>Odômetro Início</th>
-        <th>Horário Início</th>
-        <th>Odômetro Fim</th>
-        <th>Horário Fim</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody id="missoes-body"></tbody>
-  </table>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Missão</th>
+          <th>Motorista</th>
+          <th>Viatura</th>
+          <th>Status</th>
+          <th>Odômetro Início</th>
+          <th>Horário Início</th>
+          <th>Odômetro Fim</th>
+          <th>Horário Fim</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="missoes-body"></tbody>
+    </table>
+  </div>
 </div>
 </body>
 </html>
