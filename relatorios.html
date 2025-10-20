@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Relatórios de Missões - Encarregado</title>
-
+<title>Relatórios - Encarregado</title>
 <link rel="icon" type="image/svg+xml"
       href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
@@ -13,16 +12,18 @@
   --cor-primaria:#004aad;--cor-primaria-hover:#003b8e;
   --cor-fundo:#f5f7fa;--cor-texto:#1f2937;
   --cor-card:#fff;--cor-borda:#d1d5db;
+  --cor-secundaria:#e2e8f0;
   --cor-sucesso:#16a34a;--cor-erro:#dc2626;
 }
 @media(prefers-color-scheme:dark){
-  :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;
-        --cor-borda:#1f2937;}
+  :root{--cor-fundo:#0b1120;--cor-card:#111827;
+        --cor-texto:#e5e7eb;--cor-borda:#1f2937;
+        --cor-secundaria:#1e293b;}
 }
 *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
 body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
      min-height:100vh;padding:30px 10px;}
-.container{max-width:1200px;margin:auto;background:var(--cor-card);
+.container{max-width:1300px;margin:auto;background:var(--cor-card);
            border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:30px;}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;}
 header h1{color:var(--cor-primaria);font-size:1.5rem;margin:0;}
@@ -30,14 +31,11 @@ header button{background:var(--cor-erro);color:#fff;border:none;
               padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
 header button:hover{background:#b91c1c;}
 h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
-form{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:25px;}
-form select,form input{padding:10px;border:1px solid var(--cor-borda);
-                       border-radius:6px;font-size:1rem;}
-button{border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-weight:600;}
-button.filtrar{background:var(--cor-primaria);color:#fff;}
-button.filtrar:hover{background:var(--cor-primaria-hover);}
-button.exportar{background:var(--cor-sucesso);color:#fff;}
-button.exportar:hover{background:#15803d;}
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+.filters input,.filters select,button{padding:10px;border:1px solid var(--cor-borda);
+  border-radius:6px;font-size:1rem;}
+.filters button{background:var(--cor-primaria);color:#fff;border:none;cursor:pointer;font-weight:600;}
+.filters button:hover{background:var(--cor-primaria-hover);}
 table{width:100%;border-collapse:collapse;margin-top:15px;}
 thead{background:var(--cor-primaria);color:#fff;}
 th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
@@ -45,47 +43,45 @@ tbody tr:hover{background:rgba(0,74,173,.05);}
 @media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
 </style>
 </head>
-
 <body>
+
 <div class="container">
   <header>
     <h1>Relatórios de Missões</h1>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Filtros de Relatório</h2>
-  <form onsubmit="event.preventDefault(); gerarRelatorio();">
-    <select id="tipoRelatorio" required>
-      <option value="">Selecione o tipo de relatório</option>
-      <option value="individual">Individual (por motorista)</option>
-      <option value="diario">Diário</option>
-      <option value="semanal">Semanal</option>
-      <option value="mensal">Mensal</option>
-      <option value="anual">Anual</option>
+  <h2>Filtros</h2>
+  <div class="filters">
+    <select id="tipo-relatorio">
+      <option value="diario">📅 Diário</option>
+      <option value="semanal">🗓️ Semanal</option>
+      <option value="mensal">📆 Mensal</option>
+      <option value="anual">📈 Anual</option>
+      <option value="individual">👤 Individual (Motorista)</option>
     </select>
-    <input type="text" id="motorista" placeholder="Email do motorista (se individual)">
-    <input type="date" id="dataReferencia">
-    <button type="submit" class="filtrar">Gerar</button>
-    <button type="button" class="exportar" onclick="exportarCSV()">Exportar CSV</button>
-  </form>
+    <input type="date" id="data-inicio" placeholder="Data inicial">
+    <input type="date" id="data-fim" placeholder="Data final">
+    <input type="text" id="motorista" placeholder="Motorista (opcional)">
+    <button onclick="gerarRelatorio()">Gerar</button>
+    <button onclick="exportarCSV()">Exportar CSV</button>
+  </div>
 
-  <h2>Resultados</h2>
   <table>
     <thead>
       <tr>
-        <th>Data</th><th>Missão</th><th>Motorista</th><th>Viatura</th>
-        <th>Odômetro Início</th><th>Odômetro Fim</th><th>Status</th>
-        <th>Assinaturas</th>
+        <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
+        <th>Início</th><th>Fim</th><th>Odômetro Inicial</th><th>Odômetro Final</th>
       </tr>
     </thead>
-    <tbody id="tabela-relatorio"></tbody>
+    <tbody id="relatorio-body"></tbody>
   </table>
 </div>
 
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {collection,getDocs,query,where,orderBy} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {collection,getDocs,query,where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 const LIMITE=10*60*1000;let timer;
 onAuthStateChanged(auth,u=>{
@@ -96,69 +92,90 @@ function resetar(){clearTimeout(timer);
   timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
 window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* Gerar relatório */
+/* 📊 Gerar Relatório */
 window.gerarRelatorio=async()=>{
-  const tipo=document.getElementById("tipoRelatorio").value;
-  const mot=document.getElementById("motorista").value.trim();
-  const dataRef=new Date(document.getElementById("dataReferencia").value||Date.now());
-  if(!tipo){alert("Selecione o tipo de relatório.");return;}
+  const tipo=document.getElementById("tipo-relatorio").value;
+  const inicio=document.getElementById("data-inicio").value;
+  const fim=document.getElementById("data-fim").value;
+  const motorista=document.getElementById("motorista").value.toLowerCase();
+  const tbody=document.getElementById("relatorio-body");
+  tbody.innerHTML="<tr><td colspan='8'>Carregando...</td></tr>";
 
-  const coll=collection(db,"viaturas_missao");
-  const q=await getDocs(coll);
-  const tbody=document.getElementById("tabela-relatorio");
+  const snap=await getDocs(collection(db,"viaturas_missao"));
+  const todas=[];
+  snap.forEach(d=>todas.push({id:d.id,...d.data()}));
+
+  /* Filtragem temporal */
+  const hoje=new Date();
+  let filtradas=todas;
+  if(tipo==="diario"){
+    const hojeStr=hoje.toLocaleDateString();
+    filtradas=todas.filter(m=>(m.criada_em||"").includes(hojeStr));
+  }
+  else if(tipo==="semanal"){
+    const inicioSemana=new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate()-7);
+    filtradas=todas.filter(m=>{
+      const data=new Date(m.criada_em);
+      return data>=inicioSemana;
+    });
+  }
+  else if(tipo==="mensal"){
+    const mes=hoje.getMonth(),ano=hoje.getFullYear();
+    filtradas=todas.filter(m=>{
+      const d=new Date(m.criada_em);
+      return d.getMonth()===mes && d.getFullYear()===ano;
+    });
+  }
+  else if(tipo==="anual"){
+    const ano=hoje.getFullYear();
+    filtradas=todas.filter(m=>new Date(m.criada_em).getFullYear()===ano);
+  }
+  else if(tipo==="individual" && motorista){
+    filtradas=todas.filter(m=>(m.motorista||"").toLowerCase().includes(motorista));
+  }
+
+  if(inicio && fim){
+    const di=new Date(inicio), df=new Date(fim);
+    filtradas=filtradas.filter(m=>{
+      const d=new Date(m.criada_em);
+      return d>=di && d<=df;
+    });
+  }
+
   tbody.innerHTML="";
+  if(!filtradas.length){
+    tbody.innerHTML="<tr><td colspan='8'>Nenhum registro encontrado.</td></tr>";
+    return;
+  }
 
-  const inicioSemana=new Date(dataRef);inicioSemana.setDate(dataRef.getDate()-dataRef.getDay());
-  const fimSemana=new Date(inicioSemana);fimSemana.setDate(inicioSemana.getDate()+7);
-
-  q.forEach(docItem=>{
-    const m=docItem.data();
-    const dataMissao=new Date(m.criada_em||Date.now());
-    let incluir=false;
-
-    switch(tipo){
-      case "individual": incluir=m.motorista===mot;break;
-      case "diario": incluir=dataMissao.toDateString()===dataRef.toDateString();break;
-      case "semanal": incluir=dataMissao>=inicioSemana&&dataMissao<=fimSemana;break;
-      case "mensal": incluir=dataMissao.getMonth()===dataRef.getMonth()&&dataMissao.getFullYear()===dataRef.getFullYear();break;
-      case "anual": incluir=dataMissao.getFullYear()===dataRef.getFullYear();break;
-    }
-
-    if(incluir){
-      const tr=document.createElement("tr");
-      tr.innerHTML=`
-        <td>${m.criada_em||"-"}</td>
-        <td>${m.missao||""}</td>
-        <td>${m.motorista||""}</td>
-        <td>${m.viatura||""}</td>
-        <td>${m.odometro_inicio||"-"}</td>
-        <td>${m.odometro_fim||"-"}</td>
-        <td>${m.status||"-"}</td>
-        <td>
-          OSE: ${m.assinatura_ose||"-"}<br>
-          ENC: ${m.assinatura_encarregado||"-"}<br>
-          CHEFE: ${m.assinatura_chedep||"-"}
-        </td>`;
-      tbody.appendChild(tr);
-    }
+  filtradas.forEach(m=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${m.missao||"-"}</td>
+      <td>${m.motorista||"-"}</td>
+      <td>${m.viatura||"-"}</td>
+      <td>${m.status||"-"}</td>
+      <td>${m.horario_inicio||"-"}</td>
+      <td>${m.horario_fim||"-"}</td>
+      <td>${m.odometro_inicio||"-"}</td>
+      <td>${m.odometro_fim||"-"}</td>`;
+    tbody.appendChild(tr);
   });
-
-  if(!tbody.hasChildNodes())tbody.innerHTML="<tr><td colspan='8'>Nenhuma missão encontrada no período.</td></tr>";
 };
 
-/* Exportar CSV */
+/* 💾 Exportar CSV */
 window.exportarCSV=()=>{
-  const linhas=[["Data","Missão","Motorista","Viatura","Odômetro Início","Odômetro Fim","Status","Assinaturas"]];
-  document.querySelectorAll("#tabela-relatorio tr").forEach(tr=>{
-    const cols=[...tr.children].map(td=>td.innerText.replace(/\n/g," "));
+  const linhas=[["Missão","Motorista","Viatura","Status","Início","Fim","Odômetro Inicial","Odômetro Final"]];
+  document.querySelectorAll("#relatorio-body tr").forEach(tr=>{
+    const cols=[...tr.children].map(td=>td.innerText);
     linhas.push(cols);
   });
-  const csv=linhas.map(l=>l.join(",")).join("\n");
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
-  const link=document.createElement("a");
-  link.href=URL.createObjectURL(blob);
-  link.download="relatorio_missoes.csv";
-  link.click();
+  const csv=linhas.map(l=>l.join(";")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`relatorio_missoes_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
 };
 </script>
 </body>
