@@ -1,132 +1,109 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Login - Sistema de Viaturas</title>
 
 <!-- Favicon da Marinha -->
-<link rel="icon" type="image/svg+xml"
-      href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
+<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
+<!-- Estilo rápido local (mantendo o visual padrão Marinha) -->
 <style>
+:root {
+  --cor-primaria:#004aad; --cor-primaria-hover:#003b8e;
+  --grad-a:#e0eafc; --grad-b:#cfdef3;
+}
+* { box-sizing:border-box; font-family:"Segoe UI", Roboto, Arial, sans-serif; }
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #e0eafc, #cfdef3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+  margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
+  padding: 24px;
 }
 .login-box {
-  background: #ffffff;
-  padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 380px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width:100%; max-width:380px; background:#fff; border-radius:12px; padding:34px 28px;
+  box-shadow:0 12px 28px rgba(0,0,0,.12); text-align:center; transition:.25s;
 }
-.login-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-}
-.login-box img {
-  width: 90px;
-  height: 90px;
-  margin-bottom: 15px;
-}
-.login-box h2 {
-  color: #004aad;
-  margin-bottom: 20px;
-}
+.login-box:hover { transform: translateY(-3px); box-shadow:0 16px 34px rgba(0,0,0,.16); }
+.login-box img { width:88px; height:88px; margin-bottom:12px; }
+.login-box h2 { margin:4px 0 18px; color:var(--cor-primaria); font-size:1.35rem; }
 input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 15px;
+  width:100%; padding:12px 14px; margin:8px 0; border:1px solid #d1d5db; border-radius:8px;
+  font-size:15px; outline:none; transition:.2s;
 }
+input:focus { border-color:var(--cor-primaria); box-shadow:0 0 0 3px rgba(0,74,173,.15); }
 button {
-  width: 100%;
-  padding: 12px;
-  background: #004aad;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  width:100%; padding:12px; margin-top:10px; border:none; border-radius:8px; cursor:pointer;
+  background:var(--cor-primaria); color:#fff; font-weight:600; font-size:16px; transition:.2s;
 }
-button:hover {
-  background: #003b8e;
-  transform: translateY(-2px);
+button:hover { background:var(--cor-primaria-hover); transform: translateY(-1px); }
+.small {
+  margin-top:12px; font-size:.95rem;
 }
+.small a { color:var(--cor-primaria); text-decoration:none; }
+.small a:hover { text-decoration:underline; }
 </style>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+/* USAR A MESMA CONFIG CENTRAL: firebase-config.js (já no seu projeto) */
+import { auth } from "./firebase-config.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
-  authDomain: "vtr-marinha.firebaseapp.com",
-  projectId: "vtr-marinha",
-  storageBucket: "vtr-marinha.appspot.com",
-  messagingSenderId: "503079573653",
-  appId: "1:503079573653:web:beb34f57cd5447d376239c"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const db = getFirestore();
 
-window.loginADM = async function(){
+/* Mapeamento de destino por ROLE — REMOVIDO P3, ADICIONADO AUX_ENCARREGADO */
+const destinosPorRole = {
+  adm: "adm-dashboard.html",
+  chefe: "chefe-dashboard.html",
+  ose: "ose-dashboard.html",
+  encarregado: "encarregado-dashboard.html",
+  aux_encarregado: "auxiliar-encarregado-dashboard.html",
+  motorista: "motorista-dashboard.html"
+};
+
+window.login = async function () {
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value;
-
-  if(!email || !senha){
-    alert("Preencha todos os campos.");
+  if (!email || !senha) {
+    alert("Preencha e-mail e senha.");
     return;
   }
 
-  try{
-    const userCredential = await signInWithEmailAndPassword(auth,email,senha);
-    const uid = userCredential.user.uid;
-    const userDoc = await getDoc(doc(db,"usuarios",uid));
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, senha);
+    const uid = cred.user.uid;
 
-    if(!userDoc.exists()) throw new Error("Usuário não cadastrado no Firestore.");
-    const data = userDoc.data();
-    if(!data.aprovado) throw new Error("Usuário ainda não aprovado pelo ADM.");
+    // busca o perfil no Firestore
+    const snap = await getDoc(doc(db, "usuarios", uid));
+    if (!snap.exists()) throw new Error("Usuário sem cadastro de perfil no sistema.");
 
-    switch(data.role){
-      case "adm": window.location.href="adm-dashboard.html"; break;
-      case "chefe": window.location.href="chefe-dashboard.html"; break;
-      case "ose": window.location.href="ose-dashboard.html"; break;
-      case "encarregado": window.location.href="encarregado-dashboard.html"; break;
-      case "motorista": window.location.href="motorista-dashboard.html"; break;
-      case "aux_encarregado": window.location.href="aux-encarregado-dashboard.html"; break;
-      default: alert("Cargo inválido ou não reconhecido."); break;
+    const userData = snap.data();
+    if (!userData.aprovado) throw new Error("Usuário ainda não aprovado pelo ADM.");
+
+    const destino = destinosPorRole[userData.role];
+    if (!destino) {
+      alert("Perfil inválido ou sem rota configurada: " + (userData.role || "indefinido"));
+      return;
     }
-  }catch(err){
-    alert(err.message);
+    window.location.href = destino;
+  } catch (e) {
+    console.error(e);
+    alert("Falha no login: " + (e.message || e));
   }
-}
+};
 </script>
 </head>
 <body>
-<div class="login-box">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Logo Marinha do Brasil">
-  <h2>Sistema de Viaturas</h2>
-  <input type="email" id="email" placeholder="Email institucional" required>
-  <input type="password" id="senha" placeholder="Senha" required>
-  <button onclick="loginADM()">Entrar</button>
-  <p style="text-align:center;margin-top:10px;">
-    <a href="cadastro.html">Não tem cadastro? Clique aqui</a>
-  </p>
-</div>
+  <div class="login-box">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg" alt="Marinha do Brasil">
+    <h2>Sistema de Viaturas</h2>
+    <input type="email" id="email" placeholder="E-mail institucional" autocomplete="username" required>
+    <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" required>
+    <button onclick="login()">Entrar</button>
+    <div class="small">
+      <a href="cadastro.html">Não tem cadastro? Solicitar acesso</a>
+    </div>
+  </div>
 </body>
 </html>
