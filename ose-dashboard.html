@@ -8,6 +8,262 @@
   href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 <link rel="stylesheet" href="styleose.css"> <!-- seu CSS premium 2025 -->
 
+<style>
+/* ==========================================================
+   VISUAL PREMIUM 2025 — OFICIAL DE SERVIÇO (ASSINATURAS RECOLHÍVEIS)
+========================================================== */
+:root {
+  --cor-primaria: #004aad;
+  --cor-primaria-hover: #003b8e;
+  --cor-fundo: #f5f7fa;
+  --cor-texto: #1f2937;
+  --cor-card: #ffffff;
+  --cor-borda: #d1d5db;
+  --cor-secundaria: #e2e8f0;
+  --cor-sucesso: #16a34a;
+  --cor-erro: #dc2626;
+  --cor-aviso: #f59e0b;
+  --cor-fora: rgba(255, 0, 0, 0.06);
+  --cor-assinaturas: #f8fafc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #0b1120;
+    --cor-card: #111827;
+    --cor-texto: #e5e7eb;
+    --cor-borda: #1f2937;
+    --cor-secundaria: #1e293b;
+    --cor-fora: rgba(255, 0, 0, 0.15);
+    --cor-assinaturas: #1a2438;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 30px 15px;
+  font-size: 1.05rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1350px;
+  background: var(--cor-card);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  padding: 35px;
+}
+
+/* Cabeçalho */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.logo-marinha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-marinha img {
+  width: 64px;
+  height: 64px;
+}
+header h1 {
+  color: var(--cor-primaria);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+header button {
+  background: var(--cor-secundaria);
+  color: var(--cor-texto);
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+header button:hover {
+  background: var(--cor-card);
+}
+
+/* Títulos */
+h2 {
+  color: var(--cor-primaria);
+  border-left: 5px solid var(--cor-primaria);
+  padding-left: 12px;
+  margin: 30px 0 12px;
+  font-size: 1.4rem;
+}
+
+/* Formulário */
+.form-missao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.form-missao input[type="text"] {
+  flex: 1 1 30%;
+  min-width: 260px;
+  padding: 14px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+}
+.form-missao input[type="text"]:focus {
+  border-color: var(--cor-primaria);
+  outline: none;
+}
+.form-missao label {
+  width: 100%;
+  font-size: 1rem;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.form-missao button[type="submit"] {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: 0.25s;
+}
+.form-missao button[type="submit"]:hover {
+  background: var(--cor-primaria-hover);
+}
+
+/* Tabela */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+.table-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+.table-wrap::-webkit-scrollbar-thumb {
+  background: var(--cor-borda);
+  border-radius: 6px;
+}
+.table-wrap::-webkit-scrollbar-thumb:hover {
+  background: var(--cor-primaria);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  font-size: 1rem;
+}
+thead {
+  background: var(--cor-primaria);
+  color: white;
+}
+th, td {
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--cor-borda);
+  vertical-align: middle;
+}
+
+/* Botões */
+button.aprovar,
+button.negar {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: 0.25s;
+}
+button.aprovar {
+  background: var(--cor-sucesso);
+  color: white;
+}
+button.aprovar:hover { background: #15803d; }
+button.negar {
+  background: var(--cor-erro);
+  color: white;
+}
+button.negar:hover { background: #b91c1c; }
+
+/* Linha de assinaturas recolhível */
+tr.assinaturas-row td {
+  background: var(--cor-assinaturas);
+  padding: 12px 18px;
+  font-size: 0.95rem;
+  border-bottom: 2px solid var(--cor-borda);
+  transition: all 0.3s ease;
+}
+.assinaturas-conteudo {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+.assinaturas-conteudo.open {
+  max-height: 120px;
+  opacity: 1;
+}
+.toggle-assinaturas {
+  background: var(--cor-secundaria);
+  color: var(--cor-primaria);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+.toggle-assinaturas:hover {
+  background: var(--cor-primaria);
+  color: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .form-missao {
+    flex-direction: column;
+  }
+  .form-missao input[type="text"] {
+    width: 100%;
+  }
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  table { min-width: 750px; }
+}
+@media (max-width: 480px) {
+  table { min-width: 650px; }
+  th, td { font-size: 0.9rem; padding: 10px 12px; }
+}
+</style>
+
+  
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
