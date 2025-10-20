@@ -6,12 +6,19 @@
 <title>Login - Sistema de Viaturas</title>
 
 <!-- Favicon da Marinha -->
-<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
-
-<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml"
+      href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 <style>
-/* ---------- Ajuste visual ---------- */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #e0eafc, #cfdef3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
 .login-box {
   background: #ffffff;
   padding: 40px 30px;
@@ -22,21 +29,41 @@
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
+.login-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
 .login-box img {
   width: 90px;
   height: 90px;
   margin-bottom: 15px;
 }
-
-.login-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-}
-
 .login-box h2 {
   color: #004aad;
   margin-bottom: 20px;
+}
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background: #004aad;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+button:hover {
+  background: #003b8e;
+  transform: translateY(-2px);
 }
 </style>
 
@@ -53,29 +80,36 @@ const firebaseConfig = {
   messagingSenderId: "503079573653",
   appId: "1:503079573653:web:beb34f57cd5447d376239c"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 window.loginADM = async function(){
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value;
+
+  if(!email || !senha){
+    alert("Preencha todos os campos.");
+    return;
+  }
+
   try{
     const userCredential = await signInWithEmailAndPassword(auth,email,senha);
     const uid = userCredential.user.uid;
     const userDoc = await getDoc(doc(db,"usuarios",uid));
-    if(!userDoc.exists()) throw new Error("Usuário não cadastrado no Firestore");
+
+    if(!userDoc.exists()) throw new Error("Usuário não cadastrado no Firestore.");
     const data = userDoc.data();
-    if(!data.aprovado) throw new Error("Usuário não aprovado ainda");
+    if(!data.aprovado) throw new Error("Usuário ainda não aprovado pelo ADM.");
+
     switch(data.role){
       case "adm": window.location.href="adm-dashboard.html"; break;
       case "chefe": window.location.href="chefe-dashboard.html"; break;
       case "ose": window.location.href="ose-dashboard.html"; break;
       case "encarregado": window.location.href="encarregado-dashboard.html"; break;
       case "motorista": window.location.href="motorista-dashboard.html"; break;
-      case "aux_p3": window.location.href="p3-dashboard.html"; break;
-      default: alert("Role inválido"); break;
+      case "aux_encarregado": window.location.href="aux-encarregado-dashboard.html"; break;
+      default: alert("Cargo inválido ou não reconhecido."); break;
     }
   }catch(err){
     alert(err.message);
