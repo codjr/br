@@ -5,59 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oficial de Serviço - Dashboard</title>
 <link rel="icon" type="image/svg+xml"
-      href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
+  href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 <style>
 :root {
   --cor-primaria:#004aad;--cor-primaria-hover:#003b8e;
   --cor-fundo:#f5f7fa;--cor-texto:#1f2937;
   --cor-card:#fff;--cor-borda:#d1d5db;
+  --cor-secundaria:#e2e8f0;
   --cor-sucesso:#16a34a;--cor-erro:#dc2626;
 }
 @media(prefers-color-scheme:dark){
-  :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;
-        --cor-borda:#1f2937;}
+  :root{--cor-fundo:#0b1120;--cor-card:#111827;
+        --cor-texto:#e5e7eb;--cor-borda:#1f2937;
+        --cor-secundaria:#1e293b;}
 }
 *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
 body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
      min-height:100vh;padding:30px 10px;}
-.container{max-width:1250px;margin:auto;background:var(--cor-card);
+.container{max-width:1300px;margin:auto;background:var(--cor-card);
            border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:30px;}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;}
-header h1{color:var(--cor-primaria);font-size:1.5rem;margin:0;}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;flex-wrap:wrap;}
+header h1{color:var(--cor-primaria);font-size:1.6rem;margin:0;}
 header button{background:var(--cor-erro);color:#fff;border:none;
               padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
 header button:hover{background:#b91c1c;}
-h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
-table{width:100%;border-collapse:collapse;margin-top:15px;}
-thead{background:var(--cor-primaria);color:white;}
-th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
+h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);
+   padding-left:10px;}
+table{width:100%;border-collapse:collapse;margin-top:15px;font-size:.95rem;}
+thead{background:var(--cor-primaria);color:#fff;}
+th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;vertical-align:middle;}
 tbody tr:hover{background:rgba(0,74,173,.05);}
-button{border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
 button.aprovar{background:var(--cor-sucesso);color:white;}
 button.aprovar:hover{background:#15803d;}
 button.negar{background:var(--cor-erro);color:white;}
 button.negar:hover{background:#b91c1c;}
-.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
-.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
-@media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
+.badge-ok{background:rgba(22,163,74,.12);color:#166534;
+          padding:4px 8px;border-radius:6px;font-weight:700;}
+.badge-no{background:rgba(220,38,38,.12);color:#991b1b;
+          padding:4px 8px;border-radius:6px;font-weight:700;}
+.log{font-size:.8rem;color:#555;}
+@media(max-width:900px){th,td{font-size:.85rem;}}
 </style>
 </head>
 <body>
 
 <div class="container">
   <header>
-    <h1>Oficial de Serviço – Dashboard</h1>
+    <h1>Oficial de Serviço - Dashboard</h1>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Missões para Autorização</h2>
+  <h2>Missões Aguardando Autorização</h2>
   <table>
     <thead>
       <tr>
         <th>Missão</th><th>Motorista</th><th>Viatura</th>
-        <th>Odômetro Início</th><th>Odômetro Fim</th>
-        <th>Status</th><th>Assinaturas</th><th>Ações</th>
+        <th>Status</th><th>Odômetro Início</th><th>Odômetro Fim</th>
+        <th>Ações</th><th>Assinaturas</th>
       </tr>
     </thead>
     <tbody id="missoes-body"></tbody>
@@ -67,61 +73,70 @@ button.negar:hover{background:#b91c1c;}
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {
-  collection,onSnapshot,updateDoc,doc,serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {collection,onSnapshot,updateDoc,doc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+let userAtual=null;
 
 /* 🔒 Proteção e logout automático */
 const LIMITE=10*60*1000;let timer;
 onAuthStateChanged(auth,u=>{
   if(!u){window.location.href="index.html";}
-  else{resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));carregarMissoes();}
+  else{userAtual=u;carregarMissoes();resetar();["mousemove","keydown","click","scroll"]
+        .forEach(e=>document.addEventListener(e,resetar));}
 });
 function resetar(){clearTimeout(timer);
   timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
-window.logout=async()=>{await signOut(auth);window.location.href="index.html";};
+window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* 🔄 Carregar missões */
+/* 🔄 Listagem em tempo real */
 function carregarMissoes(){
+  const tb=document.getElementById("missoes-body");
   onSnapshot(collection(db,"viaturas_missao"),snap=>{
-    const tb=document.getElementById("missoes-body");tb.innerHTML="";
+    tb.innerHTML="";
     snap.forEach(d=>{
       const m=d.data();
+      if(!["Pendente","Aguardando Autorização","Negada"].includes(m.status) && m.status!=="Em viagem" && m.status!=="Concluída") return;
       const tr=document.createElement("tr");
       tr.innerHTML=`
         <td>${m.missao||""}</td>
         <td>${m.motorista||""}</td>
-        <td>${m.viatura||""}</td>
+        <td>${m.viatura_label||m.viatura||""}</td>
+        <td>${m.status||"Pendente"}</td>
         <td>${m.odometro_inicio||"-"}</td>
         <td>${m.odometro_fim||"-"}</td>
-        <td>${m.status||"Pendente"}</td>
         <td>
-          <small>Enc: ${m.assinatura_encarregado||"-"}</small><br>
-          <small>Chefe: ${m.assinatura_chedep||"-"}</small>
+          ${m.status==="Aprovada pela OSE"||m.status==="Negada pela OSE" ?
+            "<span class='badge-ok'>Finalizada</span>" :
+            `<button class='aprovar' onclick="autorizar('${d.id}')">Autorizar</button>
+             <button class='negar' onclick="negar('${d.id}')">Negar</button>`}
         </td>
         <td>
-          <button class="aprovar" onclick="aprovar('${d.id}')">Autorizar</button>
-          <button class="negar" onclick="negar('${d.id}')">Negar</button>
+          <div class="log">
+            <b>OSE:</b> ${m.assinatura_ose||"-"}<br>
+            <b>Enc:</b> ${m.assinatura_encarregado||"-"}<br>
+            <b>Chefe:</b> ${m.assinatura_chedep||"-"}
+          </div>
         </td>`;
       tb.appendChild(tr);
     });
   });
 }
 
-/* ✅ Autorizar / ❌ Negar */
-window.aprovar=async id=>{
+/* ✍️ Autorizar / Negar */
+window.autorizar=async id=>{
   await updateDoc(doc(db,"viaturas_missao",id),{
-    status:"Autorizada pela OSE",
-    assinatura_ose:auth.currentUser?.email||"OSE",
+    status:"Aprovada pela OSE",
+    assinatura_ose:userAtual.email,
     hora_assinatura_ose:new Date().toLocaleString(),
     atualizado_em:serverTimestamp()
   });
   alert("✅ Missão autorizada pela OSE.");
 };
+
 window.negar=async id=>{
   await updateDoc(doc(db,"viaturas_missao",id),{
     status:"Negada pela OSE",
-    assinatura_ose:auth.currentUser?.email||"OSE",
+    assinatura_ose:userAtual.email,
     hora_assinatura_ose:new Date().toLocaleString(),
     atualizado_em:serverTimestamp()
   });
