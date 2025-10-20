@@ -14,7 +14,7 @@
   --cor-fundo:#f5f7fa;--cor-texto:#1f2937;
   --cor-card:#fff;--cor-borda:#d1d5db;
   --cor-secundaria:#e2e8f0;
-  --cor-sucesso:#16a34a;--cor-erro:#dc2626;--cor-aviso:#f59e0b;
+  --cor-sucesso:#16a34a;--cor-erro:#dc2626;
 }
 @media(prefers-color-scheme:dark){
   :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;
@@ -31,17 +31,18 @@ header button{background:var(--cor-erro);color:#fff;border:none;
               padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
 header button:hover{background:#b91c1c;}
 h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
+form{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:25px;}
+form input,form select{padding:10px;border:1px solid var(--cor-borda);
+                       border-radius:6px;font-size:1rem;flex:1 1 200px;}
+button{border:none;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
+button.criar{background:var(--cor-primaria);color:#fff;}
+button.criar:hover{background:var(--cor-primaria-hover);}
 table{width:100%;border-collapse:collapse;margin-top:15px;}
 thead{background:var(--cor-primaria);color:#fff;}
 th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
 tbody tr:hover{background:rgba(0,74,173,.05);}
-button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
-button.criar{background:var(--cor-primaria);color:white;}
-button.criar:hover{background:var(--cor-primaria-hover);}
 .badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
 .badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
-.tag-fp{color:#dc2626;font-weight:700;}
-form input,select{padding:8px;margin:5px;border:1px solid var(--cor-borda);border-radius:6px;}
 @media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
 </style>
 </head>
@@ -65,24 +66,21 @@ form input,select{padding:8px;margin:5px;border:1px solid var(--cor-borda);borde
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Criar Nova Missão</h2>
+  <h2>Criar ou Programar Missão</h2>
   <form onsubmit="event.preventDefault(); criarMissao();">
-    <input type="text" id="missao" placeholder="Descrição da missão" required>
-    <input type="text" id="motorista" placeholder="Motorista responsável" required>
-    <select id="viatura" required>
-      <option value="">Selecione uma viatura</option>
-    </select>
-    <label><input type="checkbox" id="foraProg"> Fora da Programação</label>
-    <button type="submit" class="criar">Criar Missão</button>
+    <input type="text" id="missao" placeholder="Descrição da Missão" required>
+    <select id="motorista" required></select>
+    <select id="viatura" required></select>
+    <input type="datetime-local" id="data_programada" required>
+    <button type="submit" class="criar">Cadastrar Missão</button>
   </form>
 
-  <h2>Missões Existentes</h2>
+  <h2>Missões Programadas</h2>
   <table>
     <thead>
       <tr>
-        <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
-        <th>Fora da Prog.</th><th>Odômetro Início</th><th>Odômetro Fim</th>
-        <th>OSE</th><th>Enc.</th><th>Chefe</th><th>Aux.</th>
+        <th>Data</th><th>Missão</th><th>Motorista</th><th>Viatura</th>
+        <th>Status</th><th>OSE</th><th>Encarregado</th><th>Chefe</th>
       </tr>
     </thead>
     <tbody id="missoes-body"></tbody>
@@ -92,72 +90,66 @@ form input,select{padding:8px;margin:5px;border:1px solid var(--cor-borda);borde
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {collection,onSnapshot,addDoc,updateDoc,doc,getDocs,query,where,orderBy,serverTimestamp} 
-from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {collection,onSnapshot,addDoc,doc,getDocs,updateDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 /* 🔒 Proteção e logout automático */
 const LIMITE=10*60*1000;let timer;
 onAuthStateChanged(auth,u=>{
   if(!u){window.location.href="index.html";}
-  else{resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));
-       carregarViaturas();carregarMissoes();}
+  else{resetar();carregarListas();carregarMissoes();
+        ["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));}
 });
 function resetar(){clearTimeout(timer);
   timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
-
-/* Banner de emulação */
-const p=new URLSearchParams(window.location.search);const em=p.get("emulando");
-if(em){document.getElementById("emulacao-banner").style.display="block";
-       document.getElementById("emulando-email").textContent=em;}
-
-/* Logout */
 window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* 🚘 Carregar viaturas cadastradas */
-async function carregarViaturas(){
-  const select=document.getElementById("viatura");
-  const snap=await getDocs(collection(db,"viaturas"));
-  snap.forEach(v=>{
-    const d=v.data();
-    const opt=document.createElement("option");
-    opt.value=d.placa;
-    opt.textContent=`${d.modelo} - ${d.placa}`;
-    select.appendChild(opt);
+/* 🧭 Carregar listas de motoristas e viaturas */
+async function carregarListas(){
+  const selMot=document.getElementById("motorista");
+  const selVtr=document.getElementById("viatura");
+  selMot.innerHTML="<option value=''>Carregando motoristas...</option>";
+  selVtr.innerHTML="<option value=''>Carregando viaturas...</option>";
+
+  const motSnap=await getDocs(collection(db,"usuarios"));
+  const vtrSnap=await getDocs(collection(db,"viaturas"));
+  selMot.innerHTML="<option value=''>Selecione o motorista</option>";
+  motSnap.forEach(d=>{
+    const u=d.data();
+    if(u.role==="motorista" && u.aprovado)
+      selMot.innerHTML+=`<option value="${u.email}">${u.nome}</option>`;
+  });
+  selVtr.innerHTML="<option value=''>Selecione a viatura</option>";
+  vtrSnap.forEach(d=>{
+    const v=d.data();
+    selVtr.innerHTML+=`<option value="${v.identificacao}">${v.identificacao} (${v.odometro_atual||0} km)</option>`;
   });
 }
 
-/* 🧾 Criar missão */
+/* 🆕 Criar nova missão */
 window.criarMissao=async()=>{
   const missao=document.getElementById("missao").value.trim();
   const motorista=document.getElementById("motorista").value.trim();
   const viatura=document.getElementById("viatura").value.trim();
-  const fora=document.getElementById("foraProg").checked;
+  const dataProg=document.getElementById("data_programada").value;
+  if(!missao||!motorista||!viatura||!dataProg){alert("Preencha todos os campos.");return;}
 
-  if(!missao||!motorista||!viatura){alert("Preencha todos os campos!");return;}
+  const vtrSnap=await getDocs(collection(db,"viaturas"));
+  let odometroRef=0;
+  vtrSnap.forEach(v=>{if(v.data().identificacao===viatura){odometroRef=v.data().odometro_atual||0;}});
 
-  try{
-    // Busca último odômetro final da mesma viatura
-    const q=query(collection(db,"viaturas_missao"),where("viatura","==",viatura),orderBy("criada_em","desc"));
-    const snap=await getDocs(q);
-    let odometroRef=0;
-    snap.forEach((d,i)=>{if(i===0) odometroRef=d.data().odometro_fim||0;});
-
-    await addDoc(collection(db,"viaturas_missao"),{
-      missao,motorista,viatura,fora_programacao:fora,
-      status:"Programada",
-      criado_por:auth.currentUser?.email||"auxiliar",
-      odometro_inicio:odometroRef,
-      criada_em:serverTimestamp()
-    });
-    alert("✅ Missão criada e programada!");
-    document.querySelector("form").reset();
-  }catch(e){
-    console.error(e);
-    alert("Erro ao criar missão!");
-  }
+  await addDoc(collection(db,"viaturas_missao"),{
+    missao,motorista,viatura,
+    odometro_inicio:odometroRef,
+    data_programada:dataProg,
+    criada_por:auth.currentUser?.email||"aux_encarregado",
+    status:"Aguardando OSE",
+    criada_em:serverTimestamp()
+  });
+  alert("✅ Missão programada com sucesso!");
+  document.querySelector("form").reset();
 };
 
-/* 🔄 Carregar missões em tempo real */
+/* 📋 Carregar missões */
 function carregarMissoes(){
   const tb=document.getElementById("missoes-body");
   onSnapshot(collection(db,"viaturas_missao"),snap=>{
@@ -166,17 +158,14 @@ function carregarMissoes(){
       const m=d.data();
       const tr=document.createElement("tr");
       tr.innerHTML=`
+        <td>${m.data_programada||"-"}</td>
         <td>${m.missao||""}</td>
         <td>${m.motorista||""}</td>
         <td>${m.viatura||""}</td>
         <td>${m.status||"Pendente"}</td>
-        <td>${m.fora_programacao?"⚠️ Sim":"Não"}</td>
-        <td>${m.odometro_inicio||"-"}</td>
-        <td>${m.odometro_fim||"-"}</td>
-        <td>${m.assinatura_ose?`<span class='badge-ok'>${m.assinatura_ose}</span>`:"<span class='badge-no'>-"}</td>
-        <td>${m.assinatura_encarregado?`<span class='badge-ok'>${m.assinatura_encarregado}</span>`:"<span class='badge-no'>-"}</td>
-        <td>${m.assinatura_chedep?`<span class='badge-ok'>${m.assinatura_chedep}</span>`:"<span class='badge-no'>-"}</td>
-        <td>${m.assinatura_aux?`<span class='badge-ok'>${m.assinatura_aux}</span>`:"<span class='badge-no'>-"}</td>`;
+        <td>${m.assinatura_ose||"-"}</td>
+        <td>${m.assinatura_encarregado||"-"}</td>
+        <td>${m.assinatura_chedep||"-"}</td>`;
       tb.appendChild(tr);
     });
   });
