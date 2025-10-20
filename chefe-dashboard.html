@@ -33,9 +33,6 @@ table{width:100%;border-collapse:collapse;margin-top:15px;}
 thead{background:var(--cor-primaria);color:#fff;}
 th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
 tbody tr:hover{background:rgba(0,74,173,.05);}
-button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
-button.aprovar{background:var(--cor-sucesso);color:#fff;}button.aprovar:hover{background:#15803d;}
-button.negar{background:var(--cor-erro);color:#fff;}button.negar:hover{background:#b91c1c;}
 .badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
 .badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
 .tag-fp{color:#dc2626;font-weight:700;}
@@ -58,17 +55,17 @@ button.negar{background:var(--cor-erro);color:#fff;}button.negar:hover{backgroun
 
 <div class="container">
   <header>
-    <h1>Chefe de Departamento – Dashboard</h1>
+    <h1>Chefe de Departamento – Visualização</h1>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Missões de Viaturas</h2>
+  <h2>Programação e Missões</h2>
   <table>
     <thead>
       <tr>
         <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
-        <th>Fora da Programação</th>
-        <th>Assinatura OSE</th><th>Assinatura Encarregado</th><th>Assinatura P3</th><th>Ações</th>
+        <th>Odômetro Início</th><th>Odômetro Fim</th>
+        <th>OSE</th><th>Encarregado</th><th>Chefe</th><th>Auxiliar</th>
       </tr>
     </thead>
     <tbody id="missoes-body"></tbody>
@@ -78,17 +75,18 @@ button.negar{background:var(--cor-erro);color:#fff;}button.negar:hover{backgroun
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {collection,onSnapshot,updateDoc,doc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {collection,onSnapshot} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-/* 🔒 Proteção + logout automático 10 min */
-const TEMPO_MAXIMO=10*60*1000;let timer;
-onAuthStateChanged(auth,u=>{if(!u){window.location.href="index.html";}
-  else{resetTimer();["mousemove","keydown","click","scroll"]
-  .forEach(e=>document.addEventListener(e,resetTimer));}});
-function resetTimer(){clearTimeout(timer);
-  timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},TEMPO_MAXIMO);}
+/* 🔒 Proteção e logout automático */
+const LIMITE=10*60*1000;let timer;
+onAuthStateChanged(auth,u=>{
+  if(!u){window.location.href="index.html";}
+  else{resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));carregarMissoes();}
+});
+function resetar(){clearTimeout(timer);
+  timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
 
-/* Banner de Emulação */
+/* Banner de emulação */
 const p=new URLSearchParams(window.location.search);const em=p.get("emulando");
 if(em){document.getElementById("emulacao-banner").style.display="block";
        document.getElementById("emulando-email").textContent=em;}
@@ -96,47 +94,29 @@ if(em){document.getElementById("emulacao-banner").style.display="block";
 /* Logout */
 window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* 🔄 Missões em tempo real */
-onSnapshot(collection(db,"viaturas_missao"),snap=>{
-  const tb=document.getElementById("missoes-body");tb.innerHTML="";
-  snap.forEach(d=>{
-    const m=d.data();const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${m.missao||""}</td>
-      <td>${m.motorista||""}</td>
-      <td>${m.viatura||""}</td>
-      <td>${m.status||"Pendente"}</td>
-      <td>${m.fora_programacao?"<span class='tag-fp'>⚠ Fora</span>":"-"}</td>
-      <td>${m.assinatura_ose?`<span class='badge-ok'>${m.assinatura_ose}</span><br><small>${m.hora_assinatura_ose||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
-      <td>${m.assinatura_encarregado?`<span class='badge-ok'>${m.assinatura_encarregado}</span><br><small>${m.hora_assinatura_encarregado||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
-      <td>${m.assinatura_p3?`<span class='badge-ok'>${m.assinatura_p3}</span><br><small>${m.hora_assinatura_p3||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
-      <td>
-        <button class='aprovar' onclick="aprovar('${d.id}')">Aprovar</button>
-        <button class='negar' onclick="negar('${d.id}')">Negar</button>
-      </td>`;
-    tb.appendChild(tr);
+/* 📋 Somente leitura: missões em tempo real */
+function carregarMissoes(){
+  const tb=document.getElementById("missoes-body");
+  onSnapshot(collection(db,"viaturas_missao"),snap=>{
+    tb.innerHTML="";
+    snap.forEach(d=>{
+      const m=d.data();
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td>${m.missao||""} ${m.fora_programacao?"<span class='tag-fp'>⚠ Fora</span>":""}</td>
+        <td>${m.motorista||""}</td>
+        <td>${m.viatura||""}</td>
+        <td>${m.status||"Pendente"}</td>
+        <td>${m.odometro_inicio||"-"}<br><small>${m.horario_inicio||""}</small></td>
+        <td>${m.odometro_fim||"-"}<br><small>${m.horario_fim||""}</small></td>
+        <td>${m.assinatura_ose?`<span class='badge-ok'>${m.assinatura_ose}</span><br><small>${m.hora_assinatura_ose||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
+        <td>${m.assinatura_encarregado?`<span class='badge-ok'>${m.assinatura_encarregado}</span><br><small>${m.hora_assinatura_encarregado||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
+        <td>${m.assinatura_chedep?`<span class='badge-ok'>${m.assinatura_chedep}</span><br><small>${m.hora_assinatura_chedep||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>
+        <td>${m.assinatura_aux?`<span class='badge-ok'>${m.assinatura_aux}</span><br><small>${m.hora_assinatura_aux||""}</small>`:"<span class='badge-no'>Pendente</span>"}</td>`;
+      tb.appendChild(tr);
+    });
   });
-});
-
-/* ✅ Aprovar / ❌ Negar */
-window.aprovar=async id=>{
-  await updateDoc(doc(db,"viaturas_missao",id),{
-    status:"Aprovada",
-    assinatura_chedep:auth.currentUser?.email||"Chefe",
-    hora_assinatura_chedep:new Date().toLocaleString(),
-    atualizado_em:serverTimestamp()
-  });
-  alert("✅ Missão aprovada pelo Chefe de Departamento.");
-};
-window.negar=async id=>{
-  await updateDoc(doc(db,"viaturas_missao",id),{
-    status:"Negada",
-    assinatura_chedep:auth.currentUser?.email||"Chefe",
-    hora_assinatura_chedep:new Date().toLocaleString(),
-    atualizado_em:serverTimestamp()
-  });
-  alert("❌ Missão negada pelo Chefe de Departamento.");
-};
+}
 </script>
 </body>
 </html>
