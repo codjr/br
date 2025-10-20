@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
 }
 
@@ -78,25 +78,13 @@ button:hover {
 </style>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB9GusKT_JuumqK_Bhf-X-ZtmUkzZK0lX0",
-  authDomain: "vtr-marinha.firebaseapp.com",
-  projectId: "vtr-marinha",
-  storageBucket: "vtr-marinha.appspot.com",
-  messagingSenderId: "503079573653",
-  appId: "1:503079573653:web:beb34f57cd5447d376239c"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { auth, db } from "./firebase-config.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 window.cadastrar = async()=>{
-  const nome = document.getElementById("nome").value;
-  const email = document.getElementById("email").value;
+  const nome = document.getElementById("nome").value.trim();
+  const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value;
   const role = document.getElementById("role").value;
 
@@ -112,9 +100,9 @@ window.cadastrar = async()=>{
     await setDoc(doc(db,"usuarios",uid),{
       nome,
       email,
-      role,
-      aprovado:false,
-      criado_em:new Date().toISOString()
+      role,              // adm, chefe, ose, encarregado, motorista, aux_encarregado
+      aprovado:false,    // aguardando aprovação do ADM
+      criado_em: serverTimestamp()
     });
 
     alert("Cadastro enviado! Aguarde aprovação do ADM.");
@@ -137,10 +125,11 @@ window.cadastrar = async()=>{
   <select id="role" required>
     <option value="">Selecione o cargo</option>
     <option value="motorista">Motorista</option>
-    <option value="aux_p3">Auxiliar P3</option>
+    <option value="aux_encarregado">Auxiliar do Encarregado</option>
     <option value="encarregado">Encarregado</option>
     <option value="ose">Oficial de Serviço</option>
     <option value="chefe">Chefe de Departamento</option>
+    <!-- Removido: aux_p3 -->
   </select>
 
   <button onclick="cadastrar()">Cadastrar</button>
