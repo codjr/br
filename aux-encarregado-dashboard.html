@@ -1,112 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Auxiliar do Encarregado - Dashboard</title>
 <link rel="icon" type="image/svg+xml"
       href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 <style>
 :root {
-  --cor-primaria: #004aad;
-  --cor-primaria-hover: #003b8e;
-  --cor-fundo: #f5f7fa;
-  --cor-card: #ffffff;
-  --cor-texto: #1f2937;
-  --cor-borda: #d1d5db;
-  --cor-sucesso: #16a34a;
-  --cor-erro: #dc2626;
+  --cor-primaria:#004aad;--cor-primaria-hover:#003b8e;
+  --cor-fundo:#f5f7fa;--cor-texto:#1f2937;
+  --cor-card:#fff;--cor-borda:#d1d5db;
+  --cor-secundaria:#e2e8f0;
+  --cor-sucesso:#16a34a;--cor-erro:#dc2626;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --cor-fundo: #0b1120;
-    --cor-card: #111827;
-    --cor-texto: #e5e7eb;
-    --cor-borda: #1f2937;
-  }
+@media(prefers-color-scheme:dark){
+  :root{--cor-fundo:#0b1120;--cor-card:#111827;
+        --cor-texto:#e5e7eb;--cor-borda:#1f2937;
+        --cor-secundaria:#1e293b;}
 }
-* { box-sizing: border-box; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
-body {
-  margin: 0; background: var(--cor-fundo); color: var(--cor-texto);
-  min-height: 100vh; padding: 30px 10px;
-}
-.container {
-  max-width: 1200px; margin: auto; background: var(--cor-card);
-  border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,.12); padding: 30px;
-}
-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-header h1 { color: var(--cor-primaria); font-size: 1.4rem; margin: 0; }
-header button {
-  background: var(--cor-erro); color: #fff; border: none;
-  padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;
-}
-header button:hover { background: #b91c1c; }
-
-h2 {
-  color: var(--cor-primaria);
-  border-left: 4px solid var(--cor-primaria);
-  padding-left: 10px;
-}
-
-form input, form select, button {
-  padding: 10px; border-radius: 6px; border: 1px solid var(--cor-borda);
-  margin: 5px 0;
-}
-
-button {
-  cursor: pointer; background: var(--cor-primaria); color: #fff; font-weight: 600;
-  transition: background 0.25s;
-}
-button:hover { background: var(--cor-primaria-hover); }
-
-table {
-  width: 100%; border-collapse: collapse; margin-top: 15px;
-}
-thead { background: var(--cor-primaria); color: #fff; }
-th, td { padding: 10px 12px; border-bottom: 1px solid var(--cor-borda); text-align: left; }
-tbody tr:hover { background: rgba(0,74,173,0.05); }
-
-.badge-ok { background: rgba(22,163,74,0.12); color: #166534; padding: 4px 8px; border-radius: 6px; font-weight: 700; }
-.badge-no { background: rgba(220,38,38,0.12); color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: 700; }
-
-@media (max-width: 768px) {
-  .container { padding: 20px; }
-  th, td { font-size: 0.9rem; }
-}
+*{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
+     min-height:100vh;padding:30px 10px;}
+.container{max-width:1200px;margin:auto;background:var(--cor-card);
+           border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:30px;}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;flex-wrap:wrap}
+header h1{color:var(--cor-primaria);font-size:1.5rem;margin:0;}
+header button{background:var(--cor-erro);color:#fff;border:none;
+              padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
+header button:hover{background:#b91c1c;}
+h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
+table{width:100%;border-collapse:collapse;margin-top:15px;}
+thead{background:var(--cor-primaria);color:#fff;}
+th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;}
+tbody tr:hover{background:rgba(0,74,173,.05);}
+button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
+button.criar{background:var(--cor-primaria);color:white;}
+button.criar:hover{background:var(--cor-primaria-hover);}
+form input,form select{padding:8px;margin:5px;border:1px solid var(--cor-borda);border-radius:6px;width:100%;max-width:300px;}
+.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
+.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
+.tag-fp{color:#dc2626;font-weight:700;}
+@media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
 </style>
 </head>
-
 <body>
+
 <div class="container">
   <header>
     <h1>Auxiliar do Encarregado - Dashboard</h1>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Criar Nova Missão</h2>
+  <h2>Criar e Programar Missão</h2>
   <form onsubmit="event.preventDefault(); criarMissao();">
     <input type="text" id="missao" placeholder="Descrição da missão" required>
-    
-    <select id="motorista" required>
-      <option value="">Selecione o Motorista</option>
-    </select>
-
-    <select id="viatura" required onchange="atualizarOdometro()">
-      <option value="">Selecione a Viatura</option>
-    </select>
-
-    <input type="number" id="odometro_inicio" placeholder="Odômetro inicial" readonly>
-
-    <button type="submit">Criar Missão</button>
+    <select id="motorista" required></select>
+    <select id="viatura" required></select>
+    <label><input type="checkbox" id="foraProg"> Fora da programação</label>
+    <button type="submit" class="criar">Criar Missão</button>
   </form>
 
   <h2>Missões Existentes</h2>
   <table>
     <thead>
       <tr>
-        <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
-        <th>Odômetro Início</th><th>Odômetro Fim</th>
+        <th>Missão</th><th>Motorista</th><th>Viatura</th>
+        <th>Status</th><th>Odômetro Início</th><th>Odômetro Fim</th>
+        <th>OSE</th><th>Enc.</th><th>Chefe</th>
       </tr>
     </thead>
     <tbody id="missoes-body"></tbody>
@@ -114,113 +76,86 @@ tbody tr:hover { background: rgba(0,74,173,0.05); }
 </div>
 
 <script type="module">
-import { auth, db } from "./firebase-config.js";
-import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {
-  collection, addDoc, getDocs, doc, onSnapshot, query, where, orderBy, limit
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {auth,db} from "./firebase-config.js";
+import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {collection,onSnapshot,addDoc,doc,getDocs,query,where,orderBy,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-let usuarioAtual = null;
+let userAtual=null;
 
-/* 🔒 Proteção e logout automático */
-const LIMITE = 10 * 60 * 1000;
-let timer;
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return window.location.href = "index.html";
-  usuarioAtual = user;
-  carregarMotoristas();
-  carregarViaturas();
-  carregarMissoes();
-  resetarTimer();
-  ["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetarTimer));
+/* 🔒 Proteção e sessão */
+const LIMITE=10*60*1000;let timer;
+onAuthStateChanged(auth,u=>{
+  if(!u){window.location.href="index.html";}
+  else{userAtual=u;carregarMotoristas();carregarViaturas();carregarMissoes();
+       resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));}
 });
-function resetarTimer() {
-  clearTimeout(timer);
-  timer = setTimeout(async ()=>{
-    alert("⏰ Sessão expirada.");
-    await signOut(auth);
-    window.location.href = "index.html";
-  }, LIMITE);
-}
+function resetar(){clearTimeout(timer);
+  timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
+window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* 🚪 Logout manual */
-window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; };
-
-/* 🚗 Carregar motoristas */
+/* 👷 Motoristas */
 async function carregarMotoristas(){
-  const snap = await getDocs(query(collection(db,"usuarios"), where("role","==","motorista"), where("aprovado","==",true)));
-  const sel = document.getElementById("motorista");
-  sel.innerHTML = "<option value=''>Selecione o Motorista</option>";
-  snap.forEach(d=>{
-    const u=d.data();
-    const opt=document.createElement("option");
-    opt.value=u.email; opt.textContent=u.nome+" ("+u.email+")";
-    sel.appendChild(opt);
-  });
+  const snap=await getDocs(query(collection(db,"usuarios"),where("role","==","motorista"),where("aprovado","==",true)));
+  const sel=document.getElementById("motorista");sel.innerHTML="<option value=''>Selecione o motorista</option>";
+  snap.forEach(d=>{const u=d.data();sel.innerHTML+=`<option value="${u.email}">${u.nome}</option>`;});
 }
 
-/* 🚙 Carregar viaturas */
+/* 🚙 Viaturas */
 async function carregarViaturas(){
-  const snap = await getDocs(collection(db,"viaturas"));
-  const sel = document.getElementById("viatura");
-  sel.innerHTML = "<option value=''>Selecione a Viatura</option>";
-  snap.forEach(d=>{
-    const v=d.data();
-    const opt=document.createElement("option");
-    opt.value=d.id; opt.textContent=d.id+" — "+v.modelo;
-    sel.appendChild(opt);
-  });
+  const snap=await getDocs(collection(db,"viaturas"));
+  const sel=document.getElementById("viatura");sel.innerHTML="<option value=''>Selecione a viatura</option>";
+  snap.forEach(d=>{const v=d.data();sel.innerHTML+=`<option value="${d.id}" data-odo="${v.odometro||0}">${v.nome}</option>`;});
 }
 
-/* 🔢 Atualizar odômetro com base na última missão */
-window.atualizarOdometro = async ()=>{
-  const v=document.getElementById("viatura").value;
-  if(!v)return;
-  const q=query(collection(db,"viaturas_missao"), where("viatura","==",v), orderBy("criada_em","desc"), limit(1));
-  const snap=await getDocs(q);
-  let od=0;
-  snap.forEach(d=>{
-    const m=d.data();
-    od = m.odometro_fim ? Number(m.odometro_fim) : Number(m.odometro_inicio||0);
-  });
-  document.getElementById("odometro_inicio").value = od;
-}
-
-/* 🧾 Criar missão */
-window.criarMissao = async()=>{
+/* 🧾 Criar Missão */
+window.criarMissao=async()=>{
   const missao=document.getElementById("missao").value.trim();
   const motorista=document.getElementById("motorista").value;
-  const viatura=document.getElementById("viatura").value;
-  const odometro_inicio=document.getElementById("odometro_inicio").value;
-  if(!missao||!motorista||!viatura) return alert("Preencha todos os campos!");
+  const viaturaSel=document.getElementById("viatura");
+  const viaturaId=viaturaSel.value;
+  const viaturaNome=viaturaSel.options[viaturaSel.selectedIndex]?.text;
+  const foraProg=document.getElementById("foraProg").checked;
+  if(!missao||!motorista||!viaturaId)return alert("Preencha todos os campos!");
+
+  // Buscar último odômetro da viatura
+  let odIni=0;
+  const misSnap=await getDocs(query(collection(db,"viaturas_missao"),where("viatura","==",viaturaId),orderBy("criada_em","desc")));
+  if(!misSnap.empty){
+    const ultima=misSnap.docs[0].data();
+    odIni=ultima.odometro_fim||ultima.odometro_inicio||0;
+  }else{
+    const vSnap=await getDocs(collection(db,"viaturas"));
+    vSnap.forEach(v=>{if(v.id===viaturaId)odIni=v.data().odometro||0;});
+  }
 
   await addDoc(collection(db,"viaturas_missao"),{
-    missao, motorista, viatura,
-    odometro_inicio:Number(odometro_inicio)||0,
-    status:"Programada pelo Auxiliar",
-    criada_por:usuarioAtual.email,
-    criada_em:new Date().toISOString()
+    missao,motorista,viatura:viaturaId,viatura_label:viaturaNome,
+    odometro_inicio:odIni,
+    status:"Pendente",fora_programacao:foraProg,
+    criada_por:userAtual.email,criada_em:serverTimestamp()
   });
-  alert("✅ Missão programada com sucesso!");
-  document.querySelector("form").reset();
+  alert("✅ Missão criada com sucesso!");
+  document.getElementById("missao").value="";
   carregarMissoes();
 };
 
-/* 📡 Missões em tempo real */
+/* 🔄 Listar Missões */
 function carregarMissoes(){
-  onSnapshot(collection(db,"viaturas_missao"),(snap)=>{
+  onSnapshot(collection(db,"viaturas_missao"),snap=>{
     const tb=document.getElementById("missoes-body");tb.innerHTML="";
     snap.forEach(d=>{
       const m=d.data();
       const tr=document.createElement("tr");
       tr.innerHTML=`
-        <td>${m.missao}</td>
-        <td>${m.motorista}</td>
-        <td>${m.viatura}</td>
-        <td>${m.status}</td>
+        <td>${m.missao||""}</td>
+        <td>${m.motorista||""}</td>
+        <td>${m.viatura_label||""}</td>
+        <td>${m.status||"Pendente"}</td>
         <td>${m.odometro_inicio||"-"}</td>
         <td>${m.odometro_fim||"-"}</td>
-      `;
+        <td>${m.assinatura_ose||"-"}</td>
+        <td>${m.assinatura_encarregado||"-"}</td>
+        <td>${m.assinatura_chedep||"-"}</td>`;
       tb.appendChild(tr);
     });
   });
