@@ -87,7 +87,6 @@ import {
 const TIMEOUT = 10*60*1000; let t;
 onAuthStateChanged(auth, async (u)=>{
   if(!u){ return window.location.href="index.html"; }
-  // checa role
   const uDoc = await getDoc(doc(db,"usuarios",u.uid));
   if(!uDoc.exists() || (uDoc.data().role!=="motorista")){
     alert("Acesso restrito ao perfil: Motorista.");
@@ -123,8 +122,10 @@ function carregarMinhasMissoes(){
     tb.innerHTML = "";
     snap.forEach(d=>{
       const m = {id:d.id, ...d.data()};
-      const podeIniciar = (!m.odometro_inicio) && ["Pendente","Aprovada","Aprovada pela OSE","Autorizada"].includes(m.status || "Pendente");
-      const podeFinalizar = (!!m.odometro_inicio && !m.odometro_fim) && (m.status==="Em viagem");
+
+      // Botões sempre disponíveis conforme o progresso do odômetro
+      const podeIniciar = !m.odometro_inicio;
+      const podeFinalizar = !!m.odometro_inicio && !m.odometro_fim;
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
@@ -156,8 +157,7 @@ window.registrarInicio = async (missaoId)=>{
   if(valor===null) return;
   const odo = Number(String(valor).replace(",","."));
   if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
-  // Se houver um odometro_inicio sugerido/esperado, pode validar se odo >= sugerido
-  // (opcional: aqui não bloqueamos, mas você pode exigir >= m.odometro_inicio se já existir).
+
   await updateDoc(ref, {
     odometro_inicio: odo,
     horario_inicio: new Date().toLocaleString(),
@@ -191,7 +191,6 @@ window.registrarFim = async (missaoId)=>{
     atualizado_em: serverTimestamp()
   });
 
-  // Atualiza odômetro da viatura para manter continuidade
   if(m.viatura){
     try{
       await updateDoc(doc(db,"viaturas", m.viatura), { odometro: odo, atualizado_em: serverTimestamp() });
