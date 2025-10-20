@@ -4,36 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Encarregado - Dashboard</title>
-<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
+<link rel="icon" type="image/svg+xml"
+      href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
 <style>
 :root {
-  --cor-primaria: #004aad;
-  --cor-primaria-hover: #003b8e;
-  --cor-fundo: #f5f7fa;
-  --cor-texto: #1f2937;
-  --cor-card: #ffffff;
-  --cor-borda: #d1d5db;
-  --cor-secundaria: #e2e8f0;
-  --cor-sucesso: #16a34a;
-  --cor-erro: #dc2626;
-  --cor-aviso: #f59e0b;
+  --cor-primaria:#004aad;--cor-primaria-hover:#003b8e;
+  --cor-fundo:#f5f7fa;--cor-texto:#1f2937;
+  --cor-card:#fff;--cor-borda:#d1d5db;
+  --cor-sucesso:#16a34a;--cor-erro:#dc2626;--cor-aviso:#f59e0b;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --cor-fundo: #0b1120;
-    --cor-card: #111827;
-    --cor-texto: #e5e7eb;
-    --cor-borda: #1f2937;
-    --cor-secundaria: #1e293b;
-  }
+@media(prefers-color-scheme:dark){
+  :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;--cor-borda:#1f2937;}
 }
 *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
-body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);min-height:100vh;padding:30px 10px;}
-.container{max-width:1200px;margin:auto;background:var(--cor-card);border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,0.12);padding:30px;}
+body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
+     min-height:100vh;padding:30px 10px;}
+.container{max-width:1200px;margin:auto;background:var(--cor-card);
+           border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:30px;}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;}
 header h1{color:var(--cor-primaria);font-size:1.4rem;margin:0;}
-header button{background:var(--cor-erro);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
+header button{background:var(--cor-erro);color:#fff;border:none;
+              padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
 header button:hover{background:#b91c1c;}
 h2{color:var(--cor-primaria);margin-top:0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
 table{width:100%;border-collapse:collapse;margin-top:15px;}
@@ -43,23 +35,23 @@ tbody tr:hover{background:rgba(0,74,173,0.05);}
 button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600;}
 button.assinar{background:var(--cor-sucesso);color:white;}
 button.assinar:hover{background:#15803d;}
-form input, form select{padding:8px;margin:5px;border:1px solid var(--cor-borda);border-radius:6px;}
-.badge-ok{background:rgba(22,163,74,0.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700;}
-.badge-no{background:rgba(220,38,38,0.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700;}
-.tag-fp{color:#dc2626;font-weight:700;}
-@media(max-width:768px){.container{padding:20px;}th,td{font-size:0.9rem;}}
+input,select{padding:8px;margin:5px;border:1px solid var(--cor-borda);border-radius:6px;}
+form{margin-bottom:25px;}
+@media(max-width:768px){.container{padding:20px;}th,td{font-size:.9rem;}}
 </style>
 </head>
 <body>
 
-<!-- Banner de Emulação -->
-<div id="emulacao-banner" style="
-  display:none;background:#004aad;color:#fff;padding:10px 20px;text-align:center;
-  font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+<!-- 🔧 Banner de Emulação -->
+<div id="emulacao-banner"
+     style="display:none;background:#004aad;color:#fff;padding:10px 20px;text-align:center;
+            font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.2);">
   🔧 Modo Emulação Ativo — <span id="emulando-email"></span>
-  <button onclick="window.location.href='adm-dashboard.html'" style="
-    margin-left:10px;background:#fbbf24;color:#000;border:none;
-    padding:6px 10px;border-radius:5px;cursor:pointer;font-weight:600;">Voltar ao ADM</button>
+  <button onclick="window.location.href='adm-dashboard.html'"
+          style="margin-left:10px;background:#fbbf24;color:#000;border:none;
+                 padding:6px 10px;border-radius:5px;cursor:pointer;font-weight:600;">
+    Voltar ao ADM
+  </button>
 </div>
 
 <div class="container">
@@ -68,11 +60,27 @@ form input, form select{padding:8px;margin:5px;border:1px solid var(--cor-borda)
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Criar Nova Missão</h2>
+  <!-- 📘 Cadastro de Viaturas -->
+  <h2>Cadastro de Viaturas</h2>
+  <form onsubmit="event.preventDefault(); cadastrarViatura();">
+    <input type="text" id="modelo" placeholder="Modelo da Viatura (Ex: Parati)" required>
+    <input type="text" id="placa" placeholder="Placa (Ex: E983-0987)" required>
+    <input type="number" id="odometro" placeholder="Odômetro atual (km)" required>
+    <button type="submit" class="assinar">Cadastrar Viatura</button>
+  </form>
+
+  <h2>Viaturas Cadastradas</h2>
+  <table>
+    <thead><tr><th>Modelo</th><th>Placa</th><th>Odômetro Atual</th></tr></thead>
+    <tbody id="viaturas-body"></tbody>
+  </table>
+
+  <!-- 🚗 Criação de Missão -->
+  <h2>Criar Missão</h2>
   <form onsubmit="event.preventDefault(); criarMissao();">
-    <input type="text" id="missao" placeholder="Missão" required>
-    <input type="text" id="motorista" placeholder="Motorista" required>
-    <input type="text" id="viatura" placeholder="Viatura" required>
+    <input type="text" id="missao" placeholder="Descrição da missão" required>
+    <input type="text" id="motorista" placeholder="Motorista responsável" required>
+    <select id="viaturaSelect" required></select>
     <button type="submit" class="assinar">Criar Missão</button>
   </form>
 
@@ -80,9 +88,8 @@ form input, form select{padding:8px;margin:5px;border:1px solid var(--cor-borda)
   <table>
     <thead>
       <tr>
-        <th>Missão</th><th>Motorista</th><th>Viatura</th><th>Status</th>
-        <th>Fora da Programação</th>
-        <th>Assinatura OSE</th><th>Assinatura Encarregado</th><th>Assinatura P3</th><th>Ação</th>
+        <th>Missão</th><th>Motorista</th><th>Viatura</th>
+        <th>Odômetro Inicial</th><th>Odômetro Final</th><th>Status</th><th>Ação</th>
       </tr>
     </thead>
     <tbody id="missoes-body"></tbody>
@@ -90,93 +97,136 @@ form input, form select{padding:8px;margin:5px;border:1px solid var(--cor-borda)
 </div>
 
 <script type="module">
-import { auth, db } from "./firebase-config.js";
-import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { collection, addDoc, updateDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {auth,db} from "./firebase-config.js";
+import {signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {collection,addDoc,updateDoc,doc,onSnapshot,getDocs,query,where,orderBy,limit,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-/* =============== 🔒 Segurança e Logout Automático ================== */
-const TEMPO_MAXIMO = 10 * 60 * 1000;
-let timerLogout;
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "index.html";
-  } else {
-    iniciarTimerLogout();
-    monitorarAtividade();
-  }
+/* 🔒 Proteção e logout automático */
+const LIMITE=10*60*1000;let timer;
+onAuthStateChanged(auth,u=>{
+  if(!u){window.location.href="index.html";}
+  else{resetar();["mousemove","keydown","click","scroll"].forEach(e=>document.addEventListener(e,resetar));carregarDados();}
 });
-function iniciarTimerLogout() {
-  clearTimeout(timerLogout);
-  timerLogout = setTimeout(async () => {
-    alert("⏰ Sessão expirada. Faça login novamente.");
-    await signOut(auth);
-    window.location.href = "index.html";
-  }, TEMPO_MAXIMO);
-}
-function monitorarAtividade() {
-  ["mousemove","keydown","click","scroll"].forEach(e => document.addEventListener(e, iniciarTimerLogout));
-}
+function resetar(){clearTimeout(timer);
+  timer=setTimeout(async()=>{alert("⏰ Sessão expirada.");await signOut(auth);window.location.href="index.html";},LIMITE);}
 
-/* =============== 🔧 Banner de Emulação ================== */
-const params = new URLSearchParams(window.location.search);
-const emulando = params.get("emulando");
-if (emulando) {
-  document.getElementById("emulacao-banner").style.display = "block";
-  document.getElementById("emulando-email").innerText = emulando;
-}
+/* Banner de emulação */
+const p=new URLSearchParams(window.location.search);const em=p.get("emulando");
+if(em){document.getElementById("emulacao-banner").style.display="block";
+       document.getElementById("emulando-email").textContent=em;}
 
-/* =============== 🚪 Logout ================== */
-window.logout = async()=>{await signOut(auth);window.location.href="index.html";}
+/* Logout manual */
+window.logout=async()=>{await signOut(auth);window.location.href="index.html";}
 
-/* =============== ⚡ Missões em Tempo Real ================== */
-onSnapshot(collection(db,"viaturas_missao"),(snapshot)=>{
-  const tbody=document.getElementById("missoes-body");
-  tbody.innerHTML="";
-  snapshot.forEach(docItem=>{
-    const m=docItem.data();
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${m.missao||""}</td>
-      <td>${m.motorista||""}</td>
-      <td>${m.viatura||""}</td>
-      <td>${m.status||"Pendente"}</td>
-      <td>${m.fora_programacao ? "<span class='tag-fp'>⚠ Fora</span>" : "-"}</td>
-      <td>${m.assinatura_ose ? `<span class='badge-ok'>${m.assinatura_ose}</span><br><small>${m.hora_assinatura_ose||""}</small>` : "<span class='badge-no'>Pendente</span>"}</td>
-      <td>${m.assinatura_encarregado ? `<span class='badge-ok'>${m.assinatura_encarregado}</span><br><small>${m.hora_assinatura_encarregado||""}</small>` : "<span class='badge-no'>Pendente</span>"}</td>
-      <td>${m.assinatura_p3 ? `<span class='badge-ok'>${m.assinatura_p3}</span><br><small>${m.hora_assinatura_p3||""}</small>` : "<span class='badge-no'>Pendente</span>"}</td>
-      <td><button class='assinar' onclick="assinar('${docItem.id}')">Assinar</button></td>`;
-    tbody.appendChild(tr);
+/* =============================================
+   📘 CADASTRAR VIATURA
+============================================= */
+window.cadastrarViatura=async()=>{
+  const modelo=document.getElementById("modelo").value.trim();
+  const placa=document.getElementById("placa").value.trim();
+  const odometro=parseFloat(document.getElementById("odometro").value);
+  if(!modelo||!placa||isNaN(odometro))return alert("Preencha todos os campos corretamente.");
+  await addDoc(collection(db,"viaturas"),{
+    modelo,placa,odometro_atual:odometro,
+    criado_por:auth.currentUser?.email,
+    criado_em:serverTimestamp()
   });
-});
-
-/* =============== 🖊️ Assinar Missão ================== */
-window.assinar = async(id)=>{
-  await updateDoc(doc(db,"viaturas_missao",id),{
-    assinada_encarregado:true,
-    assinatura_encarregado:auth.currentUser?.email || "encarregado",
-    hora_assinatura_encarregado:new Date().toLocaleString(),
-    atualizado_em:serverTimestamp()
-  });
-  alert("✍ Missão assinada com sucesso!");
+  alert("🚗 Viatura cadastrada com sucesso!");
+  document.getElementById("modelo").value="";
+  document.getElementById("placa").value="";
+  document.getElementById("odometro").value="";
 };
 
-/* =============== 🆕 Criar Missão ================== */
-window.criarMissao = async()=>{
+/* =============================================
+   🔄 LISTAR VIATURAS
+============================================= */
+function carregarViaturas(){
+  const tbody=document.getElementById("viaturas-body");
+  const select=document.getElementById("viaturaSelect");
+  onSnapshot(collection(db,"viaturas"),snap=>{
+    tbody.innerHTML="";select.innerHTML="<option value=''>Selecione a viatura</option>";
+    snap.forEach(d=>{
+      const v=d.data();
+      tbody.innerHTML+=`<tr><td>${v.modelo}</td><td>${v.placa}</td><td>${v.odometro_atual||"-"}</td></tr>`;
+      select.innerHTML+=`<option value="${d.id}" data-placa="${v.placa}" data-odo="${v.odometro_atual||0}">${v.modelo} - ${v.placa}</option>`;
+    });
+  });
+}
+
+/* =============================================
+   🚗 CRIAR MISSÃO (odômetro inicial = último final)
+============================================= */
+window.criarMissao=async()=>{
   const missao=document.getElementById("missao").value.trim();
   const motorista=document.getElementById("motorista").value.trim();
-  const viatura=document.getElementById("viatura").value.trim();
-  if(!missao||!motorista||!viatura){alert("Preencha todos os campos.");return;}
+  const viaturaID=document.getElementById("viaturaSelect").value;
+  if(!missao||!motorista||!viaturaID)return alert("Preencha todos os campos.");
+  
+  // busca odômetro final da última missão
+  const ultimas=await getDocs(query(collection(db,"viaturas_missao"),where("viatura_id","==",viaturaID),orderBy("criada_em","desc"),limit(1)));
+  let odometro_inicial=0;
+  if(!ultimas.empty){
+    const ultima=ultimas.docs[0].data();
+    odometro_inicial=ultima.odometro_fim||ultima.odometro_inicio||0;
+  }
+
   await addDoc(collection(db,"viaturas_missao"),{
-    missao,motorista,viatura,
+    missao,motorista,viatura_id:viaturaID,
     status:"Pendente",
-    criada_por:auth.currentUser?.email || "encarregado",
+    odometro_inicio:odometro_inicial,
+    criada_por:auth.currentUser?.email,
     criada_em:serverTimestamp()
   });
-  document.getElementById("missao").value="";
-  document.getElementById("motorista").value="";
-  document.getElementById("viatura").value="";
   alert("🆕 Missão criada com sucesso!");
 };
+
+/* =============================================
+   🔄 LISTAR MISSÕES
+============================================= */
+function carregarMissoes(){
+  const tbody=document.getElementById("missoes-body");
+  onSnapshot(collection(db,"viaturas_missao"),snap=>{
+    tbody.innerHTML="";
+    snap.forEach(d=>{
+      const m=d.data();
+      tbody.innerHTML+=`
+        <tr>
+          <td>${m.missao||""}</td>
+          <td>${m.motorista||""}</td>
+          <td>${m.viatura_id||""}</td>
+          <td>${m.odometro_inicio||"-"}</td>
+          <td>${m.odometro_fim||"-"}</td>
+          <td>${m.status||"Pendente"}</td>
+          <td><button class="assinar" onclick="finalizar('${d.id}')">Concluir</button></td>
+        </tr>`;
+    });
+  });
+}
+
+/* =============================================
+   🏁 Finalizar missão e atualizar odômetro da viatura
+============================================= */
+window.finalizar=async id=>{
+  const fim=parseFloat(prompt("Digite o odômetro final:"));
+  if(isNaN(fim))return;
+  const ref=doc(db,"viaturas_missao",id);
+  await updateDoc(ref,{odometro_fim:fim,status:"Concluída",atualizado_em:serverTimestamp()});
+
+  // atualiza odômetro da viatura
+  const mSnap=await getDocs(query(collection(db,"viaturas_missao"),where("__name__","==",id)));
+  if(!mSnap.empty){
+    const viaturaID=mSnap.docs[0].data().viatura_id;
+    if(viaturaID){await updateDoc(doc(db,"viaturas",viaturaID),{odometro_atual:fim});}
+  }
+
+  alert("✅ Missão concluída e odômetro atualizado.");
+};
+
+/* Inicialização */
+function carregarDados(){
+  carregarViaturas();
+  carregarMissoes();
+}
 </script>
 </body>
 </html>
