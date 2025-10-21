@@ -4,209 +4,368 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Motorista - Dashboard</title>
-<link rel="icon" type="image/svg+xml"
-      href="https://upload.wikimedia.org/wikipedia/commons/a/ad/Coat_of_arms_of_the_Brazilian_Navy.svg">
 
+<!-- ===== FAVICON PADRÃO MARINHA ===== -->
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/codjr/br/refs/heads/main/heraldica-8DN.png">
+
+<!-- ======= CSS PADRONIZADO ======= -->
 <style>
-:root {
-  --cor-primaria:#004aad;--cor-primaria-hover:#003b8e;
-  --cor-fundo:#f5f7fa;--cor-texto:#1f2937;
-  --cor-card:#fff;--cor-borda:#d1d5db;
-  --cor-secundaria:#e2e8f0;
-  --cor-sucesso:#16a34a;--cor-erro:#dc2626;--cor-aviso:#f59e0b;
+/* =======================
+   RESET + BASE
+======================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
 }
-@media(prefers-color-scheme:dark){
-  :root{--cor-fundo:#0b1120;--cor-card:#111827;--cor-texto:#e5e7eb;
-        --cor-borda:#1f2937;--cor-secundaria:#1e293b;}
+
+body {
+  background: linear-gradient(180deg, #e9ecf4 0%, #f5f7fa 100%);
+  color: #1b1b1b;
+  min-height: 100vh;
 }
-*{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
-body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);
-     min-height:100vh;padding:30px 10px;}
-.container{max-width:1250px;margin:auto;background:var(--cor-card);
-           border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.12);padding:28px;}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap}
-header h1{color:var(--cor-primaria);font-size:1.5rem;margin:0;}
-header button{background:var(--cor-erro);color:#fff;border:none;
-              padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;}
-header button:hover{background:#b91c1c;}
-h2{color:var(--cor-primaria);margin:10px 0;border-left:4px solid var(--cor-primaria);padding-left:10px;}
-.table-wrap{overflow:auto;border:1px solid var(--cor-borda);border-radius:10px;margin-top:10px}
-table{width:100%;border-collapse:collapse;min-width:1000px}
-thead{background:var(--cor-primaria);color:#fff}
-th,td{padding:10px 12px;border-bottom:1px solid var(--cor-borda);text-align:left;vertical-align:top}
-tbody tr:hover{background:rgba(0,74,173,.05)}
-button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600}
-button.inicio,button.fim{background:var(--cor-primaria);color:#fff}
-button.inicio:hover,button.fim:hover{background:var(--cor-primaria-hover)}
-.badge-ok{background:rgba(22,163,74,.12);color:#166534;padding:4px 8px;border-radius:6px;font-weight:700}
-.badge-no{background:rgba(220,38,38,.12);color:#991b1b;padding:4px 8px;border-radius:6px;font-weight:700}
-.small{font-size:.9rem;color:#475569}
+
+/* =======================
+   HEADER
+======================= */
+header {
+  background: #001f3f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 5px solid #c9a600;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.logo-marinha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-marinha img {
+  width: 50px;
+  height: 50px;
+}
+
+header h1 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+header button {
+  background: linear-gradient(145deg, #b30000, #800000);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+header button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(145deg, #cc0000, #990000);
+}
+
+/* =======================
+   CONTAINER + SEÇÃO
+======================= */
+.container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.tab-pane {
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(8px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+h2 {
+  color: #002b5c;
+  margin-bottom: 20px;
+  font-weight: 700;
+  border-left: 6px solid #c9a600;
+  padding-left: 10px;
+}
+
+/* =======================
+   TABELA
+======================= */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background: #002b5c;
+  color: #fff;
+}
+
+th, td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+tbody tr:hover {
+  background: #f7f9fc;
+  transition: 0.2s;
+}
+
+/* =======================
+   BOTÕES DE AÇÃO
+======================= */
+button.inicio {
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+button.inicio:hover {
+  background: #0d47a1;
+  transform: scale(1.05);
+}
+
+button.fim {
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+button.fim:hover {
+  background: #1b5e20;
+  transform: scale(1.05);
+}
+
+.small {
+  font-size: 0.85rem;
+  color: #444;
+  background: #fefefe;
+  padding: 10px 12px;
+  border-left: 4px solid #002b5c;
+  border-radius: 6px;
+  margin-top: 14px;
+}
+
+/* =======================
+   RESPONSIVO
+======================= */
+@media (max-width: 900px) {
+  header {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  table th, table td {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+}
 </style>
 </head>
-<body>
 
-<div class="container">
+<body>
   <header>
-    <h1>Motorista — Dashboard</h1>
+    <div class="logo-marinha">
+      <img src="https://raw.githubusercontent.com/codjr/br/refs/heads/main/heraldica-8DN.png" alt="Marinha do Brasil">
+      <h1>Motorista — Sistema de Viaturas</h1>
+    </div>
     <button onclick="logout()">Sair</button>
   </header>
 
-  <h2>Minhas Missões</h2>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Missão</th>
-          <th>Viatura</th>
-          <th>Status</th>
-          <th>Odômetro Início</th>
-          <th>Horário Início</th>
-          <th>Odômetro Fim</th>
-          <th>Horário Fim</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="missoes-body"></tbody>
-    </table>
+  <div class="container">
+    <div class="tab-pane">
+      <h2>Minhas Missões</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Missão</th>
+              <th>Viatura</th>
+              <th>Status</th>
+              <th>Odômetro Início</th>
+              <th>Horário Início</th>
+              <th>Odômetro Fim</th>
+              <th>Horário Fim</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="missoes-body"></tbody>
+        </table>
+      </div>
+
+      <p class="small">
+        • Use <b>Início</b> ao sair com a viatura. • Use <b>Fim</b> ao retornar. <br>
+        • O sistema valida a sequência do odômetro e atualiza automaticamente o odômetro da viatura.
+      </p>
+    </div>
   </div>
 
-  <p class="small" style="margin-top:10px">
-    • Use <b>Início</b> ao sair com a viatura. • Use <b>Fim</b> ao retornar. <br/>
-    • O sistema valida a sequência do odômetro e atualiza o odômetro da viatura ao concluir.
-  </p>
-</div>
+  <!-- =======================
+       SCRIPT FIREBASE
+  ======================= -->
+  <script type="module">
+    import {auth, db} from "./firebase-config.js";
+    import {signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+    import {
+      collection, doc, getDoc, updateDoc, onSnapshot, query, where, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-<script type="module">
-import {auth, db} from "./firebase-config.js";
-import {signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import {
-  collection, doc, getDoc, updateDoc, onSnapshot, query, where, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-
-/* ================= Proteção (role) + Sessão (10 min) ================= */
-const TIMEOUT = 10*60*1000; let t;
-onAuthStateChanged(auth, async (u)=>{
-  if(!u){ return window.location.href="index.html"; }
-  const uDoc = await getDoc(doc(db,"usuarios",u.uid));
-  if(!uDoc.exists() || (uDoc.data().role!=="motorista")){
-    alert("Acesso restrito ao perfil: Motorista.");
-    await signOut(auth);
-    return window.location.href="index.html";
-  }
-  init(u);
-  resetTimer();
-  ["mousemove","keydown","click","scroll"].forEach(evt=>document.addEventListener(evt, resetTimer));
-});
-function resetTimer(){
-  clearTimeout(t);
-  t = setTimeout(async ()=>{
-    alert("⏰ Sessão expirada por inatividade.");
-    await signOut(auth);
-    window.location.href="index.html";
-  }, TIMEOUT);
-}
-window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; };
-
-/* ================= Estado / Init ================= */
-let EU = null;
-function init(user){
-  EU = user;
-  carregarMinhasMissoes();
-}
-
-/* =============== Minhas Missões (somente as do motorista logado) =============== */
-function carregarMinhasMissoes(){
-  const qMinhas = query(collection(db, "viaturas_missao"), where("motorista","==", EU.email));
-  onSnapshot(qMinhas, (snap)=>{
-    const tb = document.getElementById("missoes-body");
-    tb.innerHTML = "";
-    snap.forEach(d=>{
-      const m = {id:d.id, ...d.data()};
-
-      // Agora permite Início mesmo com odômetro já preenchido
-      const podeIniciar = !m.horario_inicio;
-      const podeFinalizar = !!m.horario_inicio && !m.odometro_fim;
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${m.missao||"-"}</td>
-        <td>${m.viatura_label || m.viatura || "-"}</td>
-        <td>${m.status || "Pendente"}</td>
-        <td>${m.odometro_inicio ?? "-"}</td>
-        <td>${m.horario_inicio ?? "-"}</td>
-        <td>${m.odometro_fim ?? "-"}</td>
-        <td>${m.horario_fim ?? "-"}</td>
-        <td>
-          ${podeIniciar ? `<button class="inicio" onclick="registrarInicio('${m.id}')">Início</button>` : ""}
-          ${podeFinalizar ? `<button class="fim" onclick="registrarFim('${m.id}')">Fim</button>` : ""}
-        </td>
-      `;
-      tb.appendChild(tr);
+    /* ================= Proteção (role) + Sessão (10 min) ================= */
+    const TIMEOUT = 10*60*1000; let t;
+    onAuthStateChanged(auth, async (u)=>{
+      if(!u){ return window.location.href="index.html"; }
+      const uDoc = await getDoc(doc(db,"usuarios",u.uid));
+      if(!uDoc.exists() || (uDoc.data().role!=="motorista")){
+        alert("Acesso restrito ao perfil: Motorista.");
+        await signOut(auth);
+        return window.location.href="index.html";
+      }
+      init(u);
+      resetTimer();
+      ["mousemove","keydown","click","scroll"].forEach(evt=>document.addEventListener(evt, resetTimer));
     });
-  });
-}
-
-/* ================= Registrar Início ================= */
-window.registrarInicio = async (missaoId)=>{
-  const ref = doc(db,"viaturas_missao",missaoId);
-  const dSnap = await getDoc(ref);
-  if(!dSnap.exists()) return alert("Missão não encontrada.");
-  const m = dSnap.data();
-
-  // Agora só bloqueia se já tiver horário_inicio (não pelo odômetro)
-  if(m.horario_inicio){ return alert("Início já registrado."); }
-
-  let odo = m.odometro_inicio;
-  if(!odo){
-    const valor = prompt("Digite o odômetro inicial:");
-    if(valor===null) return;
-    odo = Number(String(valor).replace(",","."));
-    if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
-  }
-
-  await updateDoc(ref, {
-    odometro_inicio: odo,
-    horario_inicio: new Date().toLocaleString(),
-    motorista_inicio: auth.currentUser?.email || "",
-    status: "Em viagem",
-    atualizado_em: serverTimestamp()
-  });
-  alert("📍 Início registrado. Boa viagem!");
-};
-
-/* ================= Registrar Fim ================= */
-window.registrarFim = async (missaoId)=>{
-  const ref = doc(db,"viaturas_missao",missaoId);
-  const dSnap = await getDoc(ref);
-  if(!dSnap.exists()) return alert("Missão não encontrada.");
-  const m = dSnap.data();
-  if(!m.odometro_inicio) return alert("Registre o início antes de finalizar.");
-  if(m.odometro_fim) return alert("Fim já registrado.");
-
-  const valor = prompt("Digite o odômetro final:");
-  if(valor===null) return;
-  const odo = Number(String(valor).replace(",","."));
-  if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
-  if(odo < Number(m.odometro_inicio)) return alert("Odômetro final não pode ser menor que o inicial.");
-
-  await updateDoc(ref, {
-    odometro_fim: odo,
-    horario_fim: new Date().toLocaleString(),
-    motorista_fim: auth.currentUser?.email || "",
-    status: "Concluída",
-    atualizado_em: serverTimestamp()
-  });
-
-  if(m.viatura){
-    try{
-      await updateDoc(doc(db,"viaturas", m.viatura), { odometro: odo, atualizado_em: serverTimestamp() });
-    }catch(e){
-      console.warn("Não foi possível atualizar odômetro da viatura:", e);
+    function resetTimer(){
+      clearTimeout(t);
+      t = setTimeout(async ()=>{
+        alert("⏰ Sessão expirada por inatividade.");
+        await signOut(auth);
+        window.location.href="index.html";
+      }, TIMEOUT);
     }
-  }
+    window.logout = async()=>{ await signOut(auth); window.location.href="index.html"; };
 
-  alert("✅ Fim registrado. Missão concluída.");
-};
-</script>
+    /* ================= Estado / Init ================= */
+    let EU = null;
+    function init(user){
+      EU = user;
+      carregarMinhasMissoes();
+    }
+
+    /* =============== Minhas Missões (somente as do motorista logado) =============== */
+    function carregarMinhasMissoes(){
+      const qMinhas = query(collection(db, "viaturas_missao"), where("motorista","==", EU.email));
+      onSnapshot(qMinhas, (snap)=>{
+        const tb = document.getElementById("missoes-body");
+        tb.innerHTML = "";
+        snap.forEach(d=>{
+          const m = {id:d.id, ...d.data()};
+
+          const podeIniciar = !m.horario_inicio;
+          const podeFinalizar = !!m.horario_inicio && !m.odometro_fim;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${m.missao||"-"}</td>
+            <td>${m.viatura_label || m.viatura || "-"}</td>
+            <td>${m.status || "Pendente"}</td>
+            <td>${m.odometro_inicio ?? "-"}</td>
+            <td>${m.horario_inicio ?? "-"}</td>
+            <td>${m.odometro_fim ?? "-"}</td>
+            <td>${m.horario_fim ?? "-"}</td>
+            <td>
+              ${podeIniciar ? `<button class="inicio" onclick="registrarInicio('${m.id}')">Início</button>` : ""}
+              ${podeFinalizar ? `<button class="fim" onclick="registrarFim('${m.id}')">Fim</button>` : ""}
+            </td>
+          `;
+          tb.appendChild(tr);
+        });
+      });
+    }
+
+    /* ================= Registrar Início ================= */
+    window.registrarInicio = async (missaoId)=>{
+      const ref = doc(db,"viaturas_missao",missaoId);
+      const dSnap = await getDoc(ref);
+      if(!dSnap.exists()) return alert("Missão não encontrada.");
+      const m = dSnap.data();
+
+      if(m.horario_inicio){ return alert("Início já registrado."); }
+
+      let odo = m.odometro_inicio;
+      if(!odo){
+        const valor = prompt("Digite o odômetro inicial:");
+        if(valor===null) return;
+        odo = Number(String(valor).replace(",","."));
+        if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
+      }
+
+      await updateDoc(ref, {
+        odometro_inicio: odo,
+        horario_inicio: new Date().toLocaleString(),
+        motorista_inicio: auth.currentUser?.email || "",
+        status: "Em viagem",
+        atualizado_em: serverTimestamp()
+      });
+      alert("📍 Início registrado. Boa viagem!");
+    };
+
+    /* ================= Registrar Fim ================= */
+    window.registrarFim = async (missaoId)=>{
+      const ref = doc(db,"viaturas_missao",missaoId);
+      const dSnap = await getDoc(ref);
+      if(!dSnap.exists()) return alert("Missão não encontrada.");
+      const m = dSnap.data();
+      if(!m.odometro_inicio) return alert("Registre o início antes de finalizar.");
+      if(m.odometro_fim) return alert("Fim já registrado.");
+
+      const valor = prompt("Digite o odômetro final:");
+      if(valor===null) return;
+      const odo = Number(String(valor).replace(",","."));
+      if(isNaN(odo) || odo < 0) return alert("Odômetro inválido.");
+      if(odo < Number(m.odometro_inicio)) return alert("Odômetro final não pode ser menor que o inicial.");
+
+      await updateDoc(ref, {
+        odometro_fim: odo,
+        horario_fim: new Date().toLocaleString(),
+        motorista_fim: auth.currentUser?.email || "",
+        status: "Concluída",
+        atualizado_em: serverTimestamp()
+      });
+
+      if(m.viatura){
+        try{
+          await updateDoc(doc(db,"viaturas", m.viatura), { odometro: odo, atualizado_em: serverTimestamp() });
+        }catch(e){
+          console.warn("Não foi possível atualizar odômetro da viatura:", e);
+        }
+      }
+
+      alert("✅ Fim registrado. Missão concluída.");
+    };
+  </script>
 </body>
 </html>
