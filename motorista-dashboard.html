@@ -290,7 +290,7 @@ button.fim:hover {
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${m.missao||"-"}</td>
-            <td id="vtr-${m.id}">Carregando...</td>
+            <td>${m.viatura_nome || m.viatura || "-"}</td>
             <td>${m.status || "Pendente"}</td>
             <td>${m.odometro_inicio ?? "-"}</td>
             <td>${m.horario_inicio ?? "-"}</td>
