@@ -276,21 +276,21 @@ button.fim:hover {
     }
 
     /* =============== Minhas Missões (somente as do motorista logado) =============== */
-    function carregarMinhasMissoes(){
+    async function carregarMinhasMissoes(){
       const qMinhas = query(collection(db, "viaturas_missao"), where("motorista","==", EU.email));
-      onSnapshot(qMinhas, (snap)=>{
+      onSnapshot(qMinhas, async (snap)=>{
         const tb = document.getElementById("missoes-body");
         tb.innerHTML = "";
-        snap.forEach(d=>{
-          const m = {id:d.id, ...d.data()};
 
+        for (const d of snap.docs) {
+          const m = {id:d.id, ...d.data()};
           const podeIniciar = !m.horario_inicio;
           const podeFinalizar = !!m.horario_inicio && !m.odometro_fim;
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${m.missao||"-"}</td>
-            <td>${m.viatura_label || m.viatura || "-"}</td>
+            <td id="vtr-${m.id}">Carregando...</td>
             <td>${m.status || "Pendente"}</td>
             <td>${m.odometro_inicio ?? "-"}</td>
             <td>${m.horario_inicio ?? "-"}</td>
@@ -302,7 +302,24 @@ button.fim:hover {
             </td>
           `;
           tb.appendChild(tr);
-        });
+
+          // Buscar nome da viatura
+          if (m.viatura) {
+            const nomeCelula = document.getElementById(`vtr-${m.id}`);
+            try {
+              const vtrDoc = await getDoc(doc(db, "viaturas", m.viatura));
+              if (vtrDoc.exists()) {
+                const dadosVtr = vtrDoc.data();
+                nomeCelula.textContent = dadosVtr.nome || dadosVtr.prefixo || dadosVtr.placa || m.viatura;
+              } else {
+                nomeCelula.textContent = m.viatura;
+              }
+            } catch (e) {
+              console.warn("Erro ao buscar viatura:", e);
+              nomeCelula.textContent = m.viatura;
+            }
+          }
+        }
       });
     }
 
