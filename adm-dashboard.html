@@ -8,6 +8,292 @@
 
 
 <style>
+/* =======================
+   RESET + BASE
+======================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: linear-gradient(180deg, #e9ecf4 0%, #f5f7fa 100%);
+  color: #1b1b1b;
+  min-height: 100vh;
+}
+
+/* =======================
+   HEADER
+======================= */
+header {
+  background: #001f3f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 5px solid #c9a600;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.logo-marinha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-marinha img {
+  width: 50px;
+  height: 50px;
+}
+
+header h1 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+header button {
+  background: linear-gradient(145deg, #b30000, #800000);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+header button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(145deg, #cc0000, #990000);
+}
+
+/* =======================
+   NAV TABS
+======================= */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: #f0f2f6;
+  box-shadow: inset 0 -1px 0 #ccc;
+}
+
+.nav-tabs button {
+  flex: 1;
+  min-width: 160px;
+  background: none;
+  border: none;
+  padding: 14px 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #002b5c;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.4px;
+}
+
+.nav-tabs button:hover {
+  background: #dde3f0;
+  color: #001d3d;
+}
+
+.nav-tabs button.active {
+  background: #002b5c;
+  color: #fff;
+  box-shadow: inset 0 -4px 0 #c9a600;
+}
+
+/* =======================
+   CONTAINER E SEÇÕES
+======================= */
+.container {
+  max-width: 1300px;
+  margin: 30px auto;
+  padding: 0 24px;
+}
+
+.tab-pane {
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(8px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+h2 {
+  color: #002b5c;
+  margin-bottom: 20px;
+  font-weight: 700;
+  border-left: 6px solid #c9a600;
+  padding-left: 10px;
+}
+
+/* =======================
+   TABELAS
+======================= */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background: #002b5c;
+  color: #fff;
+}
+
+th, td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+tbody tr:hover {
+  background: #f7f9fc;
+  transition: 0.2s;
+}
+
+/* =======================
+   BOTÕES DE AÇÃO
+======================= */
+.actions button {
+  margin: 3px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.actions button:hover {
+  transform: scale(1.07);
+}
+
+button.aprovar { background: #2e7d32; color: #fff; }
+button.desaprovar { background: #b71c1c; color: #fff; }
+button.editar { background: #1565c0; color: #fff; }
+button.reset { background: #fbc02d; color: #1b1b1b; }
+button.excluir { background: #d32f2f; color: #fff; }
+
+/* =======================
+   FILTROS E INPUTS
+======================= */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filters select,
+.filters input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 220px;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.filters select:focus,
+.filters input:focus {
+  outline: none;
+  border-color: #002b5c;
+  box-shadow: 0 0 0 3px rgba(0,43,92,0.15);
+}
+
+.filters .reset {
+  background: #002b5c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+.filters .reset:hover {
+  background: #001a39;
+}
+
+/* =======================
+   BADGES
+======================= */
+.badge-ok {
+  background: #2e7d32;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+.badge-no {
+  background: #b71c1c;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+.badge-warn {
+  background: #ffcc00;
+  color: #222;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+}
+
+/* =======================
+   TAG “FORA DE PROGRAMAÇÃO”
+======================= */
+.tag-fp {
+  background: #ff6f00;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  margin-left: 4px;
+  font-weight: 600;
+}
+
+/* =======================
+   RESPONSIVIDADE
+======================= */
+@media (max-width: 900px) {
+  header {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  .nav-tabs button {
+    min-width: 120px;
+    font-size: 0.8rem;
+  }
+  table th, table td {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+}
 
 </style>
 
